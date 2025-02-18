@@ -1,0 +1,8 @@
+1. Installation
+2. Define the variables (.env.local/ .env)
+3. Generate the secret key (openssl rand -base64 32)
+    NEXTAUTH_URL=http://localhost:3000
+    NEXTAUTH_SECRET=6BzdPny406rGaRn1GaQqcgKswJZEN6a4cq2r0wq8Qps=
+4. Structure your folder /app/api/auth/[...nextauth]/route.js
+5. Implement your route with code from the website.
+6. Define your login page
