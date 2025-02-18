@@ -25,7 +25,7 @@ export default function SignUp() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-center">Sign Up</h2>
+      <h2 className="text-2xl font-bold text-center text-red-500">Sign Up</h2>
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
         <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
           <input
@@ -54,7 +54,7 @@ export default function SignUp() {
             Sign Up
           </button>
         </form>
-        <p className="text-center mt-2">
+        <p className="text-center mt-2 text-red-500">
           Already have an account? <a href="/auth/login" className="text-blue-500">Login</a>
         </p>
       </div>

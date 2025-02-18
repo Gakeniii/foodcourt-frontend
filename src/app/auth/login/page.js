@@ -25,7 +25,7 @@ export default function Login() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-center">Login</h2>
+        <h2 className="text-2xl font-bold text-center text-red-500">Login</h2>
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
         <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
           <input
@@ -47,7 +47,7 @@ export default function Login() {
             Login
           </button>
         </form>
-        <p className="text-center mt-2">
+        <p className="text-center mt-2 text-red-500">
           Don't have an account? <a href="/auth/signup" className="text-blue-500">Sign Up</a>
         </p>
       </div>
