@@ -1,0 +1,20 @@
+.homeContainer {
+  text-align: center;
+  padding: 20px;
+}
+
+.welcomeMessage {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.introduction {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.restaurantContainer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
