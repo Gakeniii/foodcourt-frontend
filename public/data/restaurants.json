@@ -1,62 +1,62 @@
 [
   {
     "id": "1",
-    "name": "Restaurant 1",
-    "slug": "restaurant-1",
-    "image": "/images/restaurant.jpg"
+    "name": "Bella's Italian Bistro",
+    "slug": "bellas-italian-bistro",
+    "image": "/images/italian.jpg"
   },
   {
     "id": "2",
-    "name": "Restaurant 2",
-    "slug": "restaurant-2",
-    "image": "/images/restaurant.jpg"
+    "name": "Sushi Haven",
+    "slug": "sushi-haven",
+    "image": "/images/sushi.jpg"
   },
   {
     "id": "3",
-    "name": "Restaurant 3",
-    "slug": "restaurant-3",
-    "image": "/images/restaurant.jpg"
+    "name": "Taco Fiesta",
+    "slug": "taco-fiesta",
+    "image": "/images/taco.jpg"
   },
   {
     "id": "4",
-    "name": "Restaurant 4",
-    "slug": "restaurant-4",
-    "image": "/images/restaurant.jpg"
+    "name": "Burger Palace",
+    "slug": "burger-palace",
+    "image": "/images/burger.jpg"
   },
   {
     "id": "5",
-    "name": "Restaurant 5",
-    "slug": "restaurant-5",
-    "image": "/images/restaurant.jpg"
+    "name": "Green Garden Salads",
+    "slug": "green-garden-salads",
+    "image": "/images/salad.jpg"
   },
   {
     "id": "6",
-    "name": "Restaurant 6",
-    "slug": "restaurant-6",
-    "image": "/images/restaurant.jpg"
+    "name": "Steakhouse Supreme",
+    "slug": "steakhouse-supreme",
+    "image": "/images/steak.jpg"
   },
   {
     "id": "7",
-    "name": "Restaurant 7",
-    "slug": "restaurant-7",
-    "image": "/images/restaurant.jpg"
+    "name": "Pasta Delight",
+    "slug": "pasta-delight",
+    "image": "/images/pasta.jpg"
   },
   {
     "id": "8",
-    "name": "Restaurant 8",
-    "slug": "restaurant-8",
-    "image": "/images/restaurant.jpg"
+    "name": "Seafood Sensations",
+    "slug": "seafood-sensations",
+    "image": "/images/seafood.jpg"
   },
   {
     "id": "9",
-    "name": "Restaurant 9",
-    "slug": "restaurant-9",
-    "image": "/images/restaurant.jpg"
+    "name": "Vegan Vibes",
+    "slug": "vegan-vibes",
+    "image": "/images/vegan.jpg"
   },
   {
     "id": "10",
-    "name": "Restaurant 10",
-    "slug": "restaurant-10",
-    "image": "/images/restaurant.jpg"
+    "name": "Dessert Dreams",
+    "slug": "dessert-dreams",
+    "image": "/images/dessert.jpg"
   }
 ]

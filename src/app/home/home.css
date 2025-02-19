@@ -1,20 +1,74 @@
 .homeContainer {
   text-align: center;
   padding: 20px;
+  background-color: #fff;
 }
 
 .welcomeMessage {
-  font-size: 24px;
+  font-size: 2.5rem;
   margin-bottom: 10px;
+  color: #e53935;
 }
 
-.introduction {
-  font-size: 18px;
+.searchBarContainer {
+  display: flex;
+  justify-content: flex-end;
   margin-bottom: 20px;
+}
+
+.searchBar {
+  width: 50%;
+  max-width: 300px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  border-color: #4caf50;
+  color: #333;
+}
+
+.searchBar::placeholder {
+  color: #999;
 }
 
 .restaurantContainer {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+}
+
+.cardContainer {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+}
+
+.card {
+  width: 200px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.cardImage {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-bottom: 2px solid #4caf50;
+}
+
+.cardName {
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  color: #795548;
 }
