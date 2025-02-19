@@ -1,55 +1,68 @@
-"use client";
+"use client"; 
 
-import { useForm } from "react-hook-form";
-import axios from "axios";
+import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function Login() {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+export default function Login() {  
   const [error, setError] = useState("");
   const router = useRouter();
 
-  const onSubmit = async (data) => {
-    try {
-      const response = await axios.post("http://localhost:5000/api/login", data);
-      if (response.status === 200) {
-        localStorage.setItem("token", response.data.token);
-        router.push("/dashboard"); // Redirect after login
-      }
-    } catch (err) {
-      setError("Invalid email or password.");
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const email = formData.get("email");
+    const password = formData.get("password");
+
+    const res = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
+
+    if (res?.error) {
+      setError("Invalid email or password");
+    } else {
+      router.push("/dashboard");
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-center text-red-500">Login</h2>
-        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
-          <input
-            {...register("email", { required: "Email is required" })}
-            placeholder="Email"
-            className="w-full p-2 border rounded mb-2"
-          />
-          {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+        <h2 className="text-2xl font-bold text-center text-gray-700">Login</h2>
+        {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
+        
+        <form onSubmit={handleLogin} className="mt-6 space-y-4">
+          <div>
+            <label className="block text-gray-600">Email</label>
+            <input
+              name="email"
+              type="email"
+              placeholder="Enter your email"
+              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
 
-          <input
-            type="password"
-            {...register("password", { required: "Password is required" })}
-            placeholder="Password"
-            className="w-full p-2 border rounded mb-2"
-          />
-          {errors.password && <p className="text-red-500">{errors.password.message}</p>}
+          <div>
+            <label className="block text-gray-600">Password</label>
+            <input
+              name="password"
+              type="password"
+              placeholder="Enter your password"
+              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
 
-          <button type="submit" className="w-full p-2 bg-blue-500 text-white rounded">
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white p-3 rounded-lg font-bold hover:bg-blue-600 transition"
+          >
             Login
           </button>
         </form>
-        <p className="text-center mt-2 text-red-500">
-          Don't have an account? <a href="/auth/signup" className="text-blue-500">Sign Up</a>
-        </p>
       </div>
     </div>
   );
