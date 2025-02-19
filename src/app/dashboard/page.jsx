@@ -1,6 +1,7 @@
 "use client"; 
 
 import { useState } from "react";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 
 const Sidebar = () => {
@@ -12,7 +13,14 @@ const Sidebar = () => {
         <li className="mb-2"><Link href="/dashboard/menu">Manage Menu</Link></li>
         <li className="mb-2"><Link href="/dashboard/orders">Orders</Link></li>
         <li className="mb-2"><Link href="/dashboard/tables">Table Bookings</Link></li>
-        <li className="mb-2"><Link href="/auth/logout">Logout</Link></li>
+        <li className="mb-2">
+          <button 
+            onClick={() => signOut()} 
+            className="text-red-400 hover:text-red-300"
+          >
+            Logout
+          </button>
+        </li>
       </ul>
     </div>
   );

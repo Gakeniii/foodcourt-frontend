@@ -1,19 +1,46 @@
 {
-    "users": [
-      {
-        "id": 1,
-        "name": "Admin User",
-        "email": "admin@example.com",
-        "password": "admin123",
-        "role": "admin"
-      },
-      {
-        "id": 2,
-        "name": "Regular User",
-        "email": "user@example.com",
-        "password": "user123",
-        "role": "customer"
-      }
-    ]
-  }
-  
+  "users": [
+    {
+      "id": "1",
+      "name": "Admin User",
+      "email": "admin@example.com",
+      "password": "admin123",
+      "role": "admin"
+    },
+    {
+      "id": "2",
+      "name": "Regular User",
+      "email": "user@example.com",
+      "password": "user123",
+      "role": "customer"
+    },
+    {
+      "id": "24d3",
+      "name": "Antony Oloo",
+      "email": "antoloo254@gmail.com",
+      "password": "1234567",
+      "role": "customer"
+    },
+    {
+      "id": "ab90",
+      "name": "Sam Tomashi  ",
+      "email": "samwamoringa@gmail.com",
+      "password": "87654321",
+      "role": "admin"
+    },
+    {
+      "id": "1808",
+      "name": "Paul Oloo",
+      "email": "paul@gmail.com",
+      "password": "123456789",
+      "role": "customer"
+    },
+    {
+      "id": "71ff",
+      "name": "Abdul Aziz",
+      "email": "abdul@gmail.com",
+      "password": "qwerty",
+      "role": "admin"
+    }
+  ]
+}
