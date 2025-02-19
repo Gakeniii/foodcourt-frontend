@@ -1,0 +1,112 @@
+[
+  {
+    "id": "1",
+    "name": "Margherita Pizza",
+    "description": "Classic Margherita pizza with fresh tomatoes, mozzarella, and basil.",
+    "price": "$12.99",
+    "image": "/images/italian.jpg",
+    "waitingTime": "10-15 mins",
+    "cuisine": "Italian",
+    "category": "Main Course",
+    "restaurant": "Bella's Italian Bistro"
+  },
+  {
+    "id": "2",
+    "name": "Sushi Platter",
+    "description": "Assorted sushi platter with fresh salmon, tuna, and avocado rolls.",
+    "price": "$18.99",
+    "image": "/images/sushi.jpg",
+    "waitingTime": "20-25 mins",
+    "cuisine": "Japanese",
+    "category": "Main Course",
+    "restaurant": "Sushi Haven"
+  },
+  {
+    "id": "3",
+    "name": "Caesar Salad",
+    "description": "Crisp romaine lettuce with Caesar dressing, croutons, and parmesan cheese.",
+    "price": "$9.99",
+    "image": "/images/salad.jpg",
+    "waitingTime": "5-10 mins",
+    "cuisine": "American",
+    "category": "Appetizer",
+    "restaurant": "Green Garden Salads"
+  },
+  {
+    "id": "4",
+    "name": "Steak Frites",
+    "description": "Grilled steak with a side of crispy French fries and herb butter.",
+    "price": "$24.99",
+    "image": "/images/steak.jpg",
+    "waitingTime": "15-20 mins",
+    "cuisine": "French",
+    "category": "Main Course",
+    "restaurant": "Steakhouse Supreme"
+  },
+  {
+    "id": "5",
+    "name": "Chocolate Lava Cake",
+    "description": "Warm chocolate cake with a gooey center, served with vanilla ice cream.",
+    "price": "$7.99",
+    "image": "/images/dessert.jpg",
+    "waitingTime": "10-15 mins",
+    "cuisine": "Dessert",
+    "category": "Dessert",
+    "restaurant": "Dessert Dreams"
+  },
+  {
+    "id": "6",
+    "name": "Taco Fiesta",
+    "description": "Tacos filled with seasoned beef, lettuce, cheese, and salsa.",
+    "price": "$11.99",
+    "image": "/images/taco.jpg",
+    "waitingTime": "10-15 mins",
+    "cuisine": "Mexican",
+    "category": "Main Course",
+    "restaurant": "Taco Fiesta"
+  },
+  {
+    "id": "7",
+    "name": "Burger Palace",
+    "description": "Juicy beef burger with lettuce, tomato, cheese, and a special sauce.",
+    "price": "$14.99",
+    "image": "/images/burger.jpg",
+    "waitingTime": "10-15 mins",
+    "cuisine": "American",
+    "category": "Main Course",
+    "restaurant": "Burger Palace"
+  },
+  {
+    "id": "8",
+    "name": "Green Garden Salads",
+    "description": "Fresh mixed greens with tomatoes, cucumbers, and a light vinaigrette.",
+    "price": "$8.99",
+    "image": "/images/salad.jpg",
+    "waitingTime": "5-10 mins",
+    "cuisine": "American",
+    "category": "Appetizer",
+    "restaurant": "Green Garden Salads"
+  },
+  {
+    "id": "9",
+    "name": "Vegan Vibes",
+    "description": "A delicious vegan bowl with quinoa, roasted vegetables, and hummus.",
+    "price": "$13.99",
+    "image": "/images/vegan.jpg",
+    "waitingTime": "10-15 mins",
+    "cuisine": "Vegan",
+    "category": "Main Course",
+    "restaurant": "Vegan Vibes"
+  },
+  {
+    "id": "10",
+    "name": "Seafood Sensations",
+    "description": "A platter of grilled shrimp, scallops, and fish with a lemon butter sauce.",
+    "price": "$22.99",
+    "image": "/images/seafood.jpg",
+    "waitingTime": "15-20 mins",
+    "cuisine": "Seafood",
+    "category": "Main Course",
+    "restaurant": "Seafood Sensations"
+  }
+]
