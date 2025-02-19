@@ -19,3 +19,59 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+html, body {
+  height: 100%;
+  width: 100%;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+/* Ensure the background image covers the entire page */
+body {
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+/* Center Login & Signup forms */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Style the form box */
+.auth-box {
+  background: rgba(0, 0, 0, 0.8);
+  padding: 2rem;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Style input fields */
+.auth-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid gray;
+  border-radius: 8px;
+  background-color: #1f1f1f;
+  color: white;
+  margin-bottom: 10px;
+}
+
+/* Style buttons */
+.auth-button {
+  width: 100%;
+  padding: 12px;
+  background-color: red;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.auth-button:hover {
+  background-color: darkred;
+}
