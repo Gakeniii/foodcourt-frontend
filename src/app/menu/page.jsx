@@ -22,10 +22,8 @@ const Menu = () => {
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         setMenuItems(data);
-        const cuisines = ['All', ...new Set(data.map(item => item.cuisine))];
-        const categories = ['All', ...new Set(data.map(item => item.category))];
-        setCuisines(cuisines);
-        setCategories(categories);
+        setCuisines(['All', ...new Set(data.map(item => item.cuisine))]);
+        setCategories(['All', ...new Set(data.map(item => item.category))]);
       } catch (error) {
         setError('Failed to load menu items');
         console.error('Fetch error: ', error);
@@ -40,7 +38,6 @@ const Menu = () => {
   const handleCuisineChange = (event) => setSelectedCuisine(event.target.value);
   const handleCategoryChange = (event) => setSelectedCategory(event.target.value);
 
- 
   const handleCardClick = (id) => {
     setFlippedCards((prev) => ({ ...prev, [id]: !prev[id] }));
   };
@@ -62,11 +59,13 @@ const Menu = () => {
           className="searchBar"
         />
         <select value={selectedCuisine} onChange={handleCuisineChange} className="cuisineDropdown">
+          <option value="All" disabled hidden>Cuisine</option>
           {cuisines.map((cuisine, index) => (
             <option key={index} value={cuisine}>{cuisine}</option>
           ))}
         </select>
         <select value={selectedCategory} onChange={handleCategoryChange} className="categoryDropdown">
+          <option value="All" disabled hidden>Category</option>
           {categories.map((category, index) => (
             <option key={index} value={category}>{category}</option>
           ))}
@@ -88,20 +87,18 @@ const Menu = () => {
                 <div className="flip-card-front">
                   <img src={item.image} alt={item.name} className="menuItemImage" />
                   <div className="menuItemDetails">
-                    <div className="menuItemNamePrice">
-                      <h2 className="menuItemName">{item.name}</h2>
-                      <p className="menuItemPrice">{item.price}</p>
-                    </div>
+                    <h2 className="menuItemName">{item.name}</h2>
                     <p className="menuItemWaitingTime">Waiting Time: {item.waitingTime}</p>
+                    <p className="menuItemPrice">{item.price}</p>
                   </div>
                 </div>
                 <div className="flip-card-back">
-                  <h2 className="menuItemName">{item.name}</h2>
-                  <p><strong>Restaurant:</strong> {item.restaurant}</p>
-                  <p><strong>Cuisine:</strong> {item.cuisine}</p>
-                  <p><strong>Waiting Time:</strong> {item.waitingTime}</p>
-                  <p className="menuItemPrice">{item.price}</p>
-                  <QuantitySelector price={item.price} />
+                  <img src={item.image} alt={item.name} className="menuItemImage" />
+                  <div className="menuItemDetails">
+                    <p className="menuItemRestaurant"><strong>Restaurant:</strong> {item.restaurant}</p>
+                    <p className="menuItemCuisine"><strong>Cuisine:</strong> {item.cuisine}</p>
+                    <QuantitySelector className="quantitySelector" price={item.price} />
+                  </div>
                 </div>
               </div>
             </div>
