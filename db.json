@@ -49,6 +49,22 @@
       "password": "lkjhgf",
       "confirmPassword": "lkjhgf",
       "role": "customer"
+    },
+    {
+      "id": "8e03",
+      "name": "Antony Ramen ",
+      "email": "antonyramen@gmail.com",
+      "password": "qwerty12",
+      "confirmPassword": "qwerty12",
+      "role": "customer"
+    },
+    {
+      "id": "21f3",
+      "name": "Caleb Mzito",
+      "email": "caleb@gmail.com",
+      "password": "lkjhgfd",
+      "confirmPassword": "lkjhgfd",
+      "role": "admin"
     }
   ]
 }
