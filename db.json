@@ -41,6 +41,14 @@
       "email": "abdul@gmail.com",
       "password": "qwerty",
       "role": "admin"
+    },
+    {
+      "id": "e274",
+      "name": "Sifa Gakeni",
+      "email": "sifa@gmail.com",
+      "password": "lkjhgf",
+      "confirmPassword": "lkjhgf",
+      "role": "customer"
     }
   ]
 }

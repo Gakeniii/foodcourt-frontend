@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
 
 export default function SignUp() {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -12,6 +11,11 @@ export default function SignUp() {
   const router = useRouter();
 
   const onSubmit = async (data) => {
+    if (data.password !== data.confirmPassword) {
+      setError("Passwords do not match!");
+      return;
+    }
+
     try {
       const response = await axios.post("http://localhost:5000/users", data);
 
@@ -24,91 +28,79 @@ export default function SignUp() {
     }
   };
 
-  const handleLogin = async (data) => {
-    try {
-      const res = await signIn("credentials", { ...data, redirect: false });
-      if (res?.error) {
-        setError("Invalid credentials. Please try again.");
-      } else {
-        // Fetch user role from json-server
-        const userRes = await axios.get(`http://localhost:5000/users?email=${data.email}`);
-        const user = userRes.data[0];
-        
-        if (user.role === "admin") {
-          router.push("/dashboard");
-        } else {
-          router.push("/");
-        }
-      }
-    } catch (err) {
-      setError("Login failed. Please try again.");
-    }
-  };
-
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-center text-red-500">Sign Up</h2>
-        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+    <div
+      className="h-screen w-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: "url('/background.jpg')", minHeight: "100vh" }}
+    >
+      {/* Centered Signup Box */}
+      <div className="auth-box flex flex-col justify-center items-center w-full max-w-md bg-black bg-opacity-80 p-8 rounded-xl shadow-lg">
+        <h2 className="text-3xl font-bold text-center text-white">Sign Up</h2>
+        {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
 
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
-          {/* Full Name Field */}
+        {/* Signup Form */}
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-6 flex flex-col space-y-4 w-full">
+          {/* Full Name */}
           <input
             {...register("name", { required: "Full Name is required" })}
             placeholder="Full Name"
-            className="w-full p-2 border rounded mb-2 text-black"
+            className="auth-input"
+            required
           />
           {errors.name && <p className="text-red-500">{errors.name.message}</p>}
 
-          {/* Email Field */}
+          {/* Email */}
           <input
             type="email"
-            {...register("email", {
-              required: "Email is required",
-              pattern: {
-                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                message: "Invalid email format"
-              }
-            })}
+            {...register("email", { required: "Email is required" })}
             placeholder="Email"
-            className="w-full p-2 border rounded mb-2 text-black"
+            className="auth-input"
+            required
           />
           {errors.email && <p className="text-red-500">{errors.email.message}</p>}
 
-          {/* Password Field */}
+          {/* Password */}
           <input
             type="password"
-            {...register("password", {
-              required: "Password is required",
-              minLength: {
-                value: 6,
-                message: "Password must be at least 6 characters"
-              }
-            })}
+            {...register("password", { required: "Password is required" })}
             placeholder="Password"
-            className="w-full p-2 border rounded mb-2 text-black"
+            className="auth-input"
+            required
           />
           {errors.password && <p className="text-red-500">{errors.password.message}</p>}
 
-          {/* Role Selection Field */}
+          {/* Confirm Password */}
+          <input
+            type="password"
+            {...register("confirmPassword", { required: "Please confirm your password" })}
+            placeholder="Re-enter Password"
+            className="auth-input"
+            required
+          />
+          {errors.confirmPassword && <p className="text-red-500">{errors.confirmPassword.message}</p>}
+
+          {/* Role Selection */}
           <select
             {...register("role", { required: "Role is required" })}
-            className="w-full p-2 border rounded mb-2 text-black"
+            className="auth-input"
+            required
           >
             <option value="">Select Role</option>
             <option value="customer">Customer</option>
             <option value="admin">Admin</option>
           </select>
-          {errors.role && <p className="text-red-500">{errors.role.message}</p>}
 
           {/* Submit Button */}
-          <button type="submit" className="w-full p-2 bg-blue-500 text-white rounded">
+          <button type="submit" className="auth-button">
             Sign Up
           </button>
         </form>
 
-        <p className="text-center mt-2 text-black">
-          Already have an account? <a href="/auth/login" className="text-blue-500">Login</a>
+        <p className="text-center mt-4 text-gray-400">
+          Already have an account?{" "}
+          <a href="/auth/login" className="text-red-500 font-semibold hover:underline">
+            Sign In
+          </a>
         </p>
       </div>
     </div>
