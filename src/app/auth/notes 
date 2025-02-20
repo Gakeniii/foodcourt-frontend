@@ -3,4 +3,11 @@
 <div
   className="h-screen w-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
   style={{ backgroundImage: "url('/background.jpg')", minHeight: "100vh" }}
-> -->
+> 
+
+run db.json server
+npx json-server --watch db.json --port 5000
+
+
+-->
+

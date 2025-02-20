@@ -5,6 +5,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import "./login.css"; // Import the CSS file
 
 export default function LoginPage() {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -26,7 +27,12 @@ export default function LoginPage() {
         }
 
         const user = userRes.data[0];
-        router.push(user.role === "admin" ? "/dashboard" : "/");
+
+        // ✅ Store user email in localStorage for later use
+        localStorage.setItem("userEmail", data.email);
+
+        // ✅ Redirect based on role
+        router.push(user.role === "admin" ? "/dashboard" : "/home");
       }
     } catch (err) {
       setError("Login failed. Please try again.");
@@ -34,20 +40,41 @@ export default function LoginPage() {
   };
 
   return (
-    <div
-    className="h-screen w-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
-    style={{ backgroundImage: "url('/background.jpg')", minHeight: "100vh" }}
-  >
-     <div className="auth-container" style={{ backgroundImage: "url('/background.jpg')" }}>
-  <div className="auth-box">
-    <h2 className="text-3xl font-bold text-center text-white">Sign In</h2>
-    <form>
-      <input type="email" placeholder="Email" className="auth-input" />
-      <input type="password" placeholder="Password" className="auth-input" />
-      <button type="submit" className="auth-button">Sign In</button>
-    </form>
-  </div>
-</div>
+    <div className="login-container">
+      {/* Background Image */}
+      <div className="login-background" style={{ backgroundImage: "url('/background.jpg')" }}>
+        {/* Login Box */}
+        <div className="login-box">
+          <h2 className="text-3xl font-bold text-white">Sign In</h2>
+          {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+
+          {/* Login Form */}
+          <form onSubmit={handleSubmit(handleLogin)} className="mt-4">
+            <input
+              type="email"
+              {...register("email", { required: "Email is required" })}
+              placeholder="Email"
+              required
+            />
+            {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+
+            <input
+              type="password"
+              {...register("password", { required: "Password is required" })}
+              placeholder="Password"
+              required
+            />
+            {errors.password && <p className="text-red-500">{errors.password.message}</p>}
+
+            <button type="submit">Sign In</button>
+          </form>
+
+          <p className="text-gray-400 mt-4">
+            New to our platform?{" "}
+            <a href="/auth/signup" className="text-red-500 font-semibold hover:underline">Sign Up</a>
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
