@@ -9,7 +9,8 @@ export default function Tables() {
       id: i + 1,
       available: true,
       bookedAt: null,
-      countdown: 0, // Stores remaining time
+      bookedFrom: null,
+      countdown: 0, // Remaining time in seconds
     }))
   );
   const [error, setError] = useState(null);
@@ -19,13 +20,21 @@ export default function Tables() {
       prevTables.map((table) =>
         table.id === tableId
           ? table.available
-            ? {
-                ...table,
-                available: false,
-                bookedAt: new Date(),
-                countdown: Math.floor(Math.random() * (120 - 20 + 1) + 20) * 60,
-              }
-            : { ...table, available: true, bookedAt: null, countdown: 0 }
+            ? (() => {
+                const bookedAt = new Date();
+                const countdownMinutes = Math.floor(Math.random() * (30 - 20 + 1) + 20);
+                const countdown = countdownMinutes * 60;
+                const bookedFrom = new Date(bookedAt.getTime() + countdown * 1000);
+
+                return {
+                  ...table,
+                  available: false,
+                  bookedAt,
+                  bookedFrom,
+                  countdown,
+                };
+              })()
+            : { ...table, available: true, bookedAt: null, bookedFrom: null, countdown: 0 }
           : table
       )
     );
@@ -39,7 +48,7 @@ export default function Tables() {
           if (!table.available && table.countdown > 0) {
             return { ...table, countdown: table.countdown - 1 };
           } else if (!table.available && table.countdown <= 0) {
-            return { ...table, available: true, bookedAt: null, countdown: 0 };
+            return { ...table, available: true, bookedAt: null, bookedFrom: null, countdown: 0 };
           }
           return table;
         })
@@ -52,8 +61,8 @@ export default function Tables() {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-gray-100 to-gray-300 p-8">
       <div className="w-full max-w-3xl bg-white p-8 rounded-xl shadow-lg">
-        <h1 className="text-3xl font-bold text-red-500 text-center mb-6">Welcome!</h1>
-        <h1 className="text-xl text-gray-700 text-center mb-6">Book a Table</h1>
+        <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">Welcome!</h1>
+        <h1 className="text-2xl text-gray-700 text-center mb-6">Book a Table</h1>
 
         {error && <p className="text-red-500 text-center text-sm mb-4">{error}</p>}
 
@@ -85,6 +94,10 @@ export default function Tables() {
                       Table {table.id} booked at{" "}
                       <span className="font-semibold">
                         {new Date(table.bookedAt).toLocaleTimeString()}
+                      </span>{" "}
+                      | Arrive by:{" "}
+                      <span className="text-blue-500 font-semibold">
+                        {new Date(table.bookedFrom).toLocaleTimeString()}
                       </span>{" "}
                       | Time left:{" "}
                       <span className="text-red-500 font-semibold">
