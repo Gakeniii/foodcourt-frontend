@@ -1,0 +1,70 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Admin User",
+      "email": "admin@example.com",
+      "password": "admin123",
+      "role": "admin"
+    },
+    {
+      "id": "2",
+      "name": "Regular User",
+      "email": "user@example.com",
+      "password": "user123",
+      "role": "customer"
+    },
+    {
+      "id": "24d3",
+      "name": "Antony Oloo",
+      "email": "antoloo254@gmail.com",
+      "password": "1234567",
+      "role": "customer"
+    },
+    {
+      "id": "ab90",
+      "name": "Sam Tomashi  ",
+      "email": "samwamoringa@gmail.com",
+      "password": "87654321",
+      "role": "admin"
+    },
+    {
+      "id": "1808",
+      "name": "Paul Oloo",
+      "email": "paul@gmail.com",
+      "password": "123456789",
+      "role": "customer"
+    },
+    {
+      "id": "71ff",
+      "name": "Abdul Aziz",
+      "email": "abdul@gmail.com",
+      "password": "qwerty",
+      "role": "admin"
+    },
+    {
+      "id": "e274",
+      "name": "Sifa Gakeni",
+      "email": "sifa@gmail.com",
+      "password": "lkjhgf",
+      "confirmPassword": "lkjhgf",
+      "role": "customer"
+    },
+    {
+      "id": "8e03",
+      "name": "Antony Ramen ",
+      "email": "antonyramen@gmail.com",
+      "password": "qwerty12",
+      "confirmPassword": "qwerty12",
+      "role": "customer"
+    },
+    {
+      "id": "21f3",
+      "name": "Caleb Mzito",
+      "email": "caleb@gmail.com",
+      "password": "lkjhgfd",
+      "confirmPassword": "lkjhgfd",
+      "role": "admin"
+    }
+  ]
+}
