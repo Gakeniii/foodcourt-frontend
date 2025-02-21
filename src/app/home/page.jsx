@@ -43,6 +43,10 @@ export default function Home() {
     fetchMenuItems(restaurant.id); 
   };
 
+  const handleClosePanel = () => {
+    setSelectedRestaurant(null); 
+  };
+
   const filteredRestaurants = restaurants.filter((restaurant) =>
     restaurant.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -70,14 +74,14 @@ export default function Home() {
         </div>
       </div>
       {selectedRestaurant && (
-        <div className="modal">
-          <div className="modalContent">
-            <span className="closeButton" onClick={() => setSelectedRestaurant(null)}>&times;</span>
-            <h2 className="modalTitle">{selectedRestaurant.name} Menu</h2>
-            <div className="modalMenuItemsContainer">
+        <div className="sidePanel">
+          <div className="sidePanelContent">
+            <span className="closeButton" onClick={handleClosePanel}>&times;</span>
+            <h2 className="sidePanelTitle">{selectedRestaurant.name} Menu</h2>
+            <div className="sidePanelMenuItemsContainer">
               {menuItems.map((item) => (
-                <div key={item.id} className="modalMenuItem">
-                  <h3 className="modalMenuItemName">{item.name}</h3>
+                <div key={item.id} className="sidePanelMenuItem">
+                  <h3 className="sidePanelMenuItemName">{item.name}</h3>
                 </div>
               ))}
             </div>

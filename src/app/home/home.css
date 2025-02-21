@@ -74,39 +74,27 @@
 }
 
 
-.modal {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.sidePanel {
   position: fixed;
   top: 0;
-  left: 0;
-  width: 100%;
+  right: 0;
+  width: 300px; 
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  z-index: 1000;
-}
-
-
-.modalContent {
   background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  width: 80%;
-  max-width: 600px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  text-align: center;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  overflow-y: auto;
 }
 
+.sidePanelContent {
+  padding: 20px;
+}
 
 .closeButton {
   font-size: 1.5rem;
   font-weight: bold;
   color: #aaa;
   cursor: pointer;
-  position: absolute;
-  top: 10px;
-  right: 20px;
   transition: color 0.2s;
 }
 
@@ -114,24 +102,19 @@
   color: #e53935;
 }
 
-
-.modalTitle {
+.sidePanelTitle {
   font-size: 2rem;
   color: #e53935;
   margin-bottom: 20px;
 }
 
-
-.modalMenuItemsContainer {
+.sidePanelMenuItemsContainer {
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
 }
 
-
-.modalMenuItem {
-  width: 180px;
+.sidePanelMenuItem {
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -140,12 +123,11 @@
   transition: transform 0.2s;
 }
 
-.modalMenuItem:hover {
+.sidePanelMenuItem:hover {
   transform: scale(1.05);
 }
 
-
-.modalMenuItemName {
+.sidePanelMenuItemName {
   font-size: 1.2rem;
   color: #333;
   text-align: center;
