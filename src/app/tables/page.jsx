@@ -78,13 +78,13 @@ export default function Tables() {
                   : "bg-gray-500 hover:bg-gray-600 text-gray-100"
               }`}
             >
-              {table.available ? `Table ${table.id}` : `Cancel Table ${table.id}`}
+              {table.available ? `Table ${table.id}` : `Table ${table.id} Booked`}
             </motion.button>
           ))}
         </div>
 
         <div className="mt-6 text-center">
-          <h2 className="text-xl font-semibold mb-2">Reservations</h2>
+          <h2 className="text-xl font-semibold mb-2">My Reservations</h2>
           {tables.some((table) => !table.available) ? (
             <ul className="space-y-2">
               {tables.map(
