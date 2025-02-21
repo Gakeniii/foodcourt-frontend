@@ -54,7 +54,7 @@
 }
 
 .flip-card:hover {
-  transform: scale(1.05);
+  transform: scale(1.1);
 }
 
 .flip-card-inner {
@@ -77,27 +77,26 @@
   height: 100%;
   backface-visibility: hidden;
   border-radius: 8px;
-  box-shadow: 0 8px 14px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 8px 14px 0 rgba(0, 0, 0, 0.2);
+  background-color: #fff;
 }
 
 .flip-card-front {
-  background-color: #fff;
   box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 2px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -1px 0px inset;
 }
 
 .flip-card-back {
-  background-color: #fff;
   color: #333;
   transform: rotateY(180deg);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   font-size: 1rem;
-  padding: 20px;
-  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 2px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -1px 0px inset;
+  padding: 0;
   box-sizing: border-box;
-  text-align: center;
+  text-align: left;
+  height: 100%;
 }
 
 .menuItemImage {
@@ -108,7 +107,17 @@
 }
 
 .menuItemDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  height: calc(100% - 150px);
   padding: 10px;
+}
+
+.menuItemDetails p {
+  margin: 2px 0;
+  font-size: 0.8rem;
 }
 
 .menuItemNamePrice {
@@ -137,8 +146,10 @@
 .quantitySelector {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 5px;
-  margin-top: 10px;
+  margin-top: 5px;
+  width: 100%;
 }
 
 .quantitySelector button {
