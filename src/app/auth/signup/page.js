@@ -87,13 +87,13 @@ export default function SignUp() {
           >
             <option value="">Select Role</option>
             <option value="customer">Customer</option>
-            <option value="admin">Owner</option>
+            <option value="admin">Admin</option>
           </select>
 
           {/* Submit Button */}
-          <button type="submit" className="auth-button">
-            Sign Up
-          </button>
+          <button type="submit" className="w-full bg-red-600 text-white p-2 rounded-md hover:bg-red-700 transition">
+  Sign Up
+</button>
         </form>
 
         <p className="text-center mt-4 text-gray-400">

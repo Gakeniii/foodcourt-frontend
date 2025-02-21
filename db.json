@@ -5,7 +5,7 @@
       "name": "Admin User",
       "email": "admin@example.com",
       "password": "admin123",
-      "role": "Owner"
+      "role": "admin"
     },
     {
       "id": "2",
@@ -26,7 +26,7 @@
       "name": "Sam Tomashi  ",
       "email": "samwamoringa@gmail.com",
       "password": "87654321",
-      "role": "Owner"
+      "role": "admin"
     },
     {
       "id": "1808",
@@ -64,7 +64,7 @@
       "email": "caleb@gmail.com",
       "password": "lkjhgfd",
       "confirmPassword": "lkjhgfd",
-      "role": "Owner"
+      "role": "admin"
     },
     {
       "id": "4093",
@@ -72,7 +72,7 @@
       "email": "calrlin@gmail.com",
       "password": "10101010",
       "confirmPassword": "10101010",
-      "role": "Owner"
+      "role": "admin"
     },
     {
       "id": "cab6",
@@ -89,6 +89,14 @@
       "password": "kjhgfds",
       "confirmPassword": "kjhgfds",
       "role": "admin"
+    },
+    {
+      "id": "ae37",
+      "name": "wewe wewe ",
+      "email": "mimi@gmail.com",
+      "password": "mimiwewe",
+      "confirmPassword": "mimiwewe",
+      "role": "customer"
     }
   ]
 }

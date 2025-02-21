@@ -32,7 +32,7 @@ export default function LoginPage() {
         localStorage.setItem("userEmail", data.email);
 
         //  Redirect based on role
-        router.push(user.role === "owner" ? "/dashboard" : "/home");
+        router.push(user.role === "admin" ? "/dashboard" : "/home");
       }
     } catch (err) {
       setError("Login failed. Please try again.");
