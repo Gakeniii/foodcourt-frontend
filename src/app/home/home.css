@@ -72,3 +72,88 @@
   font-weight: bold;
   color: #795548;
 }
+
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+}
+
+
+.modalContent {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 600px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+
+.closeButton {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #aaa;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  transition: color 0.2s;
+}
+
+.closeButton:hover {
+  color: #e53935;
+}
+
+
+.modalTitle {
+  font-size: 2rem;
+  color: #e53935;
+  margin-bottom: 20px;
+}
+
+
+.modalMenuItemsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+
+.modalMenuItem {
+  width: 180px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.modalMenuItem:hover {
+  transform: scale(1.05);
+}
+
+
+.modalMenuItemName {
+  font-size: 1.2rem;
+  color: #333;
+  text-align: center;
+  margin: 0;
+}
+
+
+.error {
+  color: #e53935;
+  margin-top: 20px;
+}

@@ -88,8 +88,8 @@ const Menu = () => {
                   <img src={item.image_url} alt={item.name} className="menuItemImage" />
                   <div className="menuItemDetails">
                     <h2 className="menuItemName">{item.name}</h2>
-                    <p className="menuItemWaitingTime">Waiting Time: {item.waiting}</p>
-                    <p className="menuItemPrice">{item.price}</p>
+                    <p className="menuItemWaitingTime">Waiting Time: {item.waiting} minutes</p>
+                    <p className="menuItemPrice">KSh {item.price}</p>
                   </div>
                 </div>
                 <div className="flip-card-back">
