@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -10,9 +10,14 @@ export default function Home() {
 
   useEffect(() => {
     async function fetchRestaurants() {
-      const response = await fetch('/data/restaurants.json');
-      const data = await response.json();
-      setRestaurants(data);
+      try {
+        const response = await fetch('https://foodcourt-db.onrender.com/outlets');
+        if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.json();
+        setRestaurants(data);
+      } catch (error) {
+        console.error('Fetch error: ', error);
+      }
     }
     fetchRestaurants();
   }, []);
@@ -36,10 +41,10 @@ export default function Home() {
       <div className="restaurantContainer">
         <div className="cardContainer">
           {filteredRestaurants.map((restaurant) => (
-            <div key={restaurant.slug} className="card">
-              <Link href={`/home/restaurants/${restaurant.slug}`} legacyBehavior>
+            <div key={restaurant.id} className="card">
+              <Link href={`/home/restaurants/${restaurant.id}`} legacyBehavior>
                 <a>
-                  <img src={restaurant.image} alt={restaurant.name} className="cardImage" />
+                  <img src={restaurant.image_url} alt={restaurant.name} className="cardImage" />
                   <div className="cardName">{restaurant.name}</div>
                 </a>
               </Link>

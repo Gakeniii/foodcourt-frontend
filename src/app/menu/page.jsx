@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import '../menu/menu.css'; 
-import QuantitySelector from '../QuantitySelector/QuantitySelector'; 
+import QuantitySelector from '../QuantitySelector/QuantitySelector';
 
 const Menu = () => {
   const [menuItems, setMenuItems] = useState([]);
@@ -18,7 +18,7 @@ const Menu = () => {
   useEffect(() => {
     async function fetchMenuItems() {
       try {
-        const response = await fetch('/data/menu.json');
+        const response = await fetch('https://foodcourt-db.onrender.com/menu_items');
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         setMenuItems(data);
@@ -85,17 +85,17 @@ const Menu = () => {
             >
               <div className="flip-card-inner">
                 <div className="flip-card-front">
-                  <img src={item.image} alt={item.name} className="menuItemImage" />
+                  <img src={item.image_url} alt={item.name} className="menuItemImage" />
                   <div className="menuItemDetails">
                     <h2 className="menuItemName">{item.name}</h2>
-                    <p className="menuItemWaitingTime">Waiting Time: {item.waitingTime}</p>
+                    <p className="menuItemWaitingTime">Waiting Time: {item.waiting}</p>
                     <p className="menuItemPrice">{item.price}</p>
                   </div>
                 </div>
                 <div className="flip-card-back">
-                  <img src={item.image} alt={item.name} className="menuItemImage" />
+                  <img src={item.image_url} alt={item.name} className="menuItemImage" />
                   <div className="menuItemDetails">
-                    <p className="menuItemRestaurant"><strong>Restaurant:</strong> {item.restaurant}</p>
+                    <p className="menuItemRestaurant"><strong>Restaurant:</strong> {item.outlet.name}</p>
                     <p className="menuItemCuisine"><strong>Cuisine:</strong> {item.cuisine}</p>
                     <QuantitySelector className="quantitySelector" price={item.price} />
                   </div>
