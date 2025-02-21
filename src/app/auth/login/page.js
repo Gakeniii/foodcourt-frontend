@@ -28,11 +28,11 @@ export default function LoginPage() {
 
         const user = userRes.data[0];
 
-        // ✅ Store user email in localStorage for later use
+        //  Store user email in localStorage for later use
         localStorage.setItem("userEmail", data.email);
 
-        // ✅ Redirect based on role
-        router.push(user.role === "admin" ? "/dashboard" : "/home");
+        //  Redirect based on role
+        router.push(user.role === "owner" ? "/dashboard" : "/home");
       }
     } catch (err) {
       setError("Login failed. Please try again.");

@@ -75,7 +75,7 @@ export default function SignUp() {
           <select {...register("role", { required: "Role is required" })} required>
             <option value="">Select Role</option>
             <option value="customer">Customer</option>
-            <option value="admin">Admin</option>
+            <option value="admin">Owner</option>
           </select>
 
           <button type="submit">Sign Up</button>
