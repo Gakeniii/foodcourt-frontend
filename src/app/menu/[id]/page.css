@@ -1,41 +1,12 @@
-
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f8f9fa;
-  margin: 0;
-  padding: 0;
-}
-
-
 .pageContainer {
   padding: 20px;
   max-width: 1200px;
   margin: auto;
 }
 
-
-.card {
-  width: 200px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-  transition: transform 0.2s;
+.restaurantDetails {
   text-align: center;
-  margin: auto;
-  padding: 20px;
-}
-
-.card:hover {
-  transform: scale(1.05);
-}
-
-.cardImage {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  border-bottom: 2px solid #4caf50;
+  margin-bottom: 20px;
 }
 
 .cardTitle {
@@ -44,43 +15,71 @@ body {
   color: #e53935;
 }
 
+.cardImage {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
 .cardDescription {
   font-size: 1em;
   color: #555;
   margin-bottom: 20px;
 }
 
-
 .menuItemsContainer {
-  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.menuItemsTitle {
-  font-size: 1.5em;
-  margin-bottom: 10px;
-  color: #333;
+.menuItemCard {
+  width: 200px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  transition: transform 0.2s;
+  margin: 10px;
+  text-align: center;
 }
 
-.menuItem {
-  font-size: 1em;
+.menuItemCard:hover {
+  transform: scale(1.05);
+}
+
+.menuItemImage {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-bottom: 2px solid #4caf50;
+}
+
+.menuItemName {
+  font-size: 1.2rem;
   color: #333;
   padding: 10px;
-  border-bottom: 1px solid #ddd;
 }
 
-
-.ownerInfoTitle {
-  font-size: 1.5em;
-  margin-top: 20px;
-  margin-bottom: 10px;
-  color: #333;
+.menuItemPrice {
+  font-size: 1rem;
+  color: #795548;
+  padding-bottom: 10px;
 }
 
 .ownerInfo {
   font-size: 1em;
   color: #555;
+  margin-top: 20px;
 }
 
+.ownerInfoTitle {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
 
 .loading, .error {
   text-align: center;
