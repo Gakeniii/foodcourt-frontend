@@ -9,6 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "next": "^15.1.7",
+    "pg": "^8.13.3",
+
     "@tailwindcss/postcss": "^4.0.7",
     "axios": "^1.7.9",
     "bcryptjs": "^3.0.2",
