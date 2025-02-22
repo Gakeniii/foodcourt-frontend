@@ -46,27 +46,69 @@
 }
 
 .card {
-  width: 200px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-  transition: transform 0.2s;
+  background-color: transparent;
+  width: 250px;
+  height: 250px;
+  perspective: 1000px;
+  margin: 10px;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.4s, box-shadow 0.4s;
+  box-shadow: 0 8px 14px 0 rgba(0, 0, 0, 0.2); /* Add shadow */
 }
 
 .card:hover {
-  transform: scale(1.05);
+  transform: scale(1.1);
+  box-shadow: 0 16px 28px 0 rgba(0, 0, 0, 0.3); /* Increase shadow on hover */
 }
 
-.cardImage {
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.flip-card-front {
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 2px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -1px 0px inset;
+}
+
+.flip-card-back {
+  color: #333;
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 1rem;
+  padding: 0;
+  box-sizing: border-box;
+  text-align: left;
+  height: 100%;
+}
+
+.cardImage,
+.menuItemImage {
   width: 100%;
   height: 150px;
   object-fit: cover;
   border-bottom: 2px solid #4caf50;
 }
 
-.cardName {
+.cardName,
+.menuItemName {
   padding: 10px;
   text-align: center;
   font-weight: bold;
@@ -77,7 +119,7 @@
   position: fixed;
   top: 0;
   right: 0;
-  width: 300px; 
+  width: 300px;
   height: 100%;
   background-color: #fff;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);

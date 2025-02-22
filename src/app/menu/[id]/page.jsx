@@ -43,17 +43,24 @@ export default function Page({ params }) {
         <p className="error">{error}</p>
       ) : (
         restaurant && (
-          <div className="card">
-            <h1 className="cardTitle">{restaurant.name}</h1>
-            <img src={restaurant.image_url} alt={restaurant.name} className="cardImage" />
-            <p className="cardDescription">{restaurant.description}</p>
+          <div>
+            <div className="card">
+              <h1 className="cardTitle">{restaurant.name}</h1>
+              <img src={restaurant.image_url} alt={restaurant.name} className="cardImage" />
+              <p className="cardDescription">{restaurant.description}</p>
+            </div>
             <div className="menuItemsContainer">
               <h2 className="menuItemsTitle">Menu Items</h2>
-              <ul>
+              <div className="menuItemsGrid">
                 {restaurant.menu_items.map((item) => (
-                  <li key={item.id} className="menuItem">{item.name}</li>
+                  <div key={item.id} className="menuItemCard">
+                    <img src={item.image_url} alt={item.name} className="menuItemImage" />
+                    <h3 className="menuItemName">{item.name}</h3>
+                    <p className="menuItemPrice">KSh {item.price}</p>
+                    <p className="menuItemDescription">{item.description}</p>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </div>
             <div className="ownerInfo">
               <h2 className="ownerInfoTitle">Owner Information</h2>
