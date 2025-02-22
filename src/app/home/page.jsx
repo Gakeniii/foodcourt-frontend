@@ -66,10 +66,10 @@ export default function Home() {
       <div className="restaurantContainer">
         <div className="cardContainer">
           {filteredRestaurants.map((restaurant) => (
-            <div key={restaurant.id} className="card" onClick={() => handleCardClick(restaurant)}>
+            <Link href={`/menu/${restaurant.id}`} key={restaurant.id} className="card" >
               <img src={restaurant.image_url} alt={restaurant.name} className="cardImage" />
               <div className="cardName">{restaurant.name}</div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
