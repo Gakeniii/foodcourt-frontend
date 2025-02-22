@@ -11,28 +11,31 @@ export default function Tables() {
       bookedAt: null,
       bookedFrom: null,
       countdown: 0, // Remaining time in seconds
+      availabilityTime: Math.random() < 0.5 ? 20 : 30, // Random availability time (20 or 30 minutes)
     }))
   );
   const [error, setError] = useState(null);
 
-  const bookTable = (tableId) => {
+  const toggleBooking = (tableId) => {
     setTables((prevTables) =>
       prevTables.map((table) =>
-        table.id === tableId && table.available
-          ? (() => {
-              const bookedAt = new Date();
-              const countdownMinutes = Math.floor(Math.random() * (30 - 20 + 1) + 20);
-              const countdown = countdownMinutes * 60;
-              const bookedFrom = new Date(bookedAt.getTime() + countdown * 1000);
+        table.id === tableId
+          ? table.available
+            ? (() => {
+                const bookedAt = new Date();
+                const countdownMinutes = table.availabilityTime;
+                const countdown = countdownMinutes * 60;
+                const bookedFrom = new Date(bookedAt.getTime() + countdown * 1000);
 
-              return {
-                ...table,
-                available: false,
-                bookedAt,
-                bookedFrom,
-                countdown,
-              };
-            })()
+                return {
+                  ...table,
+                  available: false,
+                  bookedAt,
+                  bookedFrom,
+                  countdown,
+                };
+              })()
+            : table
           : table
       )
     );
@@ -76,19 +79,20 @@ export default function Tables() {
 
         <div className="grid grid-cols-3 gap-6 mt-6">
           {tables.map((table) => (
-            <motion.button
-              key={table.id}
-              onClick={() => table.available && bookTable(table.id)}
-              whileTap={{ scale: 0.95 }}
-              className={`p-6 rounded-lg font-semibold text-center text-lg transition duration-300 ease-in-out shadow-lg ${
-                table.available
-                  ? "bg-green-500 hover:bg-green-600 text-white"
-                  : "bg-gray-500 text-gray-100 cursor-not-allowed"
-              }`}
-              disabled={!table.available}
-            >
-              {table.available ? `Table ${table.id}` : `Table ${table.id} Booked`}
-            </motion.button>
+            <div key={table.id} className="flex flex-col items-center">
+              <motion.button
+                onClick={() => toggleBooking(table.id)}
+                whileTap={{ scale: 0.95 }}
+                className={`p-6 rounded-lg font-semibold text-center text-lg transition duration-300 ease-in-out shadow-lg ${
+                  table.available
+                    ? "bg-green-500 hover:bg-green-600 text-white"
+                    : "bg-gray-500 hover:bg-gray-600 text-gray-100"
+                }`}
+              >
+                {table.available ? `Table ${table.id}` : `Table ${table.id} Booked`}
+              </motion.button>
+              <p className="text-gray-700 mt-2">Available for {table.availabilityTime} min</p>
+            </div>
           ))}
         </div>
 
