@@ -73,7 +73,6 @@
   color: #795548;
 }
 
-
 .sidePanel {
   position: fixed;
   top: 0;
@@ -133,7 +132,6 @@
   text-align: center;
   margin: 0;
 }
-
 
 .error {
   color: #e53935;
