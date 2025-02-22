@@ -79,7 +79,7 @@ export default function Tables() {
 
         <div className="grid grid-cols-3 gap-6 mt-6">
           {tables.map((table) => (
-            <div key={table.id} className="flex flex-col items-center">
+            <div key={table.id} className="flex flex-col items-center border-2 border-gray-300 rounded-lg p-4 shadow-md">
               <motion.button
                 onClick={() => toggleBooking(table.id)}
                 whileTap={{ scale: 0.95 }}
