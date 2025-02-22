@@ -11,6 +11,7 @@ export default function Tables() {
       bookedAt: null,
       bookedFrom: null,
       countdown: 0, // Remaining time in seconds
+      availabilityTime: Math.random() < 0.5 ? 20 : 30, // Random availability time (20 or 30 minutes)
     }))
   );
   const [error, setError] = useState(null);
@@ -22,7 +23,7 @@ export default function Tables() {
           ? table.available
             ? (() => {
                 const bookedAt = new Date();
-                const countdownMinutes = Math.floor(Math.random() * (30 - 20 + 1) + 20);
+                const countdownMinutes = table.availabilityTime;
                 const countdown = countdownMinutes * 60;
                 const bookedFrom = new Date(bookedAt.getTime() + countdown * 1000);
 
@@ -34,11 +35,21 @@ export default function Tables() {
                   countdown,
                 };
               })()
-            : { ...table, available: true, bookedAt: null, bookedFrom: null, countdown: 0 }
+            : table
           : table
       )
     );
     setError(null);
+  };
+
+  const cancelBooking = (tableId) => {
+    setTables((prevTables) =>
+      prevTables.map((table) =>
+        table.id === tableId
+          ? { ...table, available: true, bookedAt: null, bookedFrom: null, countdown: 0 }
+          : table
+      )
+    );
   };
 
   useEffect(() => {
@@ -68,48 +79,62 @@ export default function Tables() {
 
         <div className="grid grid-cols-3 gap-6 mt-6">
           {tables.map((table) => (
-            <motion.button
-              key={table.id}
-              onClick={() => toggleBooking(table.id)}
-              whileTap={{ scale: 0.95 }}
-              className={`p-6 rounded-lg font-semibold text-center text-lg transition duration-300 ease-in-out shadow-lg ${
-                table.available
-                  ? "bg-green-500 hover:bg-green-600 text-white"
-                  : "bg-gray-500 hover:bg-gray-600 text-gray-100"
-              }`}
-            >
-              {table.available ? `Table ${table.id}` : `Table ${table.id} Booked`}
-            </motion.button>
+            <div key={table.id} className="flex flex-col items-center border-2 border-gray-300 rounded-lg p-4 shadow-md">
+              <motion.button
+                onClick={() => toggleBooking(table.id)}
+                whileTap={{ scale: 0.95 }}
+                className={`p-6 rounded-lg font-semibold text-center text-lg transition duration-300 ease-in-out shadow-lg ${
+                  table.available
+                    ? "bg-green-500 hover:bg-green-600 text-white"
+                    : "bg-gray-500 hover:bg-gray-600 text-gray-100"
+                }`}
+              >
+                {table.available ? `Table ${table.id}` : `Table ${table.id} Booked`}
+              </motion.button>
+              <p className="text-gray-700 mt-2">Available for {table.availabilityTime} min</p>
+            </div>
           ))}
         </div>
 
         <div className="mt-6 text-center">
           <h2 className="text-xl font-semibold mb-2">My Reservations</h2>
           {tables.some((table) => !table.available) ? (
-            <ul className="space-y-2">
-              {tables.map(
-                (table) =>
-                  !table.available && (
-                    <li key={table.id} className="text-gray-700 text-lg">
-                      Table {table.id} booked at{" "}
-                      <span className="font-semibold">
-                        {new Date(table.bookedAt).toLocaleTimeString()}
-                      </span>{" "}
-                      | Arrive by:{" "}
-                      <span className="text-blue-500 font-semibold">
-                        {new Date(table.bookedFrom).toLocaleTimeString()}
-                      </span>{" "}
-                      | Time left:{" "}
-                      <span className="text-red-500 font-semibold">
-                        {Math.floor(table.countdown / 60)}:
-                        {String(table.countdown % 60).padStart(2, "0")}
-                      </span>
-                    </li>
-                  )
-              )}
-            </ul>
+            <table className="w-full border-collapse border border-gray-300 mt-4">
+              <thead>
+                <tr className="bg-gray-200">
+                  <th className="border border-gray-300 p-2">Table</th>
+                  <th className="border border-gray-300 p-2">Booked At</th>
+                  <th className="border border-gray-300 p-2">Arrive By</th>
+                  <th className="border border-gray-300 p-2">Time Left</th>
+                  <th className="border border-gray-300 p-2">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tables.map(
+                  (table) =>
+                    !table.available && (
+                      <tr key={table.id} className="text-gray-700">
+                        <td className="border border-gray-300 p-2">{table.id}</td>
+                        <td className="border border-gray-300 p-2">{new Date(table.bookedAt).toLocaleTimeString()}</td>
+                        <td className="border border-gray-300 p-2 text-blue-500 font-semibold">{new Date(table.bookedFrom).toLocaleTimeString()}</td>
+                        <td className="border border-gray-300 p-2 text-red-500 font-semibold">
+                          {Math.floor(table.countdown / 60)}:{String(table.countdown % 60).padStart(2, "0")}
+                        </td>
+                        <td className="border border-gray-300 p-2">
+                          <button
+                            onClick={() => cancelBooking(table.id)}
+                            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                          >
+                            Cancel
+                          </button>
+                        </td>
+                      </tr>
+                    )
+                )}
+              </tbody>
+            </table>
           ) : (
-            <p className="text-gray-500">No tables booked yet.</p>
+            <p className="text-gray-500">No reservations yet.</p>
           )}
         </div>
       </div>
