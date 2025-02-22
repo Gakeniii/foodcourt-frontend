@@ -2,19 +2,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #4caf50;
+  background: linear-gradient(90deg, #4caf50, #388e3c);
   padding: 10px 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s ease;
 }
 
 .logo {
   display: flex;
   align-items: center;
-}
-
-.logoImage {
-  width: 40px;
-  height: 40px;
-  margin-right: 10px;
 }
 
 .logoName {
@@ -25,7 +21,7 @@
 
 .navList {
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-end; 
   list-style: none;
   margin: 0;
   padding: 0;
@@ -37,8 +33,24 @@
   font-size: 1rem;
   font-weight: bold;
   margin-left: 20px;
+  transition: color 0.3s ease, text-decoration 0.3s ease;
 }
 
 .navItem a:hover {
   text-decoration: underline;
+  color: #c8e6c9;
+}
+
+.navItem a.active {
+  border-bottom: 2px solid white;
+}
+
+@media (max-width: 768px) {
+  .navList {
+    flex-direction: column;
+  }
+
+  .navItem {
+    margin-bottom: 10px;
+  }
 }
