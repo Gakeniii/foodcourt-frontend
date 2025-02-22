@@ -15,26 +15,24 @@ export default function Tables() {
   );
   const [error, setError] = useState(null);
 
-  const toggleBooking = (tableId) => {
+  const bookTable = (tableId) => {
     setTables((prevTables) =>
       prevTables.map((table) =>
-        table.id === tableId
-          ? table.available
-            ? (() => {
-                const bookedAt = new Date();
-                const countdownMinutes = Math.floor(Math.random() * (30 - 20 + 1) + 20);
-                const countdown = countdownMinutes * 60;
-                const bookedFrom = new Date(bookedAt.getTime() + countdown * 1000);
+        table.id === tableId && table.available
+          ? (() => {
+              const bookedAt = new Date();
+              const countdownMinutes = Math.floor(Math.random() * (30 - 20 + 1) + 20);
+              const countdown = countdownMinutes * 60;
+              const bookedFrom = new Date(bookedAt.getTime() + countdown * 1000);
 
-                return {
-                  ...table,
-                  available: false,
-                  bookedAt,
-                  bookedFrom,
-                  countdown,
-                };
-              })()
-            : { ...table, available: true, bookedAt: null, bookedFrom: null, countdown: 0 }
+              return {
+                ...table,
+                available: false,
+                bookedAt,
+                bookedFrom,
+                countdown,
+              };
+            })()
           : table
       )
     );
@@ -72,7 +70,7 @@ export default function Tables() {
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-gray-100 to-gray-300 p-8">
       <div className="w-full max-w-3xl bg-white p-8 rounded-xl shadow-lg">
         <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">Welcome!</h1>
-        <h1 className="text-2xl text-gray-700 text-center mb-6">Book a Spot</h1>
+        <h1 className="text-2xl text-gray-700 text-center mb-6">Book a Table</h1>
 
         {error && <p className="text-red-500 text-center text-sm mb-4">{error}</p>}
 
@@ -80,15 +78,16 @@ export default function Tables() {
           {tables.map((table) => (
             <motion.button
               key={table.id}
-              onClick={() => toggleBooking(table.id)}
+              onClick={() => table.available && bookTable(table.id)}
               whileTap={{ scale: 0.95 }}
               className={`p-6 rounded-lg font-semibold text-center text-lg transition duration-300 ease-in-out shadow-lg ${
                 table.available
                   ? "bg-green-500 hover:bg-green-600 text-white"
-                  : "bg-gray-500 hover:bg-gray-600 text-gray-100"
+                  : "bg-gray-500 text-gray-100 cursor-not-allowed"
               }`}
+              disabled={!table.available}
             >
-              {table.available ? `Spot ${table.id}` : `Spot ${table.id} Booked`}
+              {table.available ? `Table ${table.id}` : `Table ${table.id} Booked`}
             </motion.button>
           ))}
         </div>
@@ -99,7 +98,7 @@ export default function Tables() {
             <table className="w-full border-collapse border border-gray-300 mt-4">
               <thead>
                 <tr className="bg-gray-200">
-                  <th className="border border-gray-300 p-2">Spot</th>
+                  <th className="border border-gray-300 p-2">Table</th>
                   <th className="border border-gray-300 p-2">Booked At</th>
                   <th className="border border-gray-300 p-2">Arrive By</th>
                   <th className="border border-gray-300 p-2">Time Left</th>
