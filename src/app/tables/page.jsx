@@ -41,6 +41,16 @@ export default function Tables() {
     setError(null);
   };
 
+  const cancelBooking = (tableId) => {
+    setTables((prevTables) =>
+      prevTables.map((table) =>
+        table.id === tableId
+          ? { ...table, available: true, bookedAt: null, bookedFrom: null, countdown: 0 }
+          : table
+      )
+    );
+  };
+
   useEffect(() => {
     const interval = setInterval(() => {
       setTables((prevTables) =>
@@ -62,7 +72,7 @@ export default function Tables() {
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-gray-100 to-gray-300 p-8">
       <div className="w-full max-w-3xl bg-white p-8 rounded-xl shadow-lg">
         <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">Welcome!</h1>
-        <h1 className="text-2xl text-gray-700 text-center mb-6">Book a Table</h1>
+        <h1 className="text-2xl text-gray-700 text-center mb-6">Book a Spot</h1>
 
         {error && <p className="text-red-500 text-center text-sm mb-4">{error}</p>}
 
@@ -78,7 +88,7 @@ export default function Tables() {
                   : "bg-gray-500 hover:bg-gray-600 text-gray-100"
               }`}
             >
-              {table.available ? `Table ${table.id}` : `Table ${table.id} Booked`}
+              {table.available ? `Spot ${table.id}` : `Spot ${table.id} Booked`}
             </motion.button>
           ))}
         </div>
@@ -90,26 +100,34 @@ export default function Tables() {
               {tables.map(
                 (table) =>
                   !table.available && (
-                    <li key={table.id} className="text-gray-700 text-lg">
-                      Table {table.id} booked at{" "}
-                      <span className="font-semibold">
-                        {new Date(table.bookedAt).toLocaleTimeString()}
-                      </span>{" "}
-                      | Arrive by:{" "}
-                      <span className="text-blue-500 font-semibold">
-                        {new Date(table.bookedFrom).toLocaleTimeString()}
-                      </span>{" "}
-                      | Time left:{" "}
-                      <span className="text-red-500 font-semibold">
-                        {Math.floor(table.countdown / 60)}:
-                        {String(table.countdown % 60).padStart(2, "0")}
-                      </span>
+                    <li key={table.id} className="text-gray-700 text-lg flex justify-between items-center">
+                      <div>
+                        Spot {table.id} booked at {" "}
+                        <span className="font-semibold">
+                          {new Date(table.bookedAt).toLocaleTimeString()}
+                        </span>{" "}
+                        | Arrive by: {" "}
+                        <span className="text-blue-500 font-semibold">
+                          {new Date(table.bookedFrom).toLocaleTimeString()}
+                        </span>{" "}
+                        | Time left: {" "}
+                        <span className="text-red-500 font-semibold">
+                          {Math.floor(table.countdown / 60)}:
+                          {String(table.countdown % 60).padStart(2, "0")}
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => cancelBooking(table.id)}
+                        className="ml-4 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                      >
+                        Cancel
+                      </button>
                     </li>
                   )
               )}
             </ul>
           ) : (
-            <p className="text-gray-500">No tables booked yet.</p>
+            <p className="text-gray-500">No reservations yet.</p>
           )}
         </div>
       </div>
