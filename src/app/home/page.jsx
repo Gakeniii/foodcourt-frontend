@@ -7,9 +7,11 @@ import './home.css';
 export default function Home() {
   const [restaurants, setRestaurants] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCuisine, setSelectedCuisine] = useState('All');
+  const [cuisines, setCuisines] = useState(['All']);
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
-  const [error, setError] = useState(''); 
-  const [menuItems, setMenuItems] = useState([]); 
+  const [error, setError] = useState('');
+  const [menuItems, setMenuItems] = useState([]);
 
   useEffect(() => {
     async function fetchRestaurants() {
@@ -18,6 +20,10 @@ export default function Home() {
         if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
         const data = await response.json();
         setRestaurants(data);
+
+        // Fetch unique cuisines
+        const uniqueCuisines = [...new Set(data.flatMap(restaurant => restaurant.cuisines))];
+        setCuisines(['All', ...uniqueCuisines]);
       } catch (error) {
         console.error('Fetch error:', error);
         setError(`Failed to load restaurants: ${error.message}`);
@@ -31,7 +37,7 @@ export default function Home() {
       const response = await fetch(`https://foodcourt-db.onrender.com/outlets/${restaurantId}`);
       if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
       const data = await response.json();
-      setMenuItems(data.menu_items); 
+      setMenuItems(data.menu_items);
     } catch (error) {
       console.error('Fetch error:', error);
       setError(`Failed to load menu items: ${error.message}`);
@@ -39,17 +45,23 @@ export default function Home() {
   };
 
   const handleCardClick = (restaurant) => {
-    setSelectedRestaurant(restaurant); 
-    fetchMenuItems(restaurant.id); 
+    setSelectedRestaurant(restaurant);
+    fetchMenuItems(restaurant.id);
   };
 
   const handleClosePanel = () => {
-    setSelectedRestaurant(null); 
+    setSelectedRestaurant(null);
   };
 
-  const filteredRestaurants = restaurants.filter((restaurant) =>
-    restaurant.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const handleCuisineChange = (event) => setSelectedCuisine(event.target.value);
+
+  const filteredRestaurants = restaurants
+    .filter((restaurant) =>
+      restaurant.name.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .filter((restaurant) =>
+      selectedCuisine === 'All' || restaurant.cuisines.includes(selectedCuisine)
+    );
 
   return (
     <div className="homeContainer">
@@ -62,6 +74,12 @@ export default function Home() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
+        <select value={selectedCuisine} onChange={handleCuisineChange} className="cuisineDropdown">
+          <option value="All">All Cuisines</option>
+          {cuisines.map((cuisine, index) => (
+            <option key={index} value={cuisine}>{cuisine}</option>
+          ))}
+        </select>
       </div>
       <div className="restaurantContainer">
         <div className="cardContainer">
