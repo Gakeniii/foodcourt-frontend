@@ -2,6 +2,7 @@
   "name": "food-court",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -13,12 +14,10 @@
     "dotenv": "^16.4.7",
     "next": "^15.1.7",
     "pg": "^8.13.3",
-
     "@tailwindcss/postcss": "^4.0.7",
     "axios": "^1.7.9",
     "bcryptjs": "^3.0.2",
     "framer-motion": "^12.4.5",
-    "next": "^15.1.7",
     "next-auth": "^4.24.11",
     "postcss": "^8.5.3",
     "react": "^19.0.0",
