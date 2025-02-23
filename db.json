@@ -5,7 +5,7 @@
       "name": "Admin User",
       "email": "admin@example.com",
       "password": "admin123",
-      "role": "admin"
+      "role": "owner"
     },
     {
       "id": "2",
@@ -26,7 +26,7 @@
       "name": "Sam Tomashi  ",
       "email": "samwamoringa@gmail.com",
       "password": "87654321",
-      "role": "admin"
+      "role": "owner"
     },
     {
       "id": "1808",
@@ -40,7 +40,7 @@
       "name": "Abdul Aziz",
       "email": "abdul@gmail.com",
       "password": "qwerty",
-      "role": "admin"
+      "role": "owner"
     },
     {
       "id": "e274",
@@ -64,7 +64,47 @@
       "email": "caleb@gmail.com",
       "password": "lkjhgfd",
       "confirmPassword": "lkjhgfd",
-      "role": "admin"
+      "role": "owner"
+    },
+    {
+      "id": "4093",
+      "name": "Carlin Barack ",
+      "email": "calrlin@gmail.com",
+      "password": "10101010",
+      "confirmPassword": "10101010",
+      "role": "owner"
+    },
+    {
+      "id": "cab6",
+      "name": "Chloe Beth ",
+      "email": "Chloe@gmail.com",
+      "password": "29292929",
+      "confirmPassword": "29292929",
+      "role": "customer"
+    },
+    {
+      "id": "5b5d",
+      "name": "John jonaya ",
+      "email": "jonaya@gmail.com",
+      "password": "kjhgfds",
+      "confirmPassword": "kjhgfds",
+      "role": "owner"
+    },
+    {
+      "id": "ae37",
+      "name": "wewe wewe ",
+      "email": "mimi@gmail.com",
+      "password": "mimiwewe",
+      "confirmPassword": "mimiwewe",
+      "role": "customer"
+    },
+    {
+      "id": "74c7",
+      "name": "Andy wetu",
+      "email": "andywetu@gmail.com",
+      "password": "wetu",
+      "confirmPassword": "wetu",
+      "role": "owner"
     }
   ]
 }
