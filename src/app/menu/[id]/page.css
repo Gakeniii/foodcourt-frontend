@@ -1,0 +1,118 @@
+.pageContainer {
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
+  background-color: #fff; /* Match the background color */
+}
+
+.card {
+  width: 200px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  transition: transform 0.2s;
+  text-align: center;
+  margin: auto;
+  padding: 20px;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.cardImage {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-bottom: 2px solid #4caf50;
+}
+
+.cardTitle {
+  font-size: 2em;
+  margin-bottom: 10px;
+  color: #e53935;
+}
+
+.cardDescription {
+  font-size: 1em;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.menuItemsContainer {
+  margin-top: 20px;
+}
+
+.menuItemsTitle {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.menuItemsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.menuItemCard {
+  width: 200px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  transition: transform 0.2s;
+  text-align: center;
+  padding: 20px;
+}
+
+.menuItemCard:hover {
+  transform: scale(1.05);
+}
+
+.menuItemImage {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-bottom: 2px solid #4caf50;
+}
+
+.menuItemName {
+  font-size: 1.2em;
+  color: #4caf50;
+  margin: 10px 0;
+}
+
+.menuItemPrice {
+  font-size: 1em;
+  color: #795548;
+  margin: 10px 0;
+}
+
+.menuItemDescription {
+  font-size: 0.9em;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.ownerInfoTitle {
+  font-size: 1.5em;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.ownerInfo {
+  font-size: 1em;
+  color: #555;
+}
+
+.loading, .error {
+  text-align: center;
+  font-size: 1.2em;
+  color: red;
+  margin-top: 20px;
+}

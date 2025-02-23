@@ -1,0 +1,35 @@
+.quantitySelector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 5px;
+  width: 100%;
+}
+
+.quantitySelector button {
+  padding: 3px 6px;
+  font-size: 0.8rem;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.quantitySelector button:hover {
+  background-color: #45a049;
+}
+
+.quantitySelector span {
+  font-size: 0.8rem;
+  color: black; 
+}
+
+.totalPrice {
+  font-size: 0.8rem;
+  margin-left: 10px;
+  color: #795548;
+  font-weight: bold;
+}

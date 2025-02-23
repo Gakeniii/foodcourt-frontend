@@ -12,9 +12,7 @@
 }
 
 .logoImage {
-  width: 40px;
-  height: 40px;
-  margin-right: 10px;
+  display: none; /* Hide the logo image */
 }
 
 .logoName {
