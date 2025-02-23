@@ -34,7 +34,6 @@ const Menu = () => {
     }
     fetchMenuItems();
   }, []);
-
   const handleSearchChange = (event) => setSearchQuery(event.target.value);
   const handleCuisineChange = (event) => setSelectedCuisine(event.target.value);
   const handleCategoryChange = (event) => setSelectedCategory(event.target.value);
@@ -47,6 +46,11 @@ const Menu = () => {
   const closeModal = () => {
     setSelectedItem(null);
     setIsModalOpen(false);
+  };
+
+  const addToCart = (item) => {
+    // Add your add-to-cart logic here
+    console.log(`Added ${item.name} to cart`);
   };
 
   const filteredMenuItems = menuItems
@@ -84,7 +88,7 @@ const Menu = () => {
         <p>{error}</p>
       ) : (
         <div className="menuItemsContainer">
-                    {filteredMenuItems.map((item) => (
+          {filteredMenuItems.map((item) => (
             <div 
               key={item.id} 
               className="menuItemCard" 
@@ -105,14 +109,19 @@ const Menu = () => {
             {isModalOpen && selectedItem && (
         <div className="modal" onClick={closeModal}>
           <div className="modalContent" onClick={(e) => e.stopPropagation()}>
+            <div className="modalImageContainer">
+              <img src={selectedItem.image_url} alt={selectedItem.name} className="modalImage" />
+            </div>
+            <div className="modalDetails">
+              <h2>{selectedItem.name}</h2>
+              <p><strong>Restaurant:</strong> {selectedItem.outlet.name}</p>
+              <p><strong>Category:</strong> {selectedItem.category}</p>
+              <p><strong>Cuisine:</strong> {selectedItem.cuisine}</p>
+              <p><strong>Price:</strong> KSh {selectedItem.price}</p>
+              <QuantitySelector price={selectedItem.price} />
+              <button className="addToCartButton" onClick={() => addToCart(selectedItem)}>Add to Cart</button>
+            </div>
             <span className="close" onClick={closeModal}>&times;</span>
-            <img src={selectedItem.image_url} alt={selectedItem.name} className="modalImage" />
-            <h2>{selectedItem.name}</h2>
-            <p><strong>Restaurant:</strong> {selectedItem.outlet.name}</p>
-            <p><strong>Category:</strong> {selectedItem.category}</p>
-            <p><strong>Cuisine:</strong> {selectedItem.cuisine}</p>
-            <p><strong>Price:</strong> KSh {selectedItem.price}</p>
-            <QuantitySelector price={selectedItem.price} />
           </div>
         </div>
       )}
