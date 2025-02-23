@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import '../menu/menu.css'; 
-import QuantitySelector from '../QuantitySelector/QuantitySelector'; 
+import QuantitySelector from '../QuantitySelector/QuantitySelector';
 
 const Menu = () => {
   const [menuItems, setMenuItems] = useState([]);
@@ -11,21 +11,20 @@ const Menu = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCuisine, setSelectedCuisine] = useState('All');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [flippedCards, setFlippedCards] = useState({});
   const [cuisines, setCuisines] = useState(['All']);
   const [categories, setCategories] = useState(['All']);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     async function fetchMenuItems() {
       try {
-        const response = await fetch('/data/menu.json');
+        const response = await fetch('https://foodcourt-db.onrender.com/menu_items');
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         setMenuItems(data);
-        const cuisines = ['All', ...new Set(data.map(item => item.cuisine))];
-        const categories = ['All', ...new Set(data.map(item => item.category))];
-        setCuisines(cuisines);
-        setCategories(categories);
+        setCuisines(['All', ...new Set(data.map(item => item.cuisine))]);
+        setCategories(['All', ...new Set(data.map(item => item.category))]);
       } catch (error) {
         setError('Failed to load menu items');
         console.error('Fetch error: ', error);
@@ -40,9 +39,14 @@ const Menu = () => {
   const handleCuisineChange = (event) => setSelectedCuisine(event.target.value);
   const handleCategoryChange = (event) => setSelectedCategory(event.target.value);
 
- 
-  const handleCardClick = (id) => {
-    setFlippedCards((prev) => ({ ...prev, [id]: !prev[id] }));
+  const openModal = (item) => {
+    setSelectedItem(item);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedItem(null);
+    setIsModalOpen(false);
   };
 
   const filteredMenuItems = menuItems
@@ -62,11 +66,13 @@ const Menu = () => {
           className="searchBar"
         />
         <select value={selectedCuisine} onChange={handleCuisineChange} className="cuisineDropdown">
+          <option value="All" disabled hidden>Cuisine</option>
           {cuisines.map((cuisine, index) => (
             <option key={index} value={cuisine}>{cuisine}</option>
           ))}
         </select>
         <select value={selectedCategory} onChange={handleCategoryChange} className="categoryDropdown">
+          <option value="All" disabled hidden>Category</option>
           {categories.map((category, index) => (
             <option key={index} value={category}>{category}</option>
           ))}
@@ -78,34 +84,36 @@ const Menu = () => {
         <p>{error}</p>
       ) : (
         <div className="menuItemsContainer">
-          {filteredMenuItems.map((item) => (
-            <div
-              key={item.id}
-              className={`flip-card ${flippedCards[item.id] ? 'flipped' : ''}`}
-              onClick={() => handleCardClick(item.id)}
+                    {filteredMenuItems.map((item) => (
+            <div 
+              key={item.id} 
+              className="menuItemCard" 
+              onClick={() => openModal(item)}
+              style={{ cursor: 'pointer' }} 
             >
-              <div className="flip-card-inner">
-                <div className="flip-card-front">
-                  <img src={item.image} alt={item.name} className="menuItemImage" />
-                  <div className="menuItemDetails">
-                    <div className="menuItemNamePrice">
-                      <h2 className="menuItemName">{item.name}</h2>
-                      <p className="menuItemPrice">{item.price}</p>
-                    </div>
-                    <p className="menuItemWaitingTime">Waiting Time: {item.waitingTime}</p>
-                  </div>
-                </div>
-                <div className="flip-card-back">
-                  <h2 className="menuItemName">{item.name}</h2>
-                  <p><strong>Restaurant:</strong> {item.restaurant}</p>
-                  <p><strong>Cuisine:</strong> {item.cuisine}</p>
-                  <p><strong>Waiting Time:</strong> {item.waitingTime}</p>
-                  <p className="menuItemPrice">{item.price}</p>
-                  <QuantitySelector price={item.price} />
-                </div>
+              <img src={item.image_url} alt={item.name} className="menuItemImage" />
+              <div className="menuItemDetails">
+                <h2 className="menuItemName">{item.name}</h2>
+                <p className="menuItemWaitingTime">Waiting Time: {item.waiting} minutes</p>
+                <p className="menuItemPrice">KSh {item.price}</p>
+                <button className="addToCart" onClick={(e) => { e.stopPropagation(); openModal(item); }}>+</button>
               </div>
             </div>
           ))}
+        </div>
+      )}
+            {isModalOpen && selectedItem && (
+        <div className="modal" onClick={closeModal}>
+          <div className="modalContent" onClick={(e) => e.stopPropagation()}>
+            <span className="close" onClick={closeModal}>&times;</span>
+            <img src={selectedItem.image_url} alt={selectedItem.name} className="modalImage" />
+            <h2>{selectedItem.name}</h2>
+            <p><strong>Restaurant:</strong> {selectedItem.outlet.name}</p>
+            <p><strong>Category:</strong> {selectedItem.category}</p>
+            <p><strong>Cuisine:</strong> {selectedItem.cuisine}</p>
+            <p><strong>Price:</strong> KSh {selectedItem.price}</p>
+            <QuantitySelector price={selectedItem.price} />
+          </div>
         </div>
       )}
     </div>
@@ -113,3 +121,5 @@ const Menu = () => {
 };
 
 export default Menu;
+
+

@@ -9,10 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tailwindcss/postcss": "^4.0.8",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "next": "^15.1.7",
+    "pg": "^8.13.3",
     "axios": "^1.7.9",
     "bcryptjs": "^2.4.3",
     "framer-motion": "^12.4.7",
-    "next": "^15.1.7",
     "next-auth": "^4.24.11",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

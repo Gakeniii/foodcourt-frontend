@@ -1,3 +1,16 @@
+
+.menuContainer {
+  text-align: center;
+  padding: 20px;
+  background-color: #fff;
+}
+
+.menuTitle {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #e53935;
+}
+
 .filtersContainer {
   display: flex;
   justify-content: center;
@@ -24,80 +37,27 @@
   outline: none;
 }
 
-.menuContainer {
-  text-align: center;
-  padding: 20px;
-  background-color: #fff;
-}
-
-.menuTitle {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
-  color: #e53935;
-}
-
 .menuItemsContainer {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
 }
 
-.flip-card {
-  background-color: transparent;
+.menuItemCard {
+  background-color: #fff;
   width: 250px;
   height: 250px;
-  perspective: 1000px;
   margin: 10px;
-  color: white;
-  cursor: pointer;
-  transition: transform 0.4s;
-}
-
-.flip-card:hover {
-  transform: scale(1.05);
-}
-
-.flip-card-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  transition: transform 0.8s;
-  transform-style: preserve-3d;
-}
-
-.flip-card.flipped .flip-card-inner {
-  transform: rotateY(180deg);
-}
-
-.flip-card-front,
-.flip-card-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
+  color: black;
   border-radius: 8px;
-  box-shadow: 0 8px 14px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 8px 14px 0 rgba(0, 0, 0, 0.2);
+  transition: transform 0.4s;
+  position: relative;
+  cursor: pointer;
 }
 
-.flip-card-front {
-  background-color: #fff;
-  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 2px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -1px 0px inset;
-}
-
-.flip-card-back {
-  background-color: #fff;
-  color: #333;
-  transform: rotateY(180deg);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size: 1rem;
-  padding: 20px;
-  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 2px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -1px 0px inset;
-  box-sizing: border-box;
-  text-align: center;
+.menuItemCard:hover {
+  transform: scale(1.05);
 }
 
 .menuItemImage {
@@ -108,13 +68,17 @@
 }
 
 .menuItemDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  height: calc(100% - 150px);
   padding: 10px;
 }
 
-.menuItemNamePrice {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.menuItemDetails p {
+  margin: 2px 0;
+  font-size: 0.8rem;
 }
 
 .menuItemName {
@@ -134,36 +98,84 @@
   color: #757575;
 }
 
-.quantitySelector {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-top: 10px;
-}
-
-.quantitySelector button {
-  padding: 3px 6px;
-  font-size: 0.8rem;
-  background-color: #4caf50;
-  color: #fff;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.quantitySelector button:hover {
-  background-color: #45a049;
-}
-
-.quantitySelector span {
-  font-size: 0.8rem;
-}
-
 .addToCart {
   background-color: grey;
   padding: 3px 6px;
   font-size: 0.8rem;
   border-radius: 3px;
   color: #fff;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.addToCart:hover {
+  background-color: darkgrey;
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5); 
+}
+
+.modalContent {
+  background-color: #fff;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 8px;
+  position: relative;
+  box-shadow: 0 8px 14px 0 rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.5s; 
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modalImage {
+  width: 100%;
+  height: auto;
+  border-bottom: 2px solid #4caf50;
+  margin-bottom: 20px;
+}
+
+.modal h2 {
+  font-size: 1.8rem;
+  color: #e53935;
+  margin-bottom: 10px;
+}
+
+.modal p {
+  font-size: 1rem;
+  margin: 5px 0;
+  color: #333; 
 }
