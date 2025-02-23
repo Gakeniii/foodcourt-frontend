@@ -22,6 +22,7 @@ export default function LoginPage() {
   
       if (response.status === 200) {
         const { accessToken, refreshToken, user } = response.data;
+        document.cookie = `next-auth.session-token=${accessToken}; path=/; Secure`;
   
         // ✅ Store user data in localStorage
         localStorage.setItem("accessToken", accessToken);
