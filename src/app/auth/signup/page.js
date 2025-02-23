@@ -15,11 +15,13 @@ export default function SignUp() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post($,{BASE_URL}/api/auth/signup, data, {
+      const response = await axios.post(`${BASE_URL}/api/auth/signup`, {
         name: data.name,
         email: data.email,
         password: data.password,
         role: data.role,
+      }, {
+        headers: { "Content-Type": "application/json" },
       });
 
       if (response.status === 201) {

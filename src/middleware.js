@@ -1,15 +1,15 @@
+import { NextResponse } from "next/server";
 
-import { withAuth } from "next-auth/middleware";
+export function middleware(req) {
+  const userRole = req.cookies.get("userRole")?.value;
 
-export default withAuth({
-  pages: {
-    signIn: "/auth/login",
-  },
-  callbacks: {
-    authorized: ({ token }) => token?.role === "Owner", // Only allow owner users
-  },
-});
+  if (userRole !== "owner") {
+    return NextResponse.redirect(new URL("/auth/login", req.url));
+  }
+
+  return NextResponse.next();
+}
 
 export const config = {
-  matcher: ["/dashboard", "/Owner/:path*"], // Protected
+  matcher: ["/dashboard"],
 };

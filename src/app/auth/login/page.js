@@ -15,18 +15,27 @@ export default function LoginPage() {
   const BASE_URL = "https://foodcourt-db.onrender.com";
 
   const handleLogin = async (data) => {
-    try {
-      const response = await axios.post($,{BASE_URL}/api/auth/login, data, {
+    try { 
+      const response = await axios.post(`${BASE_URL}/api/auth/login`, data, {
         headers: { "Content-Type": "application/json" },
       });
   
       if (response.status === 200) {
         const { accessToken, refreshToken, user } = response.data;
   
+        // ✅ Store user data in localStorage
         localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("refreshToken", refreshToken);
+        localStorage.setItem("userEmail", user.email);
+        localStorage.setItem("userRole", user.role.toLowerCase()); // ✅ Ensure role is lowercase
   
-        router.push(user.role === "Customer" ? "/home" : "/");
+        // ✅ Redirect Based on Role (Fixing Case Sensitivity)
+        // router.push(user.role.toLowerCase() === "customer" ? "/home" : "/dashboard");
+        if (user.role.toLowerCase() === "owner") {
+          router.push("/dashboard");
+        } else {
+          router.push("/home");
+        }
       }
     } catch (err) {
       setError(err.response?.data?.message || "Login failed. Please try again.");

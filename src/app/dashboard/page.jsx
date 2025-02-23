@@ -1,4 +1,5 @@
-"use client";
+
+     "use client";
 
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -11,28 +12,28 @@ export default function OwnerDashboard() {
   const router = useRouter();
 
   useEffect(() => {
-    // Retrieve user email & role from localStorage
     const userEmail = localStorage.getItem("userEmail");
     const userRole = localStorage.getItem("userRole");
 
-    if (userEmail && userRole === "owner") {
-      // Fetch owner details from the database
-      axios
-        .get(`http://localhost:5000/users?email=${userEmail}`)
-        .then((response) => {
-          if (response.data.length > 0 && response.data[0].role === "owner") {
-            setOwnerName(response.data[0].name);
-          } else {
-            router.push("/home");
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching owner data:", error);
-          router.push("/home");
-        });
-    } else {
+    // Redirect if no user is found or role is incorrect
+    if (!userEmail || userRole.toLowerCase() !== "owner") {
       router.push("/auth/login");
+      return;
     }
+    // Fetch owner details from backend
+    axios
+      .get(`https://foodcourt-db.onrender.com/users?email=${userEmail}`)
+      .then((response) => {
+        if (response.data.length > 0 && response.data[0].role.toLowerCase() === "owner") {
+          setOwnerName(response.data[0].name);
+        } else {
+          router.push("/home");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching owner data:", error);
+        router.push("/home");
+      });
   }, []);
 
   return (
@@ -41,9 +42,15 @@ export default function OwnerDashboard() {
       <nav className="bg-gray-900 text-white p-4 flex justify-between items-center">
         <h1 className="text-xl font-bold">FoodCourt Owner</h1>
         <div>
-          <Link href="/dashboard" className="mr-4 hover:text-gray-300">Dashboard</Link>
+          <Link href="/dashboard" className="mr-4 hover:text-gray-300">
+            Dashboard
+          </Link>
           <button 
-            onClick={() => signOut()} 
+            onClick={() => {
+              signOut();
+              localStorage.clear();
+              router.push("/auth/login");
+            }} 
             className="bg-red-500 px-3 py-1 rounded hover:bg-red-600"
           >
             Logout
@@ -56,7 +63,7 @@ export default function OwnerDashboard() {
         <h2 className="text-3xl font-bold mb-4">Welcome, {ownerName || "Owner"}!</h2>
         <p className="text-lg text-gray-700 mb-6">Manage your restaurant efficiently.</p>
 
-        {/* Owner Sections */}
+        {/* Sections */}
         <div className="grid grid-cols-2 gap-6">
           <Link href="/dashboard/orders" className="bg-blue-500 text-white p-6 rounded shadow-md hover:bg-blue-600">
             Orders
