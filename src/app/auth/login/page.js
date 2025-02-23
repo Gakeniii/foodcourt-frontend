@@ -24,13 +24,13 @@ export default function LoginPage() {
         const { accessToken, refreshToken, user } = response.data;
         document.cookie = `next-auth.session-token=${accessToken}; path=/; Secure`;
   
-        // ✅ Store user data in localStorage
+        //  Store user data in localStorage
         localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("refreshToken", refreshToken);
         localStorage.setItem("userEmail", user.email);
-        localStorage.setItem("userRole", user.role.toLowerCase()); // ✅ Ensure role is lowercase
+        localStorage.setItem("userRole", user.role.toLowerCase()); //  Ensure role is lowercase
   
-        // ✅ Redirect Based on Role (Fixing Case Sensitivity)
+        //  Redirect Based on Role (Fixing Case Sensitivity)
         // router.push(user.role.toLowerCase() === "customer" ? "/home" : "/dashboard");
         if (user.role.toLowerCase() === "owner") {
           router.push("/dashboard");

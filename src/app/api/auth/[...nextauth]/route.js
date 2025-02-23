@@ -62,6 +62,6 @@ export const authOptions = {
   },
 };
 
-// ✅ Fix: Export Named Methods Instead of Default Export
+// Fix: Export Named Methods Instead of Default Export
 export const GET = NextAuth(authOptions);
 export const POST = NextAuth(authOptions);
