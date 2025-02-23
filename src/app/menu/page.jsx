@@ -11,9 +11,10 @@ const Menu = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCuisine, setSelectedCuisine] = useState('All');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [flippedCards, setFlippedCards] = useState({});
   const [cuisines, setCuisines] = useState(['All']);
   const [categories, setCategories] = useState(['All']);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     async function fetchMenuItems() {
@@ -38,8 +39,14 @@ const Menu = () => {
   const handleCuisineChange = (event) => setSelectedCuisine(event.target.value);
   const handleCategoryChange = (event) => setSelectedCategory(event.target.value);
 
-  const handleCardClick = (id) => {
-    setFlippedCards((prev) => ({ ...prev, [id]: !prev[id] }));
+  const openModal = (item) => {
+    setSelectedItem(item);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedItem(null);
+    setIsModalOpen(false);
   };
 
   const filteredMenuItems = menuItems
@@ -77,32 +84,36 @@ const Menu = () => {
         <p>{error}</p>
       ) : (
         <div className="menuItemsContainer">
-          {filteredMenuItems.map((item) => (
-            <div
-              key={item.id}
-              className={`flip-card ${flippedCards[item.id] ? 'flipped' : ''}`}
-              onClick={() => handleCardClick(item.id)}
+                    {filteredMenuItems.map((item) => (
+            <div 
+              key={item.id} 
+              className="menuItemCard" 
+              onClick={() => openModal(item)}
+              style={{ cursor: 'pointer' }} 
             >
-              <div className="flip-card-inner">
-                <div className="flip-card-front">
-                  <img src={item.image_url} alt={item.name} className="menuItemImage" />
-                  <div className="menuItemDetails">
-                    <h2 className="menuItemName">{item.name}</h2>
-                    <p className="menuItemWaitingTime">Waiting Time: {item.waiting} minutes</p>
-                    <p className="menuItemPrice">KSh {item.price}</p>
-                  </div>
-                </div>
-                <div className="flip-card-back">
-                  <img src={item.image_url} alt={item.name} className="menuItemImage" />
-                  <div className="menuItemDetails">
-                    <p className="menuItemRestaurant"><strong>Restaurant:</strong> {item.outlet.name}</p>
-                    <p className="menuItemCuisine"><strong>Cuisine:</strong> {item.cuisine}</p>
-                    <QuantitySelector className="quantitySelector" price={item.price} />
-                  </div>
-                </div>
+              <img src={item.image_url} alt={item.name} className="menuItemImage" />
+              <div className="menuItemDetails">
+                <h2 className="menuItemName">{item.name}</h2>
+                <p className="menuItemWaitingTime">Waiting Time: {item.waiting} minutes</p>
+                <p className="menuItemPrice">KSh {item.price}</p>
+                <button className="addToCart" onClick={(e) => { e.stopPropagation(); openModal(item); }}>+</button>
               </div>
             </div>
           ))}
+        </div>
+      )}
+            {isModalOpen && selectedItem && (
+        <div className="modal" onClick={closeModal}>
+          <div className="modalContent" onClick={(e) => e.stopPropagation()}>
+            <span className="close" onClick={closeModal}>&times;</span>
+            <img src={selectedItem.image_url} alt={selectedItem.name} className="modalImage" />
+            <h2>{selectedItem.name}</h2>
+            <p><strong>Restaurant:</strong> {selectedItem.outlet.name}</p>
+            <p><strong>Category:</strong> {selectedItem.category}</p>
+            <p><strong>Cuisine:</strong> {selectedItem.cuisine}</p>
+            <p><strong>Price:</strong> KSh {selectedItem.price}</p>
+            <QuantitySelector price={selectedItem.price} />
+          </div>
         </div>
       )}
     </div>
@@ -110,3 +121,5 @@ const Menu = () => {
 };
 
 export default Menu;
+
+
