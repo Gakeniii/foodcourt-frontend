@@ -2,7 +2,6 @@
   "name": "food-court",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "NEXT_USE_TURBOPACK=false next dev",
     "build": "next build",
@@ -11,14 +10,15 @@
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.0.8",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
-    "next": "^15.1.7",
-    "pg": "^8.13.3",
     "axios": "^1.7.9",
     "bcryptjs": "^3.0.2",
-    "framer-motion": "^12.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "framer-motion": "^12.4.7",
+    "lucide-react": "^0.475.0",
+    "next": "^15.1.7",
     "next-auth": "^4.24.11",
+    "pg": "^8.13.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.54.2"
@@ -35,4 +35,3 @@
     "tailwindcss": "^3.4.1"
   }
 }
-
