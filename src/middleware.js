@@ -6,10 +6,10 @@ export default withAuth({
     signIn: "/auth/login",
   },
   callbacks: {
-    authorized: ({ token }) => token?.role === "owner", // Only allow owner users
+    authorized: ({ token }) => token?.role === "Owner", // Only allow owner users
   },
 });
 
 export const config = {
-  matcher: ["/dashboard", "/owner/:path*"], // Protected
+  matcher: ["/dashboard", "/Owner/:path*"], // Protected
 };

@@ -78,14 +78,14 @@ export default function SignUp() {
           {errors.confirmPassword && <p className="text-red-500">{errors.confirmPassword.message}</p>} */}
 
           {/* Role Selection */}
-          { <select
+          {/* { <select
             {...register("role", { required: "Role is required" })}
             className="auth-input"
           >
             <option value="">Select Role</option>
             <option value="customer">Customer</option>
             <option value="owner">Owner</option>
-          </select> }
+          </select> } */}
           <input
             type="text"
             {...register("role", { required: "Role is required" })}
