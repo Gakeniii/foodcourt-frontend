@@ -1,39 +1,69 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 
 export default function OwnerDashboard() {
   const [ownerName, setOwnerName] = useState("");
+  const [menus, setMenus] = useState([]); // Store owner's menu items
+  const [ordersCount, setOrdersCount] = useState(0);
+  const [tablesCount, setTablesCount] = useState(0);
+  const [recentOrders, setRecentOrders] = useState([]);
   const router = useRouter();
+  const BASE_URL = "https://foodcourt-db.onrender.com";
 
   useEffect(() => {
-    // Retrieve user email & role from localStorage
     const userEmail = localStorage.getItem("userEmail");
     const userRole = localStorage.getItem("userRole");
 
-    if (userEmail && userRole === "owner") {
-      // Fetch owner details from the database
-      axios
-        .get(`http://localhost:5000/users?email=${userEmail}`)
-        .then((response) => {
-          if (response.data.length > 0 && response.data[0].role === "owner") {
-            setOwnerName(response.data[0].name);
-          } else {
-            router.push("/home");
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching owner data:", error);
-          router.push("/home");
-        });
-    } else {
+    // Redirect if no user or wrong role
+    if (!userEmail || userRole !== "owner") {
       router.push("/auth/login");
+      return;
     }
+
+    // Fetch owner details
+    axios.get(`${BASE_URL}/users?email=${userEmail}`)
+      .then((response) => {
+        if (response.data.length > 0 && response.data[0].role.toLowerCase() === "owner") {
+          setOwnerName(response.data[0].name);
+        } else {
+          router.push("/home"); 
+        }
+      })
+      .catch((error) => console.error("Error fetching owner data:", error));
+
+    // Fetch owner's menus
+    axios.get(`${BASE_URL}/ownermenu`)
+      .then((res) => setMenus(res.data))
+      .catch((error) => console.error("Error fetching menus:", error));
+
+    // Fetch orders count & recent orders
+    axios.get(`${BASE_URL}/orders`)
+      .then((res) => {
+        setOrdersCount(res.data.length);
+        setRecentOrders(res.data.slice(0, 5)); // Get latest 5 orders
+      })
+      .catch((error) => console.error("Error fetching orders:", error));
+
+    // Fetch table bookings count
+    axios.get(`${BASE_URL}/tables`)
+      .then((res) => setTablesCount(res.data.length))
+      .catch((error) => console.error("Error fetching tables:", error));
   }, []);
+
+  // Delete menu item
+  const handleDeleteMenu = async (menuId) => {
+    try {
+      await axios.delete(`${BASE_URL}/ownermenu/${menuId}`);
+      setMenus(menus.filter(menu => menu.id !== menuId)); // Remove deleted menu
+    } catch (error) {
+      console.error("Error deleting menu:", error);
+    }
+  };
 
   return (
     <div className="h-screen flex flex-col bg-gray-100">
@@ -43,7 +73,11 @@ export default function OwnerDashboard() {
         <div>
           <Link href="/dashboard" className="mr-4 hover:text-gray-300">Dashboard</Link>
           <button 
-            onClick={() => signOut()} 
+            onClick={() => {
+              signOut();
+              localStorage.clear();
+              router.push("/auth/login");
+            }} 
             className="bg-red-500 px-3 py-1 rounded hover:bg-red-600"
           >
             Logout
@@ -56,29 +90,73 @@ export default function OwnerDashboard() {
         <h2 className="text-3xl font-bold mb-4">Welcome, {ownerName || "Owner"}!</h2>
         <p className="text-lg text-gray-700 mb-6">Manage your restaurant efficiently.</p>
 
-        {/* Owner Sections */}
-        <div className="grid grid-cols-2 gap-6">
+        {/* Order & Table Counts */}
+        <div className="grid grid-cols-2 gap-6 mb-6">
           <Link href="/dashboard/orders" className="bg-blue-500 text-white p-6 rounded shadow-md hover:bg-blue-600">
-            Orders
+            Orders ({ordersCount})
           </Link>
           <Link href="/dashboard/tables" className="bg-green-500 text-white p-6 rounded shadow-md hover:bg-green-600">
-            Table Bookings
+            Table Bookings ({tablesCount})
           </Link>
         </div>
 
+        {/* Recent Orders Section */}
+        <div className="mt-8 w-full max-w-2xl">
+          <h3 className="text-xl font-bold mb-4">Recent Orders</h3>
+          <div className="bg-white p-4 rounded shadow">
+            {recentOrders.length > 0 ? (
+              recentOrders.map((order, index) => (
+                <div key={index} className="border-b p-2">
+                  <p><strong>Order ID:</strong> {order.id}</p>
+                  <p><strong>Customer:</strong> {order.customerName}</p>
+                  <p><strong>Total:</strong> ksh{order.totalPrice}</p>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500">No recent orders found.</p>
+            )}
+          </div>
+        </div>
+
         {/* Menu Management */}
-        <div className="mt-8">
-          <h3 className="text-xl font-bold mb-4">Menu Management</h3>
-          <div className="grid grid-cols-3 gap-4">
-            <Link href="/dashboard/menu/add" className="bg-yellow-500 text-white p-4 rounded hover:bg-yellow-600">
-              Add a Menu
-            </Link>
-            <Link href="/dashboard/menu/edit" className="bg-orange-500 text-white p-4 rounded hover:bg-orange-600">
-              Edit a Menu
-            </Link>
-            <Link href="/dashboard/menu/delete" className="bg-red-500 text-white p-4 rounded hover:bg-red-600">
-              Delete a Menu
-            </Link>
+        <div className="mt-8 w-full max-w-4xl">
+          <h3 className="text-xl font-bold mb-4">Your Menu Items</h3>
+          <div className="bg-white p-4 rounded shadow">
+            {menus.length > 0 ? (
+              <table className="w-full border-collapse border border-gray-300">
+                <thead>
+                  <tr className="bg-gray-200">
+                    <th className="border p-2">Name</th>
+                    <th className="border p-2">Price</th>
+                    <th className="border p-2">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {menus.map((menu) => (
+                    <tr key={menu.id} className="text-center border-b">
+                      <td className="border p-2">{menu.name}</td>
+                      <td className="border p-2">${menu.price}</td>
+                      <td className="border p-2 space-x-2">
+                        <Link href={`/dashboard/menu/${menu.id}`} className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+                          View
+                        </Link>
+                        <Link href={`/dashboard/menu/edit/${menu.id}`} className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">
+                          Edit
+                        </Link>
+                        <button 
+                          onClick={() => handleDeleteMenu(menu.id)}
+                          className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p className="text-gray-500">No menu items found.</p>
+            )}
           </div>
         </div>
       </div>
