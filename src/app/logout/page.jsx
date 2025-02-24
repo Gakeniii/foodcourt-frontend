@@ -1,5 +1,6 @@
 "use client"
 
+import { Link } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -21,12 +22,12 @@ const Logout = () => {
 
   return (
     <>
-        <button
+        <Link
         onClick={handleLogout}
         disabled={loading}
         >
         {loading ? "Logging out..." : "Logout"}
-        </button>
+        </Link>
     </>
   );
 };
