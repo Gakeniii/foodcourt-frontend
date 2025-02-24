@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
+import "./signup.css"
 
 export default function SignUp() {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -39,12 +39,12 @@ export default function SignUp() {
       style={{ backgroundImage: "url('/background.jpg')", minHeight: "100vh" }}
     >
       {/* Centered Signup Box */}
-      <div className="auth-box flex flex-col justify-center items-center w-full max-w-md bg-black bg-opacity-80 p-8 rounded-xl shadow-lg">
+      <div className="signup-box flex flex-col justify-center items-center w-full max-w-md bg-black bg-opacity-80 p-8 rounded-xl shadow-lg">
         <h2 className="text-3xl font-bold text-center text-white">Sign Up</h2>
         {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
 
         {/* Signup Form */}
-        <form onSubmit={handleSubmit(onSubmit)} className="mt-6 flex flex-col space-y-4 w-full">
+        <form  onSubmit={handleSubmit(onSubmit)} className="mt-6 flex flex-col space-y-4 w-full">
           {/* Full Name */}
           <input
             {...register("name", { required: "Full Name is required" })}

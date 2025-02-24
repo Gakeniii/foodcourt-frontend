@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-// import { signIn } from "next-auth/react";
 import "./login.css";
 
 export default function LoginPage() {
@@ -24,15 +23,12 @@ export default function LoginPage() {
         const { accessToken, refreshToken, user } = response.data;
         document.cookie = `next-auth.session-token=${accessToken}; path=/; Secure`;
   
-        //  Store user data in localStorage
         localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("refreshToken", refreshToken);
         localStorage.setItem("userEmail", user.email);
         localStorage.setItem("userRole", user.role.toLowerCase()); //  Ensure role is lowercase
   
-        //  Redirect Based on Role (Fixing Case Sensitivity)
-        // router.push(user.role.toLowerCase() === "customer" ? "/home" : "/dashboard");
-        if (user.role.toLowerCase() === "owner") {
+        if (user.role.toLowerCase() === "Owner") {
           router.push("/dashboard");
         } else {
           router.push("/home");
