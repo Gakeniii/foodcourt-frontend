@@ -57,6 +57,7 @@ export default function SignUp() {
           <input
             type="email"
             {...register("email", { required: "Email is required" })}
+            placeholder="Email"
             className="auth-input"
           />
           {errors.email && <p className="text-red-500">{errors.email.message}</p>}
