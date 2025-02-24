@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import './page.css'; 
+// import QuantitySelector from '../QuantitySelector/QuantitySelector';
 
 export default function Page({ params }) {
   const [restaurant, setRestaurant] = useState(null);
@@ -12,6 +13,8 @@ export default function Page({ params }) {
   const [categories, setCategories] = useState(['All']);
   const [selectedItem, setSelectedItem] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showPopup, setShowPopup] = useState(false); 
+
   useEffect(() => {
     async function fetchRestaurant() {
       const { id } = await params;
@@ -43,9 +46,42 @@ export default function Page({ params }) {
     setIsModalOpen(false);
   };
 
-  const addToCart = (item) => {
-    // Add your add-to-cart logic here
-    console.log(`Added ${item.name} to cart`);
+  const addToCart = async (item) => {
+    try {
+      const response = await fetch('https://foodcourt-db.onrender.com/order_items', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          menu_item_id: item.id,
+          menu_item_name: item.name,
+          order_details: {
+            customer_id: 13, 
+            customer_name: 'Veronica Boyle', 
+            status: 'Pending',
+            table_number: 7 
+          },
+          outlet_name: item.outlet.name,
+          payment_method: 'Card', 
+          quantity: 1, 
+          total_price: item.price 
+        }),
+      });
+
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        console.error('Error:', errorMessage);
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log(`Added ${item.name} to cart`, data);
+      setShowPopup(true); 
+      setTimeout(() => setShowPopup(false), 3000); 
+    } catch (error) {
+      console.error('Error adding item to cart:', error);
+    }
   };
 
   const filteredMenuItems = restaurant?.menu_items
@@ -53,6 +89,9 @@ export default function Page({ params }) {
     .filter((item) => selectedCategory === 'All' || item.category === selectedCategory);
     return (
       <div className="menuContainer">
+        {restaurant?.image_url && (
+          <img src={restaurant.image_url} alt={`${restaurant.name} Banner`} className="restaurantBanner" />
+        )}
         <h1 className="menuTitle">{restaurant?.name} Menu</h1>
         <div className="filtersContainer">
           <input
@@ -106,16 +145,22 @@ export default function Page({ params }) {
                 )}
                 <p><strong>Category:</strong> {selectedItem.category}</p>
                 <p><strong>Cuisine:</strong> {selectedItem.cuisine}</p>
+                <p><strong>Description:</strong> {selectedItem.description}</p>
                 <p><strong>Price:</strong> KSh {selectedItem.price}</p>
+                {/* <QuantitySelector price={selectedItem.price} /> */}
                 <button className="addToCartButton" onClick={() => addToCart(selectedItem)}>Add to Cart</button>
               </div>
               <span className="close" onClick={closeModal}>&times;</span>
             </div>
           </div>
         )}
+        {showPopup && (
+          <div className="popupMessage">
+            <p>Item added to cart!</p>
+          </div>
+        )}
       </div>
     );
   }
   
-
 
