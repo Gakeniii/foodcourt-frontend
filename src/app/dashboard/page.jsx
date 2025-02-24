@@ -19,19 +19,19 @@ export default function OwnerDashboard() {
     const userEmail = localStorage.getItem("userEmail");
     const userRole = localStorage.getItem("userRole");
 
-    // Redirect if no user or wrong role
-    if (!userEmail || userRole !== "owner") {
-      router.push("/auth/login");
-      return;
-    }
+    // // Redirect if no user or wrong role
+    // if (!userEmail || userRole !== "Owner") {
+    //   router.push("/auth/login");
+    //   return;
+    // }
 
     // Fetch owner details
     axios.get(`${BASE_URL}/users?email=${userEmail}`)
       .then((response) => {
-        if (response.data.length > 0 && response.data[0].role.toLowerCase() === "owner") {
+        if (response.data.length > 0 && response.data[0].role.toLowerCase() === "Owner") {
           setOwnerName(response.data[0].name);
         } else {
-          router.push("/home"); 
+          router.push("/dashboard"); 
         }
       })
       .catch((error) => console.error("Error fetching owner data:", error));
@@ -108,7 +108,7 @@ export default function OwnerDashboard() {
               recentOrders.map((order, index) => (
                 <div key={index} className="border-b p-2">
                   <p><strong>Order ID:</strong> {order.id}</p>
-                  <p><strong>Customer:</strong> {order.customerName}</p>
+                  <p><strong>Customer:</strong> {order.name}</p>
                   <p><strong>Total:</strong> ksh{order.totalPrice}</p>
                 </div>
               ))
@@ -135,7 +135,7 @@ export default function OwnerDashboard() {
                   {menus.map((menu) => (
                     <tr key={menu.id} className="text-center border-b">
                       <td className="border p-2">{menu.name}</td>
-                      <td className="border p-2">${menu.price}</td>
+                      <td className="border p-2">Ksh{menu.price}</td>
                       <td className="border p-2 space-x-2">
                         <Link href={`/dashboard/menu/${menu.id}`} className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
                           View
