@@ -1,42 +1,52 @@
 "use client";
 
-import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import "./login.css";
+import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
   const router = useRouter();
 
-  const BASE_URL = "https://foodcourt-db.onrender.com";
+  // Basic form validation
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.email) newErrors.email = "Email is required.";
+    if (!formData.password) newErrors.password = "Password is required.";
+    return newErrors;
+  };
 
-  const handleLogin = async (data) => {
-    try { 
-      const response = await axios.post(`${BASE_URL}/api/auth/login`, data, {
-        headers: { "Content-Type": "application/json" },
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formErrors = validateForm();
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
+      return;
+    }
+    setErrors({});
+
+    try {
+      const signInResult = await signIn("credentials", {
+        redirect: false,
+        email: formData.email,
+        password: formData.password,
       });
-  
-      if (response.status === 200) {
-        const { accessToken, refreshToken, user } = response.data;
-        document.cookie = `next-auth.session-token=${accessToken}; path=/; Secure`;
-  
-        localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("refreshToken", refreshToken);
-        localStorage.setItem("userEmail", user.email);
-        localStorage.setItem("userRole", user.role.toLowerCase()); //  Ensure role is lowercase
-        localStorage.setItem("userId", user.id); // Store user ID
-  
-        if (user.role.toLowerCase() === "owner") {
-          router.push("/dashboard");
-        } else {
-          router.push("/home");
-        }
+      if (signInResult.error) {
+        setError(signInResult.error);
+      } else {
+        router.push("/dashboard");
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Login failed. Please try again.");
+      setError("Something went wrong!");
     }
   };
 
@@ -50,22 +60,26 @@ export default function LoginPage() {
           {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 
           {/* Login Form */}
-          <form onSubmit={handleSubmit(handleLogin)} className="mt-4">
+          <form onSubmit={handleSubmit} className="mt-4">
             <input
               type="email"
-              {...register("email", { required: "Email is required" })}
+              name="email"
               placeholder="Email"
               className="auth-input"
+              value={formData.email}
+              onChange={handleChange}
             />
-            {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
 
             <input
               type="password"
-              {...register("password", { required: "Password is required" })}
+              name="password"
               placeholder="Password"
               className="auth-input"
+              value={formData.password}
+              onChange={handleChange}
             />
-            {errors.password && <p class="text-red-500">{errors.password.message}</p>}
+            {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
 
             <button type="submit" className="w-full bg-red-600 text-white p-2 rounded-md hover:bg-red-700 transition">
               Sign In
