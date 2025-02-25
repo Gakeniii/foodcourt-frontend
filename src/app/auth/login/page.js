@@ -27,8 +27,9 @@ export default function LoginPage() {
         localStorage.setItem("refreshToken", refreshToken);
         localStorage.setItem("userEmail", user.email);
         localStorage.setItem("userRole", user.role.toLowerCase()); //  Ensure role is lowercase
+        localStorage.setItem("userId", user.id); // Store user ID
   
-        if (user.role.toLowerCase() === "Owner") {
+        if (user.role.toLowerCase() === "owner") {
           router.push("/dashboard");
         } else {
           router.push("/home");
@@ -64,7 +65,7 @@ export default function LoginPage() {
               placeholder="Password"
               className="auth-input"
             />
-            {errors.password && <p className="text-red-500">{errors.password.message}</p>}
+            {errors.password && <p class="text-red-500">{errors.password.message}</p>}
 
             <button type="submit" className="w-full bg-red-600 text-white p-2 rounded-md hover:bg-red-700 transition">
               Sign In
