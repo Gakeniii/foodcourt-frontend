@@ -48,7 +48,7 @@
   }
 
   .category-circle {
-    @apply flex h-24 w-24 items-center justify-center rounded-full bg-white shadow-lg;
+    @apply flex h-24 w-24 items-center justify-center rounded-full bg-yellow-100 shadow-lg;
   }
 
   .category-icon {

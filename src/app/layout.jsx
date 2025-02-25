@@ -3,6 +3,7 @@ import Navbar from './navigation/navbar';
 import Footer from './footer/page'; // Import the Footer component
 import "@fortawesome/fontawesome-free/css/all.min.css"; // Import Font Awesome CSS
 import "./globals.css";
+import { Navbar } from "./navigation/navbar";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -21,7 +22,6 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Navbar />
         {children}
         <Footer /> {/* Add the Footer component here */}
       </body>
