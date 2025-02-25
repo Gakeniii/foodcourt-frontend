@@ -9,8 +9,9 @@ export default function Checkout() {
   const [paymentMethod, setPaymentMethod] = useState("");
   const [isConfirming, setIsConfirming] = useState(false);
   const [orderStatus, setOrderStatus] = useState("Pending");
-  // const router = useRouter();
+  const router = useRouter();
   const {data: session,status}= useSession()
+
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/auth/login");
@@ -27,7 +28,6 @@ export default function Checkout() {
 
   const handleConfirm = async () => {
     try {
-      console.log("Session Data:", session);
   
       if (!session || !session?.user) {
         alert("You need to log in before placing an order.");
@@ -47,6 +47,7 @@ export default function Checkout() {
           menu_item_id: item.menu_item_id,
           quantity: item.quantity
         })),
+        table_number: tableNumber,
         status: "pending"
       };
   
@@ -59,13 +60,18 @@ export default function Checkout() {
         },
         body: JSON.stringify(orderData),
       });
+
+      // if (!response.ok) {
+      //   throw new Error(responseData.message || "Failed to place order");
+      // }
   
       const responseData = await response.json();
-      console.log("Order Response:", responseData);
-  
-      if (!response.ok) {
-        throw new Error(responseData.message || "Failed to place order");
+      if(responseData.error){
+        alert(responseData.error)
       }
+      // console.log("Order Response:", responseData);
+  
+      
   
       localStorage.removeItem("cart");
       alert("Order placed successfully!");
