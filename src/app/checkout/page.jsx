@@ -39,15 +39,18 @@ export default function Checkout() {
         alert("Your cart is empty!");
         return;
       }
+
+      const customerid = localStorage.getItem("userId", user.id)
   
       const orderData = {
-        customer_id: session.user.id,
+        customer_id: customerid,
         order_items: cart.map(item => ({
           menu_item_id: item.menu_item_id,
           quantity: item.quantity
         })),
         status: "pending"
       };
+      console.log("session", session?.user.id)
   
       console.log("Order Data to be sent:", JSON.stringify(orderData, null, 2));
   
