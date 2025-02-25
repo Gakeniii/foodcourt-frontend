@@ -3,12 +3,23 @@ import Navbar from './navigation/navbar';
 import Footer from './footer/page'; // Import the Footer component
 import "@fortawesome/fontawesome-free/css/all.min.css"; // Import Font Awesome CSS
 import "./globals.css";
-import { Navbar } from "./navigation/navbar";
+import { Roboto } from 'next/font/google';
+import { JetBrains_Mono } from '@fontsource/jetbrains-mono';
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
 });
+
+const roboto = Roboto({
+  variable: "--font-roboto",
+  subsets: ["latin"],
+  weight: ["400", "700"], // Specify the weights you want to use
+});
+
+const jetBrainsMono = {
+  variable: "jetBrainsMono",
+};
 
 export default function RootLayout({ children }) {
   return (
@@ -21,7 +32,7 @@ export default function RootLayout({ children }) {
           crossOrigin="anonymous" 
         />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${inter.variable} ${roboto.variable} ${jetBrainsMono.variable} antialiased`}>
         {children}
         <Footer /> {/* Add the Footer component here */}
       </body>
