@@ -1,0 +1,110 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Admin User",
+      "email": "admin@example.com",
+      "password": "admin123",
+      "role": "owner"
+    },
+    {
+      "id": "2",
+      "name": "Regular User",
+      "email": "user@example.com",
+      "password": "user123",
+      "role": "customer"
+    },
+    {
+      "id": "24d3",
+      "name": "Antony Oloo",
+      "email": "antoloo254@gmail.com",
+      "password": "1234567",
+      "role": "customer"
+    },
+    {
+      "id": "ab90",
+      "name": "Sam Tomashi  ",
+      "email": "samwamoringa@gmail.com",
+      "password": "87654321",
+      "role": "owner"
+    },
+    {
+      "id": "1808",
+      "name": "Paul Oloo",
+      "email": "paul@gmail.com",
+      "password": "123456789",
+      "role": "customer"
+    },
+    {
+      "id": "71ff",
+      "name": "Abdul Aziz",
+      "email": "abdul@gmail.com",
+      "password": "qwerty",
+      "role": "owner"
+    },
+    {
+      "id": "e274",
+      "name": "Sifa Gakeni",
+      "email": "sifa@gmail.com",
+      "password": "lkjhgf",
+      "confirmPassword": "lkjhgf",
+      "role": "customer"
+    },
+    {
+      "id": "8e03",
+      "name": "Antony Ramen ",
+      "email": "antonyramen@gmail.com",
+      "password": "qwerty12",
+      "confirmPassword": "qwerty12",
+      "role": "customer"
+    },
+    {
+      "id": "21f3",
+      "name": "Caleb Mzito",
+      "email": "caleb@gmail.com",
+      "password": "lkjhgfd",
+      "confirmPassword": "lkjhgfd",
+      "role": "owner"
+    },
+    {
+      "id": "4093",
+      "name": "Carlin Barack ",
+      "email": "calrlin@gmail.com",
+      "password": "10101010",
+      "confirmPassword": "10101010",
+      "role": "owner"
+    },
+    {
+      "id": "cab6",
+      "name": "Chloe Beth ",
+      "email": "Chloe@gmail.com",
+      "password": "29292929",
+      "confirmPassword": "29292929",
+      "role": "customer"
+    },
+    {
+      "id": "5b5d",
+      "name": "John jonaya ",
+      "email": "jonaya@gmail.com",
+      "password": "kjhgfds",
+      "confirmPassword": "kjhgfds",
+      "role": "owner"
+    },
+    {
+      "id": "ae37",
+      "name": "wewe wewe ",
+      "email": "mimi@gmail.com",
+      "password": "mimiwewe",
+      "confirmPassword": "mimiwewe",
+      "role": "customer"
+    },
+    {
+      "id": "74c7",
+      "name": "Andy wetu",
+      "email": "andywetu@gmail.com",
+      "password": "wetu",
+      "confirmPassword": "wetu",
+      "role": "owner"
+    }
+  ]
+}
