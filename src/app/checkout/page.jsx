@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export default function Checkout() {
   const [order, setOrder] = useState({ items: [], totalPrice: 0 });
@@ -8,7 +9,9 @@ export default function Checkout() {
   const [paymentMethod, setPaymentMethod] = useState("");
   const [isConfirming, setIsConfirming] = useState(false);
   const [orderStatus, setOrderStatus] = useState("Pending");
-  const router = useRouter();
+  // const router = useRouter();
+  const {data: session,status}= useSession()
+  console.log("Session for checkout", session)
 
   useEffect(() => {
     const storedCart = localStorage.getItem("cart");
@@ -21,6 +24,15 @@ export default function Checkout() {
 
   const handleConfirm = async () => {
     try {
+      console.log("Session Data:", session);
+  
+      if (!session || !session.user) {
+        alert("You need to log in before placing an order.");
+        return;
+      }
+  
+      console.log("Session User ID:", session.user.id); 
+  
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
   
       if (cart.length === 0) {
@@ -29,14 +41,15 @@ export default function Checkout() {
       }
   
       const orderData = {
+        customer_id: session.user.id,
         order_items: cart.map(item => ({
           menu_item_id: item.menu_item_id,
           quantity: item.quantity
         })),
         status: "pending"
       };
+  
       console.log("Order Data to be sent:", JSON.stringify(orderData, null, 2));
-
   
       const response = await fetch("https://foodcourt-db.onrender.com/orders", {
         method: "POST",
@@ -60,6 +73,7 @@ export default function Checkout() {
       alert(error.message || "Failed to place order. Please try again.");
     }
   };
+  
   
   
   return (
