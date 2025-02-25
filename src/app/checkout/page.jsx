@@ -11,8 +11,11 @@ export default function Checkout() {
   const [orderStatus, setOrderStatus] = useState("Pending");
   // const router = useRouter();
   const {data: session,status}= useSession()
-  console.log("Session for checkout", session)
-
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/auth/login");
+    }
+  }, [status, router]);
   useEffect(() => {
     const storedCart = localStorage.getItem("cart");
     if (storedCart) {
@@ -26,13 +29,11 @@ export default function Checkout() {
     try {
       console.log("Session Data:", session);
   
-      if (!session || !session.user) {
+      if (!session || !session?.user) {
         alert("You need to log in before placing an order.");
         return;
       }
-  
-      console.log("Session User ID:", session.user.id); 
-  
+    
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
   
       if (cart.length === 0) {
@@ -41,7 +42,7 @@ export default function Checkout() {
       }
   
       const orderData = {
-        customer_id: session.user.id,
+        customer_id: session?.user?.id,
         order_items: cart.map(item => ({
           menu_item_id: item.menu_item_id,
           quantity: item.quantity
@@ -74,7 +75,9 @@ export default function Checkout() {
     }
   };
   
-  
+  if (status === "loading") {
+    return <p>Loading session...</p>;
+  }
   
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-8 px-4">
