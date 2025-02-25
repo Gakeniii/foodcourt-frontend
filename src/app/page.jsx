@@ -61,16 +61,5 @@ export default function LandingPage() {
   );
 }
 
-// "use client";
-// import dynamic from 'next/dynamic';
 
-// const MotionDiv = dynamic(() => import('framer-motion').then(mod => mod.motion.div), { ssr: false });
-
-// export default function LandingPage() {
-//   return (
-//     <MotionDiv initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
-//       <h1>Test</h1>
-//     </MotionDiv>
-//   );
-// }
 

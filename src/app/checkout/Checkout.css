@@ -3,15 +3,15 @@
   margin: 0 auto;
   padding: 20px;
   font-family: Arial, sans-serif;
-  background-color: #fff; /* Set a white background for better contrast */
-  color: #333; /* Set a dark text color for better readability */
+  background-color: #fff; 
+  color: #333; 
 }
 
 .checkoutTitle {
   text-align: center;
   font-size: 2rem;
   margin-bottom: 20px;
-  color: #e53935; /* Title color */
+  color: #e53935; 
 }
 
 .cartItemsList {
@@ -26,7 +26,7 @@
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 8px;
-  background-color: #f9f9f9; /* Set a light background for cart items */
+  background-color: #f9f9f9; 
   box-shadow: 0 8px 14px 0 rgba(0, 0, 0, 0.2);
 }
 
@@ -56,3 +56,72 @@
 .cartItemDetails strong {
   font-weight: bold;
 }
+
+/* Dropdown Styling */
+.tableDropdownContainer {
+  margin-bottom: 20px; 
+  text-align: center;
+}
+
+.tableDropdownContainer label {
+  font-size: 1rem;
+  margin-right: 10px;
+  color: #333;
+}
+
+.tableDropdown {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+}
+/* Dropdown Styling */
+.paymentDropdownContainer {
+  margin-bottom: 20px; 
+  text-align: center;
+}
+
+.paymentDropdownContainer label {
+  font-size: 1rem;
+  margin-right: 10px;
+  color: #333;
+}
+
+.paymentDropdown {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+}
+.confirmOrderButton {
+  display: block;
+  width: 100%;
+  padding: 15px 20px;
+  margin: 20px 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  background-color: #e53935; 
+  color: #fff; 
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.confirmOrderButton:hover {
+  background-color: #d32f2f; 
+  transform: scale(1.05); 
+}
+
+.confirmOrderButton:active {
+  background-color: #b71c1c; 
+  transform: scale(0.98); 
+}
+
