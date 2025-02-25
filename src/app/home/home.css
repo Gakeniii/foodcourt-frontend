@@ -12,8 +12,8 @@
 
 .searchBarContainer {
   display: flex;
-  justify-content: center; 
-  gap: 20px; 
+  justify-content: center;
+  gap: 20px;
   margin-bottom: 20px;
 }
 
@@ -24,16 +24,11 @@
   border-radius: 20px;
   border-color: #4caf50;
   color: #333;
-  width: 300px; 
+  width: 300px;
 }
 
 .searchBar::placeholder {
   color: #999;
-}
-.filterContainer {
-  display: flex;
-  align-items: center; 
-  gap: 10px; 
 }
 
 .cuisineDropdown {
@@ -50,25 +45,22 @@
   box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
   outline: none;
 }
+
 .restaurantContainer {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
 }
 
 .cardContainer {
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
   gap: 20px;
-  padding: 20px;
+  justify-content: center;
 }
 
 .card {
   background-color: #fff;
-  flex: 1 0 30%; 
-  max-width: 30%; 
-  box-sizing: border-box; 
+  width: 300px; 
   margin: 10px;
   color: black;
   border-radius: 8px;
@@ -77,16 +69,17 @@
   position: relative;
   cursor: pointer;
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
 }
 
 .card:hover {
   transform: scale(1.05);
   box-shadow: 0 16px 28px 0 rgba(0, 0, 0, 0.3);
 }
+
 .cardImage {
   width: 100%;
-  height: 200px; 
+  height: 200px;
   object-fit: cover;
   border-bottom: 2px solid #4caf50;
 }
@@ -95,9 +88,9 @@
   padding: 10px;
   text-align: center;
   font-weight: bold;
-  font-size: 1.2rem; 
-  color: #4caf50; 
-  margin-top: auto; 
+  font-size: 1.2rem;
+  color: #4caf50;
+  margin-top: auto;
 }
 
 .sidePanel {

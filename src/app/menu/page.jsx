@@ -8,13 +8,9 @@ const Menu = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCuisine, setSelectedCuisine] = useState('All');
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [cuisines, setCuisines] = useState(['All']);
-  const [categories, setCategories] = useState(['All']);
   const [selectedItem, setSelectedItem] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showPopup, setShowPopup] = useState(false); // State for popup message
 
   useEffect(() => {
     async function fetchMenuItems() {
@@ -23,8 +19,6 @@ const Menu = () => {
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         setMenuItems(data);
-        setCuisines(['All', ...new Set(data.map(item => item.cuisine))]);
-        setCategories(['All', ...new Set(data.map(item => item.category))]);
       } catch (error) {
         setError('Failed to load menu items');
         console.error('Fetch error: ', error);
@@ -34,9 +28,6 @@ const Menu = () => {
     }
     fetchMenuItems();
   }, []);
-  const handleSearchChange = (event) => setSearchQuery(event.target.value);
-  const handleCuisineChange = (event) => setSelectedCuisine(event.target.value);
-  const handleCategoryChange = (event) => setSelectedCategory(event.target.value);
 
   const openModal = (item) => {
     setSelectedItem(item);
@@ -48,47 +39,53 @@ const Menu = () => {
     setIsModalOpen(false);
   };
 
-  const addToCart = (item) => {
-    // Add your add-to-cart logic here
-    console.log(`Added ${item.name} to cart`);
+  const addToCart = async (item) => {
+    try {
+      const response = await fetch('https://foodcourt-db.onrender.com/order_items', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          menu_item_id: item.id,
+          menu_item_name: item.name,
+          order_details: {
+            customer_id: 13, 
+            customer_name: 'Veronica Boyle', 
+            status: 'Pending',
+            table_number: 7 
+          },
+          outlet_name: item.outlet.name,
+          payment_method: 'Card', 
+          quantity: 1, 
+          total_price: item.price 
+        }),
+      });
+
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        console.error('Error:', errorMessage);
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      console.log(`Added ${item.name} to cart`, data);
+      setShowPopup(true); 
+      setTimeout(() => setShowPopup(false), 3000);
+    } catch (error) {
+      console.error('Error adding item to cart:', error);
+    }
   };
-
-  const filteredMenuItems = menuItems
-    .filter((item) => item.name.toLowerCase().includes(searchQuery.toLowerCase()))
-    .filter((item) => selectedCuisine === 'All' || item.cuisine === selectedCuisine)
-    .filter((item) => selectedCategory === 'All' || item.category === selectedCategory);
-
   return (
     <div className="menuContainer">
       <h1 className="menuTitle">Menu</h1>
-      <div className="filtersContainer">
-        <input
-          type="text"
-          placeholder="Search..."
-          value={searchQuery}
-          onChange={handleSearchChange}
-          className="searchBar"
-        />
-        <select value={selectedCuisine} onChange={handleCuisineChange} className="cuisineDropdown">
-          <option value="All" disabled hidden>Cuisine</option>
-          {cuisines.map((cuisine, index) => (
-            <option key={index} value={cuisine}>{cuisine}</option>
-          ))}
-        </select>
-        <select value={selectedCategory} onChange={handleCategoryChange} className="categoryDropdown">
-          <option value="All" disabled hidden>Category</option>
-          {categories.map((category, index) => (
-            <option key={index} value={category}>{category}</option>
-          ))}
-        </select>
-      </div>
       {loading ? (
         <p>Loading menu items...</p>
       ) : error ? (
         <p>{error}</p>
       ) : (
         <div className="menuItemsContainer">
-          {filteredMenuItems.map((item) => (
+          {menuItems.map((item) => (
             <div 
               key={item.id} 
               className="menuItemCard" 
@@ -100,13 +97,12 @@ const Menu = () => {
                 <h2 className="menuItemName">{item.name}</h2>
                 <p className="menuItemWaitingTime">Waiting Time: {item.waiting} minutes</p>
                 <p className="menuItemPrice">KSh {item.price}</p>
-                <button className="addToCart" onClick={(e) => { e.stopPropagation(); openModal(item); }}>+</button>
               </div>
             </div>
           ))}
         </div>
       )}
-            {isModalOpen && selectedItem && (
+      {isModalOpen && selectedItem && (
         <div className="modal" onClick={closeModal}>
           <div className="modalContent" onClick={(e) => e.stopPropagation()}>
             <div className="modalImageContainer">
@@ -117,6 +113,7 @@ const Menu = () => {
               <p><strong>Restaurant:</strong> {selectedItem.outlet.name}</p>
               <p><strong>Category:</strong> {selectedItem.category}</p>
               <p><strong>Cuisine:</strong> {selectedItem.cuisine}</p>
+              <p><strong>Description:</strong> {selectedItem.description}</p>
               <p><strong>Price:</strong> KSh {selectedItem.price}</p>
               <QuantitySelector price={selectedItem.price} />
               <button className="addToCartButton" onClick={() => addToCart(selectedItem)}>Add to Cart</button>
@@ -125,10 +122,14 @@ const Menu = () => {
           </div>
         </div>
       )}
+      {showPopup && (
+        <div className="popupMessage">
+          <p>Item added to cart!</p>
+        </div>
+      )}
     </div>
   );
 };
 
 export default Menu;
-
 
