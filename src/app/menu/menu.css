@@ -220,3 +220,57 @@
   text-decoration: none;
   cursor: pointer;
 }
+.filtersContainer {
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* Space between filters */
+  margin-bottom: 20px;
+}
+
+.searchBar,
+.cuisineDropdown,
+.categoryDropdown,
+.tableDropdown {
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 20px; /* Rounded corners */
+  width: 250px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  margin-right: 10px; /* Space between elements */
+}
+
+.searchBar:focus,
+.cuisineDropdown:focus,
+.categoryDropdown:focus,
+.tableDropdown:focus {
+  border-color: #4caf50;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+  outline: none;
+}
+
+.searchBar {
+  padding-left: 30px; /* Adjusted padding for icon */
+  position: relative;
+}
+
+.searchBar::before {
+  content: '🔍'; /* Unicode search icon */
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.dropdownIcon {
+  position: relative;
+}
+
+.dropdownIcon::after {
+  content: '▼';
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
