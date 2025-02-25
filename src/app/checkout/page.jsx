@@ -1,101 +1,113 @@
 "use client";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Checkout() {
+  const [order, setOrder] = useState({ items: [], totalPrice: 0 });
+  const [tableNumber, setTableNumber] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
   const [isConfirming, setIsConfirming] = useState(false);
-  const [orderStatus, setOrderStatus] = useState("Order Placed");
+  const [orderStatus, setOrderStatus] = useState("Pending");
+  const router = useRouter();
 
-  // Sample order data
-  const order = {
-    customerName: "John Doe",
-    restaurantName: "Spicy Bites",
-    items: [
-      { foodName: "Chicken Biryani", price: 1200, table: 5, status: orderStatus },
-      { foodName: "Mango Lassi", price: 300, table: 5, status: orderStatus },
-    ],
-    totalPrice: 1500,
-    waitingTime: "25 mins",
-    paymentMethod: "Credit Card",
+  useEffect(() => {
+    const storedCart = localStorage.getItem("cart");
+    if (storedCart) {
+      const parsedCart = JSON.parse(storedCart);
+      const total = parsedCart.reduce((acc, item) => acc + item.total_price, 0);
+      setOrder({ items: parsedCart, totalPrice: total });
+    }
+  }, []);
+
+  const handleConfirm = async () => {
+    try {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  
+      if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+      }
+  
+      const orderData = {
+        order_items: cart.map(item => ({
+          menu_item_id: item.menu_item_id,
+          quantity: item.quantity
+        })),
+        status: "pending"
+      };
+      console.log("Order Data to be sent:", JSON.stringify(orderData, null, 2));
+
+  
+      const response = await fetch("https://foodcourt-db.onrender.com/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
+  
+      const responseData = await response.json();
+      console.log("Order Response:", responseData);
+  
+      if (!response.ok) {
+        throw new Error(responseData.message || "Failed to place order");
+      }
+  
+      localStorage.removeItem("cart");
+      alert("Order placed successfully!");
+    } catch (error) {
+      console.error("Order Error:", error);
+      alert(error.message || "Failed to place order. Please try again.");
+    }
   };
-
-  // Handle confirm button click
-  const handleConfirm = () => {
-    setIsConfirming(true);
-    setOrderStatus("Confirmed");
-
-    setTimeout(() => {
-      setOrderStatus("Served");
-      setIsConfirming(false);
-    }, 3000); // Simulating order processing delay
-  };
-
+  
+  
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-8 px-4">
-      {/* Checkout Card */}
+      <h1 className="text-3xl font-bold text-gray-800">Checkout</h1>
+
       <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6 mt-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">
-          Order Summary
-        </h2>
+        <h2 className="text-2xl font-semibold mb-4">Your Order</h2>
+        {order.items.length === 0 ? (
+          <p className="text-gray-600">No items in cart.</p>
+        ) : (
+          <ul>
+            {order.items.map((item, index) => (
+              <li key={index} className="border-b py-2 flex justify-between">
+                <span>{item.quantity}x {item.menu_item_name}</span>
+                <span>KSh {item.total_price}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+        <h3 className="text-xl font-semibold mt-4">Total: KSh {order.totalPrice}</h3>
+      </div>
 
-        {/* Customer Details */}
-        <div className="mb-4">
-          <p className="text-lg font-semibold text-gray-700">
-            Customer: <span className="font-normal">{order.customerName}</span>
-          </p>
-          <p className="text-lg font-semibold text-gray-700">
-            Restaurant: <span className="font-normal">{order.restaurantName}</span>
-          </p>
-        </div>
+      <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6 mt-6">
+        <label className="block mb-2">Table Number:</label>
+        <input
+          type="text"
+          value={tableNumber}
+          onChange={(e) => setTableNumber(e.target.value)}
+          className="border p-2 w-full mb-4"
+        />
 
-        {/* Order Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-gray-200">
-                <th className="p-2 text-left">Food Name</th>
-                <th className="p-2 text-left">Table</th>
-                <th className="p-2 text-left">Status</th>
-                <th className="p-2 text-right">Price (KSh)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {order.items.map((item, index) => (
-                <tr key={index} className="border-t">
-                  <td className="p-2">{item.foodName}</td>
-                  <td className="p-2">{item.table}</td>
-                  <td className="p-2">{orderStatus}</td>
-                  <td className="p-2 text-right">{item.price}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <label className="block mb-2">Payment Method:</label>
+        <input
+          type="text"
+          value={paymentMethod}
+          onChange={(e) => setPaymentMethod(e.target.value)}
+          className="border p-2 w-full mb-4"
+        />
 
-        {/* Order Summary */}
-        <div className="mt-4 border-t pt-4">
-          <p className="text-lg font-semibold text-gray-700">
-            Waiting Time: <span className="font-normal">{order.waitingTime}</span>
-          </p>
-          <p className="text-lg font-semibold text-gray-700">
-            Payment Method: <span className="font-normal">{order.paymentMethod}</span>
-          </p>
-          <p className="text-xl font-bold text-gray-800 mt-2">
-            Total: KSh {order.totalPrice}
-          </p>
-        </div>
-
-        {/* Confirm Order Button */}
         <button
-          className={`w-full mt-6 py-3 text-white font-bold rounded-lg transition ${
-            isConfirming
-              ? "bg-gray-500 cursor-not-allowed"
-              : "bg-blue-600 hover:bg-blue-700"
+          className={`w-full py-2 text-white rounded-lg ${
+            isConfirming ? "bg-gray-500" : "bg-green-600 hover:bg-green-700"
           }`}
           onClick={handleConfirm}
           disabled={isConfirming}
         >
-          {isConfirming ? "Processing..." : "Confirm Order"}
+          {isConfirming ? "Confirming..." : "Confirm Order"}
         </button>
       </div>
     </div>

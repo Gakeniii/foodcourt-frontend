@@ -1,27 +1,31 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import '../menu/menu.css'; 
-import QuantitySelector from '../QuantitySelector/QuantitySelector';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import "../menu/menu.css";
+import QuantitySelector from "../QuantitySelector/QuantitySelector";
 
 const Menu = () => {
+  const router = useRouter();
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showPopup, setShowPopup] = useState(false); // State for popup message
+  const [showPopup, setShowPopup] = useState(false);
+  const [cart, setCart] = useState([]);
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     async function fetchMenuItems() {
       try {
-        const response = await fetch('https://foodcourt-db.onrender.com/menu_items');
-        if (!response.ok) throw new Error('Network response was not ok');
+        const response = await fetch("https://foodcourt-db.onrender.com/menu_items");
+        if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
         setMenuItems(data);
       } catch (error) {
-        setError('Failed to load menu items');
-        console.error('Fetch error: ', error);
+        setError("Failed to load menu items");
+        console.error("Fetch error: ", error);
       } finally {
         setLoading(false);
       }
@@ -31,6 +35,7 @@ const Menu = () => {
 
   const openModal = (item) => {
     setSelectedItem(item);
+    setQuantity(1);
     setIsModalOpen(true);
   };
 
@@ -39,43 +44,38 @@ const Menu = () => {
     setIsModalOpen(false);
   };
 
-  const addToCart = async (item) => {
-    try {
-      const response = await fetch('https://foodcourt-db.onrender.com/order_items', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          menu_item_id: item.id,
-          menu_item_name: item.name,
-          order_details: {
-            customer_id: 13, 
-            customer_name: 'Veronica Boyle', 
-            status: 'Pending',
-            table_number: 7 
-          },
-          outlet_name: item.outlet.name,
-          payment_method: 'Card', 
-          quantity: 1, 
-          total_price: item.price 
-        }),
-      });
-
-      if (!response.ok) {
-        const errorMessage = await response.text();
-        console.error('Error:', errorMessage);
-        throw new Error('Network response was not ok');
-      }
-
-      const data = await response.json();
-      console.log(`Added ${item.name} to cart`, data);
-      setShowPopup(true); 
-      setTimeout(() => setShowPopup(false), 3000);
-    } catch (error) {
-      console.error('Error adding item to cart:', error);
+  const addToCart = () => {
+    if (!selectedItem) return;
+    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+  
+    const existingItemIndex = existingCart.findIndex(item => item.menu_item_id === selectedItem.id);
+  
+    if (existingItemIndex !== -1) {
+      existingCart[existingItemIndex].quantity += quantity;
+      existingCart[existingItemIndex].total_price += selectedItem.price * quantity;
+    } else {
+      const cartItem = {
+        menu_item_id: selectedItem.id,
+        menu_item_name: selectedItem.name,
+        quantity,
+        total_price: selectedItem.price * quantity,
+        outlet_name: selectedItem.outlet?.name || "Unknown Outlet",
+      };
+      existingCart.push(cartItem);
     }
+  
+    setCart(existingCart);
+    localStorage.setItem("cart", JSON.stringify(existingCart));
+  
+    setShowPopup(true);
+    setTimeout(() => setShowPopup(false), 2000);
+  
+    closeModal();
+  
+    router.push("/checkout");
   };
+  
+
   return (
     <div className="menuContainer">
       <h1 className="menuTitle">Menu</h1>
@@ -86,11 +86,11 @@ const Menu = () => {
       ) : (
         <div className="menuItemsContainer">
           {menuItems.map((item) => (
-            <div 
-              key={item.id} 
-              className="menuItemCard" 
+            <div
+              key={item.id}
+              className="menuItemCard"
               onClick={() => openModal(item)}
-              style={{ cursor: 'pointer' }} 
+              style={{ cursor: "pointer" }}
             >
               <img src={item.image_url} alt={item.name} className="menuItemImage" />
               <div className="menuItemDetails">
@@ -102,6 +102,7 @@ const Menu = () => {
           ))}
         </div>
       )}
+
       {isModalOpen && selectedItem && (
         <div className="modal" onClick={closeModal}>
           <div className="modalContent" onClick={(e) => e.stopPropagation()}>
@@ -110,18 +111,20 @@ const Menu = () => {
             </div>
             <div className="modalDetails">
               <h2>{selectedItem.name}</h2>
-              <p><strong>Restaurant:</strong> {selectedItem.outlet.name}</p>
+              <p><strong>Restaurant:</strong> {selectedItem.outlet?.name || "Unknown Outlet"}</p>
               <p><strong>Category:</strong> {selectedItem.category}</p>
               <p><strong>Cuisine:</strong> {selectedItem.cuisine}</p>
               <p><strong>Description:</strong> {selectedItem.description}</p>
               <p><strong>Price:</strong> KSh {selectedItem.price}</p>
-              <QuantitySelector price={selectedItem.price} />
-              <button className="addToCartButton" onClick={() => addToCart(selectedItem)}>Add to Cart</button>
+              <QuantitySelector quantity={quantity} setQuantity={setQuantity} price={selectedItem.price} />
+              <p><strong>Total Price:</strong> KSh {selectedItem.price * quantity}</p>
+              <button className="addToCartButton" onClick={addToCart}>Add to Cart</button>
             </div>
             <span className="close" onClick={closeModal}>&times;</span>
           </div>
         </div>
       )}
+
       {showPopup && (
         <div className="popupMessage">
           <p>Item added to cart!</p>
@@ -132,4 +135,3 @@ const Menu = () => {
 };
 
 export default Menu;
-
