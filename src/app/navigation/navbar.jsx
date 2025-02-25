@@ -101,7 +101,7 @@ export function Navbar() {
             <div className="flex h-16 items-center justify-between">
               {/* Logo */}
               <Link href="/" className="flex items-center">
-                <span className="text-4xl font-bold text-[#00A082]">Foodie Eats</span>
+                <span className="text-4xl font-bold text-gray-600">Foodie Eats</span>
               </Link>
 
               {/* User Button with Dropdown */}
