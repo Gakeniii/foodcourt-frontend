@@ -12,6 +12,8 @@ export default function Home() {
   const [selectedRestaurant, setSelectedRestaurant] = useState(null);
   const [error, setError] = useState('');
   const [menuItems, setMenuItems] = useState([]);
+  const [tables, setTables] = useState([]);
+  const [loadingTables, setLoadingTables] = useState(true);
 
   useEffect(() => {
     async function fetchRestaurants() {
@@ -32,6 +34,22 @@ export default function Home() {
     fetchRestaurants();
   }, []);
 
+  useEffect(() => {
+    async function fetchTables() {
+      try {
+        const response = await fetch('https://foodcourt-db.onrender.com/bookings');
+        if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.json();
+        setTables(data.filter(table => table.availability === true));
+      } catch (error) {
+        console.error('Fetch error: ', error);
+        setError(`Failed to load tables: ${error.message}`);
+      } finally {
+        setLoadingTables(false);
+      }
+    }
+    fetchTables();
+  }, []);
   const fetchMenuItems = async (restaurantId) => {
     try {
       const response = await fetch(`https://foodcourt-db.onrender.com/outlets/${restaurantId}`);
@@ -62,36 +80,35 @@ export default function Home() {
     .filter((restaurant) =>
       selectedCuisine === 'All' || restaurant.cuisines.includes(selectedCuisine)
     );
-
-  return (
-    <div className="homeContainer">
-      <h1 className="welcomeMessage">Welcome to Foodcourt!</h1>
-      <div className="searchBarContainer">
-        <input
-          type="text"
-          className="searchBar"
-          placeholder="Search for restaurants..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <select value={selectedCuisine} onChange={handleCuisineChange} className="cuisineDropdown">
-          <option value="All">All Cuisines</option>
-          {cuisines.map((cuisine, index) => (
-            <option key={index} value={cuisine}>{cuisine}</option>
-          ))}
-        </select>
-      </div>
-      <div className="restaurantContainer">
-        <div className="cardContainer">
-          {filteredRestaurants.map((restaurant) => (
-            <Link href={`/menu/${restaurant.id}`} key={restaurant.id} className="card">
-              <img src={restaurant.image_url} alt={restaurant.name} className="cardImage" />
-              <div className="cardName">{restaurant.name}</div>
-            </Link>
-          ))}
+    return (
+      <div className="homeContainer">
+        <h1 className="welcomeMessage">Welcome to Foodcourt!</h1>
+        <div className="searchBarContainer">
+          <input
+            type="text"
+            className="searchBar"
+            placeholder="Search for restaurants..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <select value={selectedCuisine} onChange={handleCuisineChange} className="cuisineDropdown">
+            <option value="All">All Cuisines</option>
+            {cuisines.map((cuisine, index) => (
+              <option key={index} value={cuisine}>{cuisine}</option>
+            ))}
+          </select>
         </div>
-      </div>
-      {selectedRestaurant && (
+        <div className="restaurantContainer">
+          <div className="cardContainer">
+            {filteredRestaurants.map((restaurant) => (
+              <Link href={`/menu/${restaurant.id}`} key={restaurant.id} className="card">
+                <img src={restaurant.image_url} alt={restaurant.name} className="cardImage" />
+                <div className="cardName">{restaurant.name}</div>
+              </Link>
+            ))}
+          </div>
+        </div>
+        {selectedRestaurant && (
         <div className="sidePanel">
           <div className="sidePanelContent">
             <span className="closeButton" onClick={handleClosePanel}>&times;</span>
@@ -106,7 +123,26 @@ export default function Home() {
           </div>
         </div>
       )}
+      <div className="tablesContainer">
+        <h2>Available Tables</h2>
+        {loadingTables ? (
+          <p>Loading available tables...</p>
+        ) : error ? (
+          <p>{error}</p>
+        ) : (
+          tables.map((table) => (
+            <div key={table.id} className="tableCard">
+              <h3>Table {table.table_number}</h3>
+              <p>Booking Time: {new Date(table.booking_time).toLocaleString()}</p>
+              <p>Customer: {table.customer_name}</p>
+            </div>
+          ))
+        )}
+      </div>
       {error && <p className="error">{error}</p>}
     </div>
   );
 }
+
+  
+

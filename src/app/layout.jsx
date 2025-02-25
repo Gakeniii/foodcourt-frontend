@@ -1,4 +1,6 @@
+import { CartProvider } from './context/CartContext';
 import { Inter, Roboto_Mono } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import Footer from './footer/page'; // Import the Footer component
 import "@fortawesome/fontawesome-free/css/all.min.css"; // Import Font Awesome CSS
 import "./globals.css";
