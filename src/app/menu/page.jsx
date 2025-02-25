@@ -1,28 +1,33 @@
 "use client";
 
+import { useCart } from '../context/CartContext';
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import "../menu/menu.css";
 import QuantitySelector from "../QuantitySelector/QuantitySelector";
 
 const Menu = () => {
-  const router = useRouter();
-  const [menuItems, setMenuItems] = useState([]);
+  const [outlets, setOutlets] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCuisine, setSelectedCuisine] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedItem, setSelectedItem] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showPopup, setShowPopup] = useState(false);
-  const [cart, setCart] = useState([]);
   const [quantity, setQuantity] = useState(1);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const router = useRouter();
+  const { addItemToCart } = useCart();
 
   useEffect(() => {
-    async function fetchMenuItems() {
+    async function fetchOutlets() {
       try {
+
         const response = await fetch("https://foodcourt-db.onrender.com/menu_items");
         if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
-        setMenuItems(data);
+        setOutlets(data);
       } catch (error) {
         setError("Failed to load menu items");
         console.error("Fetch error: ", error);
@@ -30,12 +35,16 @@ const Menu = () => {
         setLoading(false);
       }
     }
-    fetchMenuItems();
+    fetchOutlets();
   }, []);
+  const handleSearchChange = (event) => setSearchQuery(event.target.value);
+  const handleCuisineChange = (event) => setSelectedCuisine(event.target.value);
+  const handleCategoryChange = (event) => setSelectedCategory(event.target.value);
 
-  const openModal = (item) => {
-    setSelectedItem(item);
+  const openModal = (item, outlet) => {
+    setSelectedItem({ ...item, outlet });
     setQuantity(1);
+    setTotalPrice(item.price);
     setIsModalOpen(true);
   };
 
@@ -43,6 +52,27 @@ const Menu = () => {
     setSelectedItem(null);
     setIsModalOpen(false);
   };
+
+  const handleQuantityChange = (quantity, totalPrice) => {
+    setQuantity(quantity);
+    setTotalPrice(totalPrice);
+  };
+
+  const addToCart = (item) => {
+    addItemToCart({
+      ...item,
+      quantity,
+      totalPrice,
+    });
+    router.push('/checkout'); 
+  };
+  const filteredMenuItems = outlets.flatMap(outlet =>
+    outlet.menu_items.filter(item =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (selectedCuisine === 'All' || item.cuisine === selectedCuisine) &&
+      (selectedCategory === 'All' || item.category === selectedCategory)
+    ).map(item => ({ ...item, outlet }))
+  );
 
   const addToCart = () => {
     if (!selectedItem) return;
@@ -75,28 +105,55 @@ const Menu = () => {
     router.push("/checkout");
   };
   
-
   return (
     <div className="menuContainer">
       <h1 className="menuTitle">Menu</h1>
+      <div className="filtersContainer">
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+          className="searchBar"
+        />
+        <select value={selectedCuisine} onChange={handleCuisineChange} className="cuisineDropdown">
+          <option value="All">All Cuisines</option>
+          {Array.from(new Set(outlets.flatMap(outlet => outlet.cuisines))).map(cuisine => (
+            <option key={cuisine} value={cuisine}>{cuisine}</option>
+          ))}
+        </select>
+        <select value={selectedCategory} onChange={handleCategoryChange} className="categoryDropdown">
+          <option value="All">All Categories</option>
+          {Array.from(new Set(outlets.flatMap(outlet => outlet.menu_items.map(item => item.category)))).map(category => (
+            <option key={category} value={category}>{category}</option>
+          ))}
+        </select>
+      </div>
       {loading ? (
-        <p>Loading menu items...</p>
+        <p>Loading outlets...</p>
       ) : error ? (
         <p>{error}</p>
       ) : (
         <div className="menuItemsContainer">
-          {menuItems.map((item) => (
-            <div
-              key={item.id}
-              className="menuItemCard"
-              onClick={() => openModal(item)}
-              style={{ cursor: "pointer" }}
+          {filteredMenuItems.map((item) => (
+            <div 
+              key={item.id} 
+              className="menuItemCard" 
+              onClick={() => openModal(item, item.outlet)}
+              style={{ cursor: 'pointer' }} 
+//           {menuItems.map((item) => (
+//             <div
+//               key={item.id}
+//               className="menuItemCard"
+//               onClick={() => openModal(item)}
+//               style={{ cursor: "pointer" }}
             >
               <img src={item.image_url} alt={item.name} className="menuItemImage" />
               <div className="menuItemDetails">
                 <h2 className="menuItemName">{item.name}</h2>
                 <p className="menuItemWaitingTime">Waiting Time: {item.waiting} minutes</p>
                 <p className="menuItemPrice">KSh {item.price}</p>
+                <button className="addToCart" onClick={(e) => { e.stopPropagation(); openModal(item, item.outlet); }}>+</button>
               </div>
             </div>
           ))}
@@ -114,11 +171,17 @@ const Menu = () => {
               <p><strong>Restaurant:</strong> {selectedItem.outlet?.name || "Unknown Outlet"}</p>
               <p><strong>Category:</strong> {selectedItem.category}</p>
               <p><strong>Cuisine:</strong> {selectedItem.cuisine}</p>
-              <p><strong>Description:</strong> {selectedItem.description}</p>
               <p><strong>Price:</strong> KSh {selectedItem.price}</p>
-              <QuantitySelector quantity={quantity} setQuantity={setQuantity} price={selectedItem.price} />
-              <p><strong>Total Price:</strong> KSh {selectedItem.price * quantity}</p>
-              <button className="addToCartButton" onClick={addToCart}>Add to Cart</button>
+              <QuantitySelector price={selectedItem.price} onQuantityChange={handleQuantityChange} />
+              <button 
+                className="addToCartButton" 
+                onClick={() => addToCart(selectedItem)}
+              >
+                Add to Cart
+              </button>
+//               <QuantitySelector quantity={quantity} setQuantity={setQuantity} price={selectedItem.price} />
+//               <p><strong>Total Price:</strong> KSh {selectedItem.price * quantity}</p>
+//               <button className="addToCartButton" onClick={addToCart}>Add to Cart</button>
             </div>
             <span className="close" onClick={closeModal}>&times;</span>
           </div>
@@ -135,3 +198,4 @@ const Menu = () => {
 };
 
 export default Menu;
+

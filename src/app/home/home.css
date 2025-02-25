@@ -45,7 +45,6 @@
   box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
   outline: none;
 }
-
 .restaurantContainer {
   display: flex;
   justify-content: center;
@@ -92,7 +91,6 @@
   color: #4caf50;
   margin-top: auto;
 }
-
 .sidePanel {
   position: fixed;
   top: 0;
@@ -132,7 +130,6 @@
   flex-direction: column;
   gap: 10px;
 }
-
 .sidePanelMenuItem {
   background-color: #fff;
   border: 1px solid #ddd;
@@ -151,6 +148,30 @@
   color: #333;
   text-align: center;
   margin: 0;
+}
+
+.tablesContainer {
+  margin-top: 40px;
+  text-align: left;
+}
+
+.tableCard {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+}
+
+.tableCard h3 {
+  color: #4caf50;
+  margin: 0 0 10px 0;
+}
+
+.tableCard p {
+  color: #333;
+  margin: 5px 0;
 }
 
 .error {
