@@ -1,66 +1,41 @@
-.navbar {
+.grid-container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #0a0a0a;
-  padding: 10px 20px;
+  justify-content: center;
+  gap: 200px;
+  margin-top: -30px;
 }
 
-.logo {
-  display: flex;
-  align-items: center;
-}
-
-.logoImage {
-  display: none; /* Hide the logo image */
-}
-
-.logoName {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: white;
-}
-
-.navList {
-  display: flex;
-  justify-content: space-around;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.navItem a {
-  color: white;
-  text-decoration: none;
-  font-size: 1rem;
-  font-weight: bold;
-  margin-left: 20px;
-}
-
-.navItem a:hover {
-  text-decoration: underline;
-}
-/* src/app/navigation/navbar.css */
-.notification-badge {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  background-color: red;
-  color: white;
-  border-radius: 50%;
-  padding: 2px 6px;
-  font-size: 0.75rem;
-  font-weight: bold;
-}
-
-/* Additional CSS for the Navbar component */
 .category-circle {
   position: relative;
+  border-radius: 50%;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 55px;
+  height: 55px;
 }
 
 .category-icon {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
 }
 
+.category-label {
+  font-size: 0.75rem;
+}
 
+.notification-badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.75rem;
+}

@@ -1,8 +1,7 @@
-// src/app/navigation/navbar.jsx
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { ChevronDown, User, LogOut } from "lucide-react";
 import './navbar.css';
@@ -20,8 +19,6 @@ export function Navbar({ cartItems }) {
   const router = useRouter();
   const pathname = usePathname();
 
-  // Add other necessary code here...
-
   const hiddenRoutes = ["/auth/login", "/auth/signup", "/"];
   if (hiddenRoutes.includes(pathname)) return null;
 
@@ -29,33 +26,33 @@ export function Navbar({ cartItems }) {
     <div className="flex flex-col w-full">
       <div className="bg-yellow-400">
         {/* Top Navbar */}
-        <header className="sticky top-0 z-50 w-full">
-          <div className="container mx-auto px-4">
-            <div className="flex h-16 items-center justify-between">
+        <header className="sticky top-0 z-50 w-full h-8"> {/* Reduced height to 50% */}
+          <div className="container mx-auto px-2"> {/* Adjusted padding */}
+            <div className="flex h-8 items-center justify-between"> {/* Reduced height to 50% */}
               {/* Logo */}
               <Link href="/" className="flex items-center">
-                <span className="text-4xl font-bold text-gray-600">Foodie Eats</span>
+                <span className="text-2xl font-bold text-gray-600">Foodie Eats</span> {/* Reduced font size */}
               </Link>
-                            {/* User Button with Dropdown */}
-                            <div className="relative">
+              {/* User Button with Dropdown */}
+              <div className="relative">
                 <button
                   onClick={() => setIsOpen(!isOpen)}
-                  className="flex items-center gap-2 bg-yellow-200 rounded-full px-4 py-2 hover:shadow-md transition-shadow"
+                  className="flex items-center gap-1 bg-yellow-200 rounded-full px-2 py-1 hover:shadow-md transition-shadow" 
                 >
-                  <User className="h-5 w-5 text-[#00A082]" />
-                  <span className="font-medium text-gray-800">User</span>
-                  <ChevronDown className="h-4 w-4" />
+                  <User className="h-2.5 w-2.5 text-[#00A082]" /> {/* Reduced icon size */}
+                  <span className="font-medium text-gray-800 text-sm">User</span> {/* Reduced font size */}
+                  <ChevronDown className="h-2 w-2" /> {/* Reduced icon size */}
                 </button>
 
                 {/* Dropdown Menu */}
                 {isOpen && (
-                  <div className="absolute right-0 mt-2 w-36 bg-white rounded-lg shadow-lg border border-gray-200">
+                  <div className="absolute right-0 mt-2 w-18 bg-white rounded-lg shadow-lg border border-gray-200"> {/* Adjusted width */}
                     <button
                       onClick={handleLogout}
                       disabled={loading}
-                      className="flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
+                      className="flex items-center w-full px-2 py-1 text-gray-700 hover:bg-gray-100" 
                     >
-                      <LogOut className="h-5 w-5 mr-2 text-red-500" />
+                      <LogOut className="h-2.5 w-2.5 mr-1 text-red-500" /> {/* Reduced icon size */}
                       {loading ? "Logging out..." : "Logout"}
                     </button>
                   </div>
@@ -64,9 +61,9 @@ export function Navbar({ cartItems }) {
             </div>
           </div>
         </header>
-                {/* Categories Section */}
-                <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-40 justify-items-center">
+        {/* Categories Section */}
+        <div className="container mx-auto px-2 py-4"> {/* Adjusted padding */}
+          <div className="grid-container"> {/* Apply the new grid-container class */}
             {categories.map((category) => (
               <Link key={category.name} href={category.href} className="category-bubble">
                 <div className="category-circle hover:scale-110 transition-transform transition-all duration-300 ease-in-out relative">
@@ -91,5 +88,3 @@ export function Navbar({ cartItems }) {
 };
 
 export default Navbar;
-
-
