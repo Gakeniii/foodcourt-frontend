@@ -9,7 +9,8 @@ export default function Checkout() {
   const [isConfirming, setIsConfirming] = useState(false);
   const [error, setError] = useState(null); // New state for error messages
   const router = useRouter();
-   useEffect(() => {
+
+  useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     const table = queryParams.get("table");
     if (table) {
@@ -23,17 +24,21 @@ export default function Checkout() {
       setOrder({ items: parsedCart, totalPrice: total });
     }
   }, []);
-const handleConfirm = async () => {
+
+  const handleConfirm = async () => {
     setIsConfirming(true); // Disable the button and show "Confirming..." text
     setError(null); // Clear any previous errors
 
     try {
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
-       if (cart.length === 0) {
+
+      if (cart.length === 0) {
         alert("Your cart is empty!");
         setIsConfirming(false); // Re-enable the button
         return;
       }
+
+      // Prepare the order data to send to the backend
       const orderData = {
         table_number: tableNumber, // Include the table number
         payment_method: paymentMethod, // Include the payment method
@@ -42,11 +47,13 @@ const handleConfirm = async () => {
           quantity: item.quantity,
           price: item.total_price, // Include the price of each item
         })),
-        total_price: order.totalPrice, //  total price
+        total_price: order.totalPrice, // Include the total price
         status: "Pending", // Use the correct status value (capitalized)
       };
 
       console.log("Sending order data:", orderData); // Log the order data
+
+      // Send the order to the backend API
       const response = await fetch("https://foodcourt-db.onrender.com/orders", {
         method: "POST",
         headers: {
@@ -54,7 +61,9 @@ const handleConfirm = async () => {
         },
         body: JSON.stringify(orderData),
       });
-const responseText = await response.text();
+
+      // Check if the response is valid JSON
+      const responseText = await response.text();
       let responseData;
       try {
         responseData = JSON.parse(responseText);
@@ -71,8 +80,12 @@ const responseText = await response.text();
             `Failed to place order. Status: ${response.status}`
         );
       }
+
+      // Clear the cart and show a success message
       localStorage.removeItem("cart");
-      alert("Order placed successfully!");
+      alert("Successful!");
+
+      // Redirect the user to a confirmation page or home page
       router.push("/order-confirmation"); // Replace with your desired route
     } catch (error) {
       console.error("Order Error:", error);
@@ -85,6 +98,7 @@ const responseText = await response.text();
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-8 px-4">
       <h1 className="text-3xl font-bold text-gray-800">Checkout</h1>
+
       <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6 mt-6">
         <h2 className="text-2xl font-semibold mb-4">Your Order</h2>
         {order.items.length === 0 ? (
@@ -103,6 +117,7 @@ const responseText = await response.text();
         )}
         <h3 className="text-xl font-semibold mt-4">Total: KSh {order.totalPrice}</h3>
       </div>
+
       <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6 mt-6">
         <label className="block mb-2">Table Number:</label>
         <input
@@ -121,8 +136,10 @@ const responseText = await response.text();
           className="border p-2 w-full mb-4"
           placeholder="Enter payment method (e.g., Cash, Card)"
         />
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-          <button
+
+        {error && <p className="text-red-500 mb-4">{error}</p>} {/* Display error message */}
+
+        <button
           className={`w-full py-2 text-white rounded-lg ${
             isConfirming ? "bg-gray-500" : "bg-green-600 hover:bg-green-700"
           }`}
