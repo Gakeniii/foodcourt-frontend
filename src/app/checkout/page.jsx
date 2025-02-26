@@ -47,3 +47,10 @@ const handleConfirm = async () => {
       };
 
       console.log("Sending order data:", orderData); // Log the order data
+      const response = await fetch("https://foodcourt-db.onrender.com/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
