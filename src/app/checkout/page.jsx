@@ -23,3 +23,9 @@ export default function Checkout() {
       setOrder({ items: parsedCart, totalPrice: total });
     }
   }, []);
+const handleConfirm = async () => {
+    setIsConfirming(true); // Disable the button and show "Confirming..." text
+    setError(null); // Clear any previous errors
+
+    try {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
