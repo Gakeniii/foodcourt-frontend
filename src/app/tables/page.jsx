@@ -77,3 +77,25 @@ useEffect(() => {
       setRedirectTableId(null); // Reset the redirect state
     }
   }, [redirectTableId, router]);
+useEffect(() => {
+    const interval = setInterval(() => {
+      setTables((prevTables) =>
+        prevTables.map((table) => {
+          if (!table.available && table.countdown > 0) {
+            return { ...table, countdown: table.countdown - 1 };
+          } else if (!table.available && table.countdown <= 0) {
+            return { ...table, available: true, bookedAt: null, bookedFrom: null, countdown: 0 };
+          }
+          return table;
+        })
+      );
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-gray-100 to-gray-300 p-8">
+      <div className="w-full max-w-3xl bg-white p-8 rounded-xl shadow-lg">
+        <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">Welcome!</h1>
+        <h1 className="text-2xl text-gray-700 text-center mb-6">Book a Table</h1>
