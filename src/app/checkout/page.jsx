@@ -71,3 +71,5 @@ const responseText = await response.text();
             `Failed to place order. Status: ${response.status}`
         );
       }
+      localStorage.removeItem("cart");
+      alert("Order placed successfully!");
