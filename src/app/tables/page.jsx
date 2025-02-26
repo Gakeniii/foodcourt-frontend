@@ -17,3 +17,21 @@ useEffect(() => {
           throw new Error("Failed to fetch table data");
         }
         const data = await response.json();
+   const mappedTables = data.map((table) => ({
+          id: table.id,
+          available: table.available,
+          bookedAt: table.bookedAt ? new Date(table.bookedAt) : null,
+          bookedFrom: table.bookedFrom ? new Date(table.bookedFrom) : null,
+          countdown: table.countdown || 0, // Remaining time in seconds
+          availabilityTime: table.availabilityTime || (Math.random() < 0.5 ? 20 : 30), // Random availability time (20 or 30 minutes)
+        }));
+
+        setTables(mappedTables);
+      } catch (error) {
+        console.error("Error fetching tables:", error);
+        setError("Failed to load table data. Please try again later.");
+      }
+    };
+
+    fetchTables();
+  }, []);
