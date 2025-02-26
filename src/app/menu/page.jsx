@@ -1,3 +1,4 @@
+// src/app/menu/Menu.jsx
 "use client";
 
 import { useEffect, useState } from 'react';
@@ -19,6 +20,7 @@ const Menu = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const router = useRouter();
   const { addItemToCart } = useCart();
+  const [addedItems, setAddedItems] = useState({}); // Updated state to track added items
 
   useEffect(() => {
     async function fetchOutlets() {
@@ -36,10 +38,10 @@ const Menu = () => {
     }
     fetchOutlets();
   }, []);
+
   const handleSearchChange = (event) => setSearchQuery(event.target.value);
   const handleCuisineChange = (event) => setSelectedCuisine(event.target.value);
   const handleCategoryChange = (event) => setSelectedCategory(event.target.value);
-
   const openModal = (item, outlet) => {
     setSelectedItem({ ...item, outlet });
     setQuantity(1);
@@ -63,8 +65,10 @@ const Menu = () => {
       quantity,
       totalPrice,
     });
-    router.push('/checkout'); 
+    setAddedItems(prevState => ({ ...prevState, [item.id]: true })); // Update the state for the specific item
+    // router.push('/checkout'); 
   };
+
   const filteredMenuItems = outlets.flatMap(outlet =>
     outlet.menu_items.filter(item =>
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
@@ -72,7 +76,6 @@ const Menu = () => {
       (selectedCategory === 'All' || item.category === selectedCategory)
     ).map(item => ({ ...item, outlet }))
   );
-
   return (
     <div className="menuContainer">
       <h1 className="menuTitle">Menu</h1>
@@ -121,7 +124,7 @@ const Menu = () => {
           ))}
         </div>
       )}
-      {isModalOpen && selectedItem && (
+            {isModalOpen && selectedItem && (
         <div className="modal" onClick={closeModal}>
           <div className="modalContent" onClick={(e) => e.stopPropagation()}>
             <div className="modalImageContainer">
@@ -136,9 +139,9 @@ const Menu = () => {
               <QuantitySelector price={selectedItem.price} onQuantityChange={handleQuantityChange} />
               <button 
                 className="addToCartButton" 
-                onClick={() => addToCart(selectedItem)}
+                onClick={(e) => { e.stopPropagation(); addToCart(selectedItem); }}
               >
-                Add to Cart
+                {addedItems[selectedItem.id] ? "Added to Cart" : "Add to Cart"} {/* Updated to show correct state */}
               </button>
             </div>
             <span className="close" onClick={closeModal}>&times;</span>

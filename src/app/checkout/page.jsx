@@ -1,3 +1,4 @@
+// src/app/checkout/checkout.jsx
 "use client";
 
 import { useEffect, useState } from 'react';
@@ -13,6 +14,7 @@ export default function Checkout() {
   const [paymentMethod, setPaymentMethod] = useState("Apple Pay"); 
   const [selectedTableNumber, setSelectedTableNumber] = useState("");
   const paymentMethods = ["Apple Pay", "M-Pesa", "Credit Card", "PayPal"];
+  
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
     setUserId(storedUserId || ""); 
@@ -32,9 +34,11 @@ export default function Checkout() {
 
     fetchTables();
   }, []);
+  
   const handlePaymentMethodChange = (event) => {
     setPaymentMethod(event.target.value);
   };
+  
   const handleOrderConfirmation = async () => {
     const orderData = {
       customer_id: userId,
@@ -76,12 +80,11 @@ export default function Checkout() {
       console.error('Order confirmation error:', error);
     }
   };
+  
   return (
     <div className="checkoutContainer">
       <h1 className="checkoutTitle">Checkout Page</h1>
-      {userId && (
-        <p className="userId">User ID: {userId}</p> 
-      )}
+      {userId && <p className="userId">User ID: {userId}</p>}
       <div className="tableDropdownContainer">
         <label htmlFor="tableDropdown">Select Table:</label>
         <select
@@ -122,7 +125,7 @@ export default function Checkout() {
                 <img src={item.image_url} alt={item.name} />
                 <div className="cartItemDetails">
                   <h2>{item.name}</h2>
-                  <p><strong>Menu Item ID:</strong> {item.id}</p> {/* Display menu item ID */}
+                  <p><strong>Menu Item ID:</strong> {item.id}</p>
                   <p><strong>Restaurant:</strong> {item.outlet.name}</p>
                   <p><strong>Restaurant ID:</strong> {item.outlet.id}</p>
                   <p><strong>Category:</strong> {item.category}</p>
@@ -131,7 +134,7 @@ export default function Checkout() {
                   <p><strong>Description:</strong> {item.description}</p>
                   <p><strong>Quantity:</strong> {item.quantity}</p>
                   <p><strong>Total Price:</strong> KSh {item.totalPrice}</p>
-                  <p><strong>Payment Method:</strong> {paymentMethod}</p> {/* Display selected payment method */}
+                  <p><strong>Payment Method:</strong> {paymentMethod}</p>
                 </div>
               </li>
             ))}
@@ -142,8 +145,5 @@ export default function Checkout() {
     </div>
   );
 }
-
-
-
 
 

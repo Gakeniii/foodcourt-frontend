@@ -1,22 +1,28 @@
+/* src/app/checkout/Checkout.css */
 .checkoutContainer {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
   font-family: Arial, sans-serif;
-  background-color: #fff; 
-  color: #333; 
+  background-color: #f7f7f7; /* Light background color */
+  color: #333;
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
 .checkoutTitle {
   text-align: center;
   font-size: 2rem;
   margin-bottom: 20px;
-  color: #e53935; 
+  color: #e53935; /* Red color for the title */
+  border-bottom: 2px solid #e53935; /* Bottom border to highlight the title */
+  padding-bottom: 10px;
 }
 
 .cartItemsList {
   list-style-type: none;
   padding: 0;
+  margin: 20px 0;
 }
 
 .cartItem {
@@ -26,13 +32,13 @@
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 8px;
-  background-color: #f9f9f9; 
-  box-shadow: 0 8px 14px 0 rgba(0, 0, 0, 0.2);
+  background-color: #fff; /* White background for each item */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
 .cartItem img {
-  width: 100px;
-  height: 100px;
+  width: 80px; /* Slightly smaller image */
+  height: 80px;
   object-fit: cover;
   border-radius: 8px;
   margin-right: 20px;
@@ -43,14 +49,15 @@
 }
 
 .cartItemDetails h2 {
-  font-size: 1.5rem;
+  font-size: 1.2rem; /* Slightly smaller font size for the item name */
   margin: 0;
+  color: #333;
 }
 
 .cartItemDetails p {
   margin: 5px 0;
   font-size: 0.9rem;
-  color: #333;
+  color: #555; /* Slightly lighter color for the details */
 }
 
 .cartItemDetails strong {
@@ -58,47 +65,32 @@
 }
 
 /* Dropdown Styling */
-.tableDropdownContainer {
-  margin-bottom: 20px; 
-  text-align: center;
-}
-
-.tableDropdownContainer label {
-  font-size: 1rem;
-  margin-right: 10px;
-  color: #333;
-}
-
-.tableDropdown {
-  padding: 10px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #fff;
-  color: #333;
-  cursor: pointer;
-}
-/* Dropdown Styling */
+.tableDropdownContainer,
 .paymentDropdownContainer {
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
   text-align: center;
+  display: inline-block; /* Place them on one line */
+  width: 48%; /* Adjust width to fit two containers in one line */
 }
 
+.tableDropdownContainer label,
 .paymentDropdownContainer label {
   font-size: 1rem;
   margin-right: 10px;
   color: #333;
 }
 
+.tableDropdown,
 .paymentDropdown {
-  padding: 10px;
-  font-size: 1rem;
+  padding: 8px; /* Smaller padding */
+  font-size: 0.9rem; /* Smaller font size */
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 5px; /* Rounded corners for both dropdowns */
   background-color: #fff;
   color: #333;
   cursor: pointer;
 }
+
 .confirmOrderButton {
   display: block;
   width: 100%;
@@ -107,8 +99,8 @@
   font-size: 1.2rem;
   font-weight: bold;
   text-align: center;
-  background-color: #e53935; 
-  color: #fff; 
+  background-color: #00a082; /* Updated button color */
+  color: #fff;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -116,12 +108,80 @@
 }
 
 .confirmOrderButton:hover {
-  background-color: #d32f2f; 
-  transform: scale(1.05); 
+  background-color: #008b70;
+  transform: scale(1.05); /* Slightly larger scale on hover */
 }
 
 .confirmOrderButton:active {
-  background-color: #b71c1c; 
-  transform: scale(0.98); 
+  background-color: #006b5a;
+  transform: scale(0.98); /* Slightly smaller scale on active */
 }
 
+.userId {
+  font-size: 1rem;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #555;
+}
+
+.tableDropdownContainer,
+.paymentDropdownContainer {
+  display: inline-block; /* Place them on one line */
+  width: 48%; /* Adjust width to fit two containers in one line */
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.tableDropdownContainer label,
+.paymentDropdownContainer label {
+  font-size: 1rem;
+  margin-right: 10px;
+  color: #333;
+}
+
+.tableDropdown,
+.paymentDropdown {
+  padding: 8px; /* Smaller padding */
+  font-size: 0.9rem; /* Smaller font size */
+  border: 1px solid #ccc;
+  border-radius: 5px; /* Rounded corners for both dropdowns */
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+}
+
+.cartItemsList {
+  list-style: none;
+  padding: 0;
+}
+
+.cartItem {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  align-items: center;
+}
+
+.cartItem img {
+  max-width: 80px;
+  border-radius: 5px;
+}
+
+.cartItemDetails {
+  flex-grow: 1;
+}
+
+.cartItemDetails h2 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.cartItemDetails p {
+  margin: 5px 0;
+  color: #555;
+}

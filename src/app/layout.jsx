@@ -1,11 +1,11 @@
 // src/app/layout.jsx
 import { Geist, Geist_Mono } from "next/font/google";
-import Navbar from './navigation/navbar';
 import Footer from './footer/page'; 
 import "@fortawesome/fontawesome-free/css/all.min.css"; 
 import "./globals.css";
 import { CartProvider } from './context/CartContext'; 
 import { OutletProvider } from './context/OutletContext'; 
+import ClientLayout from './clientLayout/ClientLayout'; // Import the new ClientLayout component
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,8 +36,9 @@ export default function RootLayout({ children }) {
             />
           </head>
           <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-            <Navbar />
-            {children}
+            <ClientLayout> {/* Wrap the children with ClientLayout */}
+              {children}
+            </ClientLayout>
             {/* <Footer /> Add the Footer component here */}
           </body>
         </html>
