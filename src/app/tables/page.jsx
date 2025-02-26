@@ -42,6 +42,22 @@ useEffect(() => {
         console.error("Error fetching tables:", error);
         setError("Failed to load table data. Please try again later.");
       }
+         setRedirectTableId(table.id);
+
+                return {
+                  ...table,
+                  available: false,
+                  bookedAt,
+                  bookedFrom,
+                  countdown,
+                };
+              })()
+            : table
+          : table
+      )
+    );
+    setError(null);
+  };
     };
 
     fetchTables();
