@@ -99,3 +99,4 @@ useEffect(() => {
       <div className="w-full max-w-3xl bg-white p-8 rounded-xl shadow-lg">
         <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">Welcome!</h1>
         <h1 className="text-2xl text-gray-700 text-center mb-6">Book a Table</h1>
+        {error && <p className="text-red-500 text-center text-sm mb-4">{error}</p>}
