@@ -103,3 +103,21 @@ const responseText = await response.text();
         )}
         <h3 className="text-xl font-semibold mt-4">Total: KSh {order.totalPrice}</h3>
       </div>
+      <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6 mt-6">
+        <label className="block mb-2">Table Number:</label>
+        <input
+          type="text"
+          value={tableNumber}
+          onChange={(e) => setTableNumber(e.target.value)}
+          className="border p-2 w-full mb-4"
+          readOnly
+        />
+
+        <label className="block mb-2">Payment Method:</label>
+        <input
+          type="text"
+          value={paymentMethod}
+          onChange={(e) => setPaymentMethod(e.target.value)}
+          className="border p-2 w-full mb-4"
+          placeholder="Enter payment method (e.g., Cash, Card)"
+        />
