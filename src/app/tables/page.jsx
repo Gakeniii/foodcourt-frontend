@@ -25,6 +25,17 @@ useEffect(() => {
           countdown: table.countdown || 0, // Remaining time in seconds
           availabilityTime: table.availabilityTime || (Math.random() < 0.5 ? 20 : 30), // Random availability time (20 or 30 minutes)
         }));
+         const toggleBooking = (tableId) => {
+    setTables((prevTables) =>
+      prevTables.map((table) =>
+        table.id === tableId
+          ? table.available
+            ? (() => {
+                const bookedAt = new Date();
+                const countdownMinutes = table.availabilityTime;
+                const countdown = countdownMinutes * 60;
+                const bookedFrom = new Date(bookedAt.getTime() + countdown * 1000);
+
 
         setTables(mappedTables);
       } catch (error) {
