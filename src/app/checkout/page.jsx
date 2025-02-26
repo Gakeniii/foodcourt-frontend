@@ -85,3 +85,21 @@ const responseText = await response.text();
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-8 px-4">
       <h1 className="text-3xl font-bold text-gray-800">Checkout</h1>
+      <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6 mt-6">
+        <h2 className="text-2xl font-semibold mb-4">Your Order</h2>
+        {order.items.length === 0 ? (
+          <p className="text-gray-600">No items in cart.</p>
+        ) : (
+          <ul>
+            {order.items.map((item, index) => (
+              <li key={index} className="border-b py-2 flex justify-between">
+                <span>
+                  {item.quantity}x {item.menu_item_name}
+                </span>
+                <span>KSh {item.total_price}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+        <h3 className="text-xl font-semibold mt-4">Total: KSh {order.totalPrice}</h3>
+      </div>
