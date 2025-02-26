@@ -54,3 +54,20 @@ const handleConfirm = async () => {
         },
         body: JSON.stringify(orderData),
       });
+const responseText = await response.text();
+      let responseData;
+      try {
+        responseData = JSON.parse(responseText);
+      } catch (jsonError) {
+        console.error("Failed to parse JSON response:", responseText);
+        throw new Error("Invalid response from the server. Please try again.");
+      }
+
+      if (!response.ok) {
+        console.error("Backend response:", responseData); // Log the backend response
+        throw new Error(
+          responseData.error ||
+            responseData.message ||
+            `Failed to place order. Status: ${response.status}`
+        );
+      }
