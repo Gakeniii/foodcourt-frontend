@@ -21,7 +21,7 @@ const Menu = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const router = useRouter();
   const { addItemToCart } = useCart();
-  const { selectedOutlet, setSelectedOutlet } = useOutlet(); // Get selected outlet
+  const { selectedOutlet, setSelectedOutlet } = useOutlet();
 
   useEffect(() => {
     async function fetchOutlets() {
@@ -78,7 +78,7 @@ const Menu = () => {
 
     addItemToCart({
       ...item,
-      outlet_id: selectedOutlet.id, // Ensure correct outlet_id is passed
+      outlet_id: selectedOutlet.id,
       quantity,
       totalPrice,
     });
@@ -86,14 +86,14 @@ const Menu = () => {
   };
 
   const filteredMenuItems = outlets.flatMap((outlet) =>
-    (outlet.menu_items || []) // Ensure menu_items is an array
+    (outlet.menu_items || [])
       .filter(
         (item) =>
           item.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
           (selectedCuisine === "All" || item.cuisine === selectedCuisine) &&
           (selectedCategory === "All" || item.category === selectedCategory)
       )
-      .map((item) => ({ ...item, outlet })) // Ensure each item has an outlet reference
+      .map((item) => ({ ...item, outlet }))
   );
 
   return (
