@@ -121,3 +121,4 @@ const responseText = await response.text();
           className="border p-2 w-full mb-4"
           placeholder="Enter payment method (e.g., Cash, Card)"
         />
+        {error && <p className="text-red-500 mb-4">{error}</p>}
