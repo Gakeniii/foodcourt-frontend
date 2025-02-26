@@ -100,3 +100,21 @@ useEffect(() => {
         <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">Welcome!</h1>
         <h1 className="text-2xl text-gray-700 text-center mb-6">Book a Table</h1>
         {error && <p className="text-red-500 text-center text-sm mb-4">{error}</p>}
+             <div className="grid grid-cols-3 gap-6 mt-6">
+          {tables.map((table) => (
+            <div key={table.id} className="flex flex-col items-center border-2 border-gray-300 rounded-lg p-4 shadow-md">
+              <motion.button
+                onClick={() => toggleBooking(table.id)}
+                whileTap={{ scale: 0.95 }}
+                className={`p-6 rounded-lg font-semibold text-center text-lg transition duration-300 ease-in-out shadow-lg ${
+                  table.available
+                    ? "bg-green-500 hover:bg-green-600 text-white"
+                    : "bg-gray-500 hover:bg-gray-600 text-gray-100"
+                }`}
+              >
+                {table.available ? `Table ${table.id}` : `Table ${table.id} Booked`}
+              </motion.button>
+              <p className="text-gray-700 mt-2">Available for {table.availabilityTime} min</p>
+            </div>
+          ))}
+        </di
