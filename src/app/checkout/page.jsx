@@ -73,3 +73,15 @@ const responseText = await response.text();
       }
       localStorage.removeItem("cart");
       alert("Order placed successfully!");
+      router.push("/order-confirmation"); // Replace with your desired route
+    } catch (error) {
+      console.error("Order Error:", error);
+      setError(error.message); // Display the error message to the user
+    } finally {
+      setIsConfirming(false); // Re-enable the button
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-8 px-4">
+      <h1 className="text-3xl font-bold text-gray-800">Checkout</h1>
