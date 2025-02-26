@@ -11,7 +11,7 @@ export default function SignUp() {
   const [error, setError] = useState("");
   const router = useRouter();
   
-  const BASE_URL = "https://foodcourt-db.onrender.com";
+  const BASE_URL = "http://127.0.0.1:5000";
 
   const onSubmit = async (data) => {
     try {

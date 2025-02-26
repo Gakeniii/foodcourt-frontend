@@ -1,15 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect  } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { ChevronDown, User, LogOut } from "lucide-react";
+import { ChevronDown, User, LogOut, Home, Utensils, ClipboardList, CalendarCheck, ShoppingCart } from "lucide-react";
 
 const categories = [
-  { name: "Home page", icon: "/icons/home.png", href: "/home" },
-  { name: "Food", icon: "icons/foodbar.png", href: "/menu" },
-  { name: "Tables", icon: "icons/table.png", href: "/tables" },
-  { name: "Checkout", icon: "icons/cart.png", href: "/checkout" },
+  { name: "Home page", icon: Home, href: "/home" },
+  { name: "Food", icon: Utensils, href: "/menu" },
+  { name: "Orders", icon: ClipboardList, href: "/orders" },
+  { name: "Bookings", icon: CalendarCheck, href: "/tables" },
+  { name: "Cart", icon: ShoppingCart, href: "/checkout" },
 ];
 
 export function Navbar() {
@@ -22,10 +23,10 @@ export function Navbar() {
     const fetchUser = async () => {
       let token = localStorage.getItem("access_token");
 
-      if (!token) return; // If no token, do nothing
+      if (!token) return;
 
       try {
-        let response = await fetch("https://foodcourt-db.onrender.com/users", {
+        let response = await fetch("http://127.0.0.1:5000/users", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -36,8 +37,7 @@ export function Navbar() {
           setUserName(data.name);
           return;
         } else if (response.status === 401) {
-          // If unauthorized, try refreshing the token
-          const refreshResponse = await fetch("https://foodcourt-db.onrender.com/api/auth/refresh", {
+          const refreshResponse = await fetch("http://127.0.0.1:5000/api/auth/refresh", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -49,8 +49,7 @@ export function Navbar() {
             const refreshData = await refreshResponse.json();
             localStorage.setItem("access_token", refreshData.access_token);
 
-            // Retry fetching user data with new token
-            response = await fetch("https://foodcourt-db.onrender.com/users", {
+            response = await fetch("http://127.0.0.1:5000/users", {
               headers: {
                 Authorization: `Bearer ${refreshData.access_token}`,
               },
@@ -95,16 +94,13 @@ export function Navbar() {
   return (
     <div className="flex flex-col w-full">
       <div className="bg-yellow-400">
-        {/* Top Navbar */}
         <header className="sticky top-0 z-50 w-full">
-          <div className="container mx-auto px-4">
+          <div className="container mx-auto px-2">
             <div className="flex h-16 items-center justify-between">
-              {/* Logo */}
               <Link href="/" className="flex items-center">
                 <span className="text-4xl font-bold text-gray-600">Foodie Eats</span>
               </Link>
 
-              {/* User Button with Dropdown */}
               <div className="relative">
                 <button
                   onClick={() => setIsOpen(!isOpen)}
@@ -115,7 +111,6 @@ export function Navbar() {
                   <ChevronDown className="h-4 w-4" />
                 </button>
 
-                {/* Dropdown Menu */}
                 {isOpen && (
                   <div className="absolute right-0 mt-2 w-36 bg-white rounded-lg shadow-lg border border-gray-200">
                     <button
@@ -133,26 +128,18 @@ export function Navbar() {
           </div>
         </header>
 
-        {/* Categories Section */}
-        <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-40 justify-items-center">
-            {categories.map((category) => {
-              const Icon = category.icon;
-              return (
-                <Link key={category.name} href={category.href} className="category-bubble">
-                  <div className="category-circle hover:scale-110 transition-transform transition-all duration-300 ease-in-out">
-                    <img
-                      className="category-icon hover:scale-110 transition-transform transition-all duration-300 ease-in-out"
-                      src={category.icon}
-                      alt={category.name} />
-                  </div>
-                  <div className="flex flex-col items-center">
-                    <span className="category-label">{category.name}</span>
-                    <span className="text-xs text-gray-600">{category.description}</span>
-                  </div>
-                </Link>
-              );
-            })}
+        <div className="container mx-auto px-2 py-2">
+          <div className="grid grid-cols-2 md:grid-cols-4 justify-items-center">
+            {categories.map(({ name, icon: Icon, href }) => (
+              <Link key={name} href={href} className="category-bubble">
+                <div className="category-circle hover:scale-110 transition-transform transition-all duration-300 ease-in-out">
+                  <Icon className="h-8 w-8 text-gray-600" />
+                </div>
+                <div className="flex flex-col items-center">
+                  <span className="category-label">{name}</span>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </div>

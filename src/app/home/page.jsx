@@ -18,7 +18,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchRestaurants() {
       try {
-        const response = await fetch('https://foodcourt-db.onrender.com/outlets');
+        const response = await fetch('http://127.0.0.1:5000/outlets');
         if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
         const data = await response.json();
         setRestaurants(data);
@@ -37,7 +37,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchTables() {
       try {
-        const response = await fetch('https://foodcourt-db.onrender.com/bookings');
+        const response = await fetch('http://127.0.0.1:5000/bookings');
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         setTables(data.filter(table => table.availability === true));
@@ -52,7 +52,7 @@ export default function Home() {
   }, []);
   const fetchMenuItems = async (restaurantId) => {
     try {
-      const response = await fetch(`https://foodcourt-db.onrender.com/outlets/${restaurantId}`);
+      const response = await fetch(`http://127.0.0.1:5000/outlets/${restaurantId}`);
       if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
       const data = await response.json();
       setMenuItems(data.menu_items);

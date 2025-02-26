@@ -1,11 +1,9 @@
-import { CartProvider } from './context/CartContext';
 import { Inter, Roboto_Mono } from "next/font/google";
-import { Geist, Geist_Mono } from "next/font/google";
 import Footer from './footer/page'; // Import the Footer component
 import "@fortawesome/fontawesome-free/css/all.min.css"; // Import Font Awesome CSS
 import "./globals.css";
-import { Navbar } from "./navigation/navbar";
 import Providers from "@/providers";
+import { Navbar } from "./navigation/navbar";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const robotoMono = Roboto_Mono({ subsets: ["latin"], variable: "--font-roboto-mono" });
@@ -27,7 +25,7 @@ export default function RootLayout({ children }) {
 
         <Providers>
         {children}
-        </Providers>       
+        </Providers>
       </body>
     </html>
   );

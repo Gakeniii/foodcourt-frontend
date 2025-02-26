@@ -43,8 +43,9 @@ export default function LoginPage() {
       if (signInResult.error) {
         setError(signInResult.error);
       } else {
-        router.push("/dashboard");
+        router.push("/home");
       }
+        
     } catch (err) {
       setError("Something went wrong!");
     }
