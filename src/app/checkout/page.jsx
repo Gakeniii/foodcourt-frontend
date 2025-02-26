@@ -34,3 +34,16 @@ const handleConfirm = async () => {
         setIsConfirming(false); // Re-enable the button
         return;
       }
+      const orderData = {
+        table_number: tableNumber, // Include the table number
+        payment_method: paymentMethod, // Include the payment method
+        order_items: cart.map((item) => ({
+          menu_item_id: item.menu_item_id,
+          quantity: item.quantity,
+          price: item.total_price, // Include the price of each item
+        })),
+        total_price: order.totalPrice, //  total price
+        status: "Pending", // Use the correct status value (capitalized)
+      };
+
+      console.log("Sending order data:", orderData); // Log the order data
