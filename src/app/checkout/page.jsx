@@ -29,3 +29,8 @@ const handleConfirm = async () => {
 
     try {
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
+       if (cart.length === 0) {
+        alert("Your cart is empty!");
+        setIsConfirming(false); // Re-enable the button
+        return;
+      }
