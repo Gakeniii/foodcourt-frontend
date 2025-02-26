@@ -71,3 +71,9 @@ useEffect(() => {
 
     fetchTables();
   }, []);
+useEffect(() => {
+    if (redirectTableId) {
+      router.push(`/checkout?table=${redirectTableId}`);
+      setRedirectTableId(null); // Reset the redirect state
+    }
+  }, [redirectTableId, router]);
