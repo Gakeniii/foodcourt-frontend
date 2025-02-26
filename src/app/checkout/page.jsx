@@ -122,3 +122,16 @@ const responseText = await response.text();
           placeholder="Enter payment method (e.g., Cash, Card)"
         />
         {error && <p className="text-red-500 mb-4">{error}</p>}
+          <button
+          className={`w-full py-2 text-white rounded-lg ${
+            isConfirming ? "bg-gray-500" : "bg-green-600 hover:bg-green-700"
+          }`}
+          onClick={handleConfirm}
+          disabled={isConfirming}
+        >
+          {isConfirming ? "Confirming..." : "Confirm Order"}
+        </button>
+      </div>
+    </div>
+  );
+}
