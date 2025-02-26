@@ -25,6 +25,15 @@ useEffect(() => {
           countdown: table.countdown || 0, // Remaining time in seconds
           availabilityTime: table.availabilityTime || (Math.random() < 0.5 ? 20 : 30), // Random availability time (20 or 30 minutes)
         }));
+         const cancelBooking = (tableId) => {
+    setTables((prevTables) =>
+      prevTables.map((table) =>
+        table.id === tableId
+          ? { ...table, available: true, bookedAt: null, bookedFrom: null, countdown: 0 }
+          : table
+      )
+    );
+  };
          const toggleBooking = (tableId) => {
     setTables((prevTables) =>
       prevTables.map((table) =>
