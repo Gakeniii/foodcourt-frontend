@@ -38,7 +38,7 @@ export default function BookingsPage() {
               <h2 className="text-lg font-semibold text-blue-600">Booking #{booking.id}</h2>
               <p className="text-gray-700">📌 <strong>Table Number:</strong> {booking.table_number}</p>
               <p className="text-gray-700">⏰ <strong>Date and Time:</strong> {booking.booking_time}</p>
-              <p className="text-gray-700">🧑‍💼 <strong>Customer:</strong> {booking.customer_name}</p>
+              <p className="text-gray-700">🧑 <strong>Customer:</strong> {booking.customer_name}</p>
               <p className="text-gray-700">📧 <strong>Email:</strong> {booking.customer_email}</p>
             </div>
           ))}
