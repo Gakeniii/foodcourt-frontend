@@ -1,7 +1,6 @@
-import { useSession } from "next-auth/react";
 
 export async function login(email, password) {
-    const response = await fetch(`http://127.0.0.1:5000/api/auth/login`, {
+    const response = await fetch(`${process.env.BASE_URL}/api/auth/login`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -10,22 +9,18 @@ export async function login(email, password) {
         body: JSON.stringify({ email, password }),
     });
 
-    // Handle response errors
     if (!response.ok) {
         console.error("Login failed:", response);
-        // return null; // This will trigger 401 in NextAuth
     }
 
-    const data = await response.json(); // Parse response body
-    return data; // Ensure it returns an object with { id, name, email }
+    const data = await response.json();
+    return data;
 }
 
-// utils.js
 
-// Base URL for API requests (adjust based on your backend)
-const BASE_URL = 'http://localhost:5000';  // Change to your Flask API base URL
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-// Fetch outlets from the backend
+
 export const fetchOutlets = async () => {
   try {
     const response = await fetch(`${BASE_URL}/outlets`);
@@ -164,7 +159,7 @@ export async function fetchOutletMenus(outletId, token) {
     if (!response.ok) throw new Error("Failed to fetch menus");
     
     const data = await response.json();
-    return data.menu_items; // Assuming the response contains menu_items inside the outlet object
+    return data.menu_items;
   } catch (error) {
     console.error("Error fetching outlet menus:", error);
     return [];
@@ -203,9 +198,36 @@ export async function addMenuItem(menuData, token) {
 }  
 
 // Edit an existing menu item
+// export async function updateMenuItem(menuId, updatedData, token) {
+//   try {
+//     const response = await fetch(`${BASE_URL}/menu_items/${menuId}`, {
+//       method: "PATCH",
+//       headers: {
+//         "Authorization": `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(updatedData),
+//     });
+
+//     if (!response.ok) throw new Error("Failed to update menu item");
+
+//     return await response.json();
+//   } catch (error) {
+//     console.error("Error updating menu item:", error);
+//     return null;
+//   }
+// }
+
 export async function updateMenuItem(menuId, updatedData, token) {
   try {
-    const response = await fetch(`${BASE_URL}/menu_items/${menuId}`, {
+    console.log("Updating menu item:", { menuId, updatedData, token });
+
+    if (!token) {
+      console.error("❌ Token is missing. Make sure the user is authenticated.");
+      return null;
+    }
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/menu_items/${menuId}`, {
       method: "PATCH",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -214,14 +236,23 @@ export async function updateMenuItem(menuId, updatedData, token) {
       body: JSON.stringify(updatedData),
     });
 
-    if (!response.ok) throw new Error("Failed to update menu item");
+    console.log("Response status:", response.status);
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("❌ API Error Response:", errorText);
+      throw new Error(`Failed to update menu item: ${response.statusText}`);
+    }
 
-    return await response.json();
+    const data = await response.json();
+    console.log("✅ Successfully updated menu item:", data);
+    return data;
   } catch (error) {
-    console.error("Error updating menu item:", error);
+    console.error("🚨 Error updating menu item:", error.message);
     return null;
   }
 }
+
 
 // Delete a menu item
 export async function deleteMenuItem(menuId, token) {
