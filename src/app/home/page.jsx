@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import './home.css';
+import { useSession } from 'next-auth/react';
 
 export default function Home() {
   const [restaurants, setRestaurants] = useState([]);
@@ -14,6 +15,10 @@ export default function Home() {
   const [menuItems, setMenuItems] = useState([]);
   const [tables, setTables] = useState([]);
   const [loadingTables, setLoadingTables] = useState(true);
+
+  const { data: session, status } = useSession();
+
+  console.log("Session Data:", session)
 
   useEffect(() => {
     async function fetchRestaurants() {

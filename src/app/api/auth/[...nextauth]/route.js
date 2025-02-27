@@ -16,9 +16,11 @@ export const authOptions = {
         }
 
         const response = await login(credentials.email, credentials.password);
+        console.log("Response:", response)
         if (!response || !response.access_token) {
           throw new Error(response.error);
         }
+
 
         // Return the relevant user data and tokens
         return {

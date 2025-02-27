@@ -88,7 +88,7 @@ export function Navbar() {
     }
   };
 
-  const hiddenRoutes = ["/auth/login", "/auth/signup", "/"];
+  const hiddenRoutes = ["/auth/login", "/auth/signup", "/", "/dashboard", "/dashboard/outlet/[id]"];
   if (hiddenRoutes.includes(pathname)) return null;
 
   return (

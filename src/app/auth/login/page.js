@@ -4,13 +4,15 @@ import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import "./login.css";
-import { signIn } from "next-auth/react";
+// import { signIn } from "next-auth/react";
+import { login } from "@/app/lib/utils";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [errors, setErrors] = useState({});
   const router = useRouter();
+
 
   // Basic form validation
   const validateForm = () => {
@@ -33,23 +35,30 @@ export default function LoginPage() {
       return;
     }
     setErrors({});
-
+  
     try {
-      const signInResult = await signIn("credentials", {
-        redirect: false,
-        email: formData.email,
-        password: formData.password,
-      });
-      if (signInResult.error) {
-        setError(signInResult.error);
-      } else {
-        router.push("/home");
+      const userData = await login(formData.email, formData.password);
+      console.log("User Data:", userData); // Debugging
+  
+      if (!userData || !userData.user || !userData.user.role) {
+          setError("Login failed. Please try again.");
+          return;
       }
-        
+  
+      // Extract user role correctly
+      const userRole = userData.user.role;
+  
+      // Redirect based on role
+      router.push(userRole === "Customer" ? "/home" : "/dashboard");
+  
     } catch (err) {
       setError("Something went wrong!");
-    }
-  };
+      console.error("Login error:", err);
+  }
+ 
+};
+
+  
 
   return (
     <div className="login-container">

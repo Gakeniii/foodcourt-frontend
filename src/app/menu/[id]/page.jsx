@@ -7,8 +7,8 @@ import "./page.css";
 import { useOrder } from "@/app/context/OrderContext";
 
 export default function Page({ params }) {
-  const params = useParams();
-  // const { id } = params;
+  // const params = useParams();
+  const { id } = params;
   console.log("Menu ID:", params.id);
   // console.log("Params recieve:", params);
 
