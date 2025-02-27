@@ -9,7 +9,7 @@ const categories = [
   { name: "Home page", icon: Home, href: "/home" },
   { name: "Food", icon: Utensils, href: "/menu" },
   { name: "Orders", icon: ClipboardList, href: "/orders" },
-  { name: "Bookings", icon: CalendarCheck, href: "/tables" },
+  // { name: "Bookings", icon: CalendarCheck, href: "/tables" },
   { name: "Cart", icon: ShoppingCart, href: "/checkout" },
 ];
 
@@ -88,7 +88,7 @@ export function Navbar() {
     }
   };
 
-  const hiddenRoutes = ["/auth/login", "/auth/signup", "/", "/dashboard"];
+  const hiddenRoutes = ["/", "/auth/login", "/auth/signup", "/dashboard", "/dashboard/orders", "/dashboard/tables", "/dashboard/outlet/:id"];
   if (hiddenRoutes.includes(pathname)) return null;
 
   return (
@@ -129,7 +129,7 @@ export function Navbar() {
         </header>
 
         <div className="container mx-auto px-2 py-2">
-          <div className="grid grid-cols-2 md:grid-cols-4 justify-items-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 justify-items-center gap-4">
             {categories.map(({ name, icon: Icon, href }) => (
               <Link key={name} href={href} className="category-bubble">
                 <div className="category-circle hover:scale-110 transition-transform transition-all duration-300 ease-in-out">

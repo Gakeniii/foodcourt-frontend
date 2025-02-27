@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Navbar from "../navbar";
 
 // import { useEffect, useState } from "react";
 
@@ -24,6 +25,7 @@ export default function BookingsPage() {
 
   return (
     <div className="p-6">
+      <Navbar/>
       <h1 className="text-3xl font-bold mb-6 text-center">Table Bookings</h1>
 
       {bookings.length === 0 ? (

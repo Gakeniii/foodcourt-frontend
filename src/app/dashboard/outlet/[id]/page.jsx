@@ -3,6 +3,7 @@ import { fetchOutletMenus, addMenuItem, updateMenuItem, deleteMenuItem } from "@
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
+import Navbar from "../../navbar";
 
 
 export default function OutletPage() {
@@ -104,6 +105,7 @@ export default function OutletPage() {
 
   return (
     <div className="p-6">
+      <Navbar/>
       {popup.message && (
         <div className={`fixed top-20 bg-${popup.color}-500 text-white p-4 rounded-md shadow-lg transition-opacity`}>
           {popup.message}
@@ -160,6 +162,13 @@ export default function OutletPage() {
         {/* Menu List */}
         <div className="bg-white p-6 rounded-lg shadow-md w-full md:w-2/3">
           <h2 className="text-2xl font-semibold text-gray-700 mb-4">Menu List</h2>
+          {menus.length == 0 ? (
+            <div className="mt-6 p-4 bg-white rounded-lg shadow-md text-center">
+              <p className="text-gray-600 text-lg font-medium">
+                No menu items for this outlet
+              </p>
+            </div>
+          ) : (
           <ul className="space-y-4">
             {menus.map((menu, index) => (
               <li key={menu.id || index} className="flex justify-between p-3 border-b bg-gray-50 rounded-md">
@@ -171,6 +180,7 @@ export default function OutletPage() {
               </li>
             ))}
           </ul>
+          )}
         </div>
   
       </div>
