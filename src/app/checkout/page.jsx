@@ -17,11 +17,14 @@ export default function Checkout() {
   const paymentMethods = ["Apple Pay", "M-Pesa", "Card", "Cash"];
   const router = useRouter();
 
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
   // useEffect(() => {
   //   if (!session) {
   //     window.location.href = "/auth/login";
   //   }
   // }, [session]);
+
 
   const handleTableSelect = (tableNumber) => {
     setSelectedTableNumber(tableNumber);
@@ -38,7 +41,7 @@ export default function Checkout() {
     }
   
     const orderData = {
-      customer_id: 9,
+      customer_id: session?.user?.id,
       outlet_id: selectedOutlet.id,
       order_items: (cartItems ?? []).map(item => ({
         menu_item_id: item.id,
@@ -55,7 +58,7 @@ export default function Checkout() {
     };
   
     try {
-      const response = await fetch('http://localhost:5000/orders', {
+      const response = await fetch(`${BASE_URL}/orders`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
