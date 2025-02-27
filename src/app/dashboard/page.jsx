@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { fetchOutlets, addOutlet } from "../lib/utils";
+import axios from "axios";
 
 export default function OwnerDashboard() {
   const [ownerName, setOwnerName] = useState("");
@@ -14,57 +15,51 @@ export default function OwnerDashboard() {
   const [outlets, setOutlets] = useState([]);
   const [newOutletName, setNewOutletName] = useState("");
   const [newOutletImageUrl, setNewOutletImageUrl] = useState("");
-
   const [popupMessage, setPopupMessage] = useState("");
   const [showPopup, setShowPopup] = useState(false);
-
   const router = useRouter();
   const { data: session, status } = useSession();
-  const BASE_URL = "http://127.0.0.1:5000";
+
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
   console.log("Session data:", session);
 
   useEffect(() => {
-    // console.log("Session status:", status);
-    // console.log("Session data:", session);
+    if (status === "unauthenticated") {
+      router.push("/auth/login");
+    }
+  }, [status, router]);
 
-    // if (status === "loading") return;
-    // if (status === "unauthenticated") {
-    //   router.push("/auth/login");
-    //   return;
-    // }
+  useEffect(() => {
+    if (status !== "authenticated") return;
 
     const fetchData = async () => {
       try {
-        const userId = session?.user?.id;
+        const userEmail = session?.user?.email;
         const token = session?.accessToken;
 
-        // if (!userId || !token) {
-        //   router.push("/auth/login");
-        //   return;
-        // }
-
-        const response = await fetch(`${BASE_URL}/users/${userId}`, {
-          headers: { "Authorization": `Bearer ${token}` },
+        const response = await axios.get(`${BASE_URL}/users?email=${userEmail}`,{
+          headers: {"Authorization": `Bearer ${session?.accessToken}`}
         });
-        const userData = await response.json();
+        console.log("Fetching user with email:", userEmail);
 
-        if (userData?.role?.toLowerCase() === "owner") {
-          setOwnerName(userData.name);
+        if (response.data.length > 0 && response.data[0].role.toLowerCase() === "owner") {
+          setOwnerName(response.data[0].name);
         } else {
-          router.push("/auth/login");
+          router.push("/dashboard");
         }
 
-        const ordersResponse = await fetch(`${BASE_URL}/orders`, {
+        const ordersResponse = await axios.get(`${BASE_URL}/orders`, {
           headers: { "Authorization": `Bearer ${token}` },
         });
-        const ordersData = await ordersResponse.json();
+        const ordersData = ordersResponse.data;
         setOrdersCount(ordersData.length);
         setRecentOrders(ordersData.slice(0, 5));
 
-        const tablesResponse = await fetch(`${BASE_URL}/bookings`, {
+        const tablesResponse = await axios.get(`${BASE_URL}/bookings`, {
           headers: { "Authorization": `Bearer ${token}` },
         });
-        const tablesData = await tablesResponse.json();
+        const tablesData = tablesResponse.data;
         setTablesCount(tablesData.length);
 
         const outletsData = await fetchOutlets(token);
@@ -73,7 +68,6 @@ export default function OwnerDashboard() {
         console.error("Error fetching data:", error);
       }
     };
-
     fetchData();
   }, [status, session, router]);
 
