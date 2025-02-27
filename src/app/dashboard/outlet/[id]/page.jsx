@@ -77,13 +77,22 @@ export default function OutletPage() {
 
   const handleUpdateMenu = async () => {
     if (!editingMenu) return;
-    const updated = await updateMenuItem(editingMenu.id, editingMenu, token);
+
+      const updatedData = {
+      ...editingMenu,
+      price: parseInt(editingMenu.price, 10) || 0,
+    };
+  
+    const updated = await updateMenuItem(editingMenu.id, updatedData, token);
     if (updated) {
-      setMenus(menus.map((m) => (m.id === editingMenu.id ? updated : m)));
+      setMenus((prevMenus) => 
+        prevMenus.map((m) => (m.id === editingMenu.id ? { ...m, ...updated } : m))
+      );
       setEditingMenu(null);
       setShowModal(true);
       showPopup("Menu updated successfully!", "yellow");
     }
+    
   };
 
   const handleDeleteMenu = async (menuId) => {
@@ -152,8 +161,8 @@ export default function OutletPage() {
         <div className="bg-white p-6 rounded-lg shadow-md w-full md:w-2/3">
           <h2 className="text-2xl font-semibold text-gray-700 mb-4">Menu List</h2>
           <ul className="space-y-4">
-            {menus.map((menu) => (
-              <li key={menu.id} className="flex justify-between p-3 border-b bg-gray-50 rounded-md">
+            {menus.map((menu, index) => (
+              <li key={menu.id || index} className="flex justify-between p-3 border-b bg-gray-50 rounded-md">
                 <span className="font-semibold">{menu.name} - Ksh {menu.price}</span>
                 <div className="space-x-2">
                   <button onClick={() => { setEditingMenu(menu); setShowModal(true); }} className="text-yellow-500 font-medium">Edit</button>
