@@ -13,11 +13,13 @@ const categories = [
   { name: "Cart", icon: ShoppingCart, href: "/checkout" },
 ];
 
+
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -26,7 +28,7 @@ export function Navbar() {
       if (!token) return;
 
       try {
-        let response = await fetch("http://127.0.0.1:5000/users", {
+        let response = await fetch(`${BASE_URL}/users`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
