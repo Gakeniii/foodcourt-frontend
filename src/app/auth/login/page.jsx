@@ -11,8 +11,6 @@ export default function LoginPage() {
   const [errors, setErrors] = useState({});
   const router = useRouter();
 
-
-  // Basic form validation
   const validateForm = () => {
     const newErrors = {};
     if (!formData.email) newErrors.email = "Email is required.";
@@ -59,7 +57,6 @@ export default function LoginPage() {
     }
 };
 
-  
 
   return (
     <div className="login-container">
