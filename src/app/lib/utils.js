@@ -61,92 +61,7 @@ export const addOutlet = async (outletData, token) => {
   }
 };
 
-// // Fetch menu items from the backend
-// export const fetchMenuItems = async () => {
-//   try {
-//     const response = await fetch(`${BASE_URL}/menu_items`);
-//     if (!response.ok) {
-//       throw new Error('Failed to fetch menu items');
-//     }
-//     const data = await response.json();
-//     return data;
-//   } catch (error) {
-//     console.error(error);
-//     return [];
-//   }
-// };
 
-// // Add a menu item
-// export const addMenuItem = async (menuItemData) => {
-//     const token = session?.accessToken; 
-//   try {
-//     const response = await fetch(`${BASE_URL}/menu_items`, {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         "Authorization": `Bearer ${token}`
-//       },
-//       body: JSON.stringify(menuItemData),
-//     });
-//     if (!response.ok) {
-//       throw new Error('Failed to add menu item');
-//     }
-//     const data = await response.json();
-//     return data;
-//   } catch (error) {
-//     console.error(error);
-//     return null;
-//   }
-// };
-
-// // Edit a menu item
-// export const editMenuItem = async (menuItemId, updatedData) => {
-//     const token = session?.accessToken; 
-//   try {
-//     const response = await fetch(`${BASE_URL}/menu_items/${menuItemId}`, {
-//       method: 'PATCH',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         "Authorization": `Bearer ${token}`
-//       },
-//       body: JSON.stringify(updatedData),
-//     });
-//     if (!response.ok) {
-//       throw new Error('Failed to edit menu item');
-//     }
-//     const data = await response.json();
-//     return data;
-//   } catch (error) {
-//     console.error(error);
-//     return null;
-//   }
-// };
-
-// // Delete a menu item
-// export const deleteMenuItem = async (menuItemId) => {
-//     const token = session?.accessToken; 
-//   try {
-//     const response = await fetch(`${BASE_URL}/menu_items/${menuItemId}`, {
-//       method: 'DELETE',
-//       headers: {
-//         "Authorization": `Bearer ${token}`
-//       }
-//     });
-//     if (!response.ok) {
-//       throw new Error('Failed to delete menu item');
-//     }
-//     const data = await response.json();
-//     return data;
-//   } catch (error) {
-//     console.error(error);
-//     return null;
-//   }
-// };
-
-
-//MENU FUCNTIONALITIES
-
-// Fetch menus for a specific outlet
 export async function fetchOutletMenus(outletId, token) {
   try {
     const response = await fetch(`${BASE_URL}/outlets/${outletId}`, {
@@ -195,28 +110,7 @@ export async function addMenuItem(menuData, token) {
       console.error("🔴 Error making API request:", error);
       return null;
     }
-}  
-
-// Edit an existing menu item
-// export async function updateMenuItem(menuId, updatedData, token) {
-//   try {
-//     const response = await fetch(`${BASE_URL}/menu_items/${menuId}`, {
-//       method: "PATCH",
-//       headers: {
-//         "Authorization": `Bearer ${token}`,
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify(updatedData),
-//     });
-
-//     if (!response.ok) throw new Error("Failed to update menu item");
-
-//     return await response.json();
-//   } catch (error) {
-//     console.error("Error updating menu item:", error);
-//     return null;
-//   }
-// }
+}
 
 export async function updateMenuItem(menuId, updatedData, token) {
   try {
