@@ -3,10 +3,10 @@ import { useState, useEffect } from "react";
 function AvailableTables({ onSelectTable }) {
   const [availableTables, setAvailableTables] = useState([]);
   const [selectedTable, setSelectedTable] = useState(null);
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
   useEffect(() => {
-    // Fetch available tables from the API
-    fetch("http://localhost:5000/available")
+    fetch(`${BASE_URL}/available`)
       .then((response) => response.json())
       .then((data) => setAvailableTables(data.unbooked_tables)) // Adjusted to match the new API response
       .catch((error) => console.error("Error fetching available tables:", error));
