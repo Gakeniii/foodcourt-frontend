@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 
 export default function Checkout() {
   const { data: session } = useSession();
-  const { cartItems } = useCart();
+  const { cartItems, clearCart } = useCart();
   const { selectedOutlet } = useOutlet();
   const [selectedTableNumber, setSelectedTableNumber] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("M-Pesa");
@@ -72,16 +72,14 @@ export default function Checkout() {
         throw new Error(`Network response was not ok: ${errorText}`);
       }
   
-      // const orderResponse = await response.json(); 
       const orderResponse = await response.json();
-      console.log("Order Response:", orderResponse); // Debugging output
+      console.log("Order Response:", orderResponse);
+
+      clearCart();
 
       localStorage.setItem("order_id", orderResponse.id);
-      router.push(`/orders`);
-
-  
       alert('Order placed successfully!');
-      router.push(`/orders`); // Redirect to order details
+      router.push(`/orders`);
     } catch (error) {
       console.error('Order confirmation error:', error);
       alert('Failed to place order. Please try again.');
@@ -92,9 +90,6 @@ export default function Checkout() {
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
       <h1 className="text-2xl font-semibold text-gray-800 mb-4">Checkout Page</h1>
-
-      <h2 className="text-lg font-medium mb-2 ">Select a Table</h2>
-      <AvailableTables onSelectTable={handleTableSelect} className="bg-gray-100 rounded-lg shadow-md hover:bg-gray-200"/>
 
       <div className="mt-4">
         <label htmlFor="paymentDropdown" className="block font-medium text-gray-700">Select Payment Method:</label>
@@ -131,6 +126,8 @@ export default function Checkout() {
           </ul>
         )}
       </div>
+      <h2 className="text-lg font-medium mb-2 ">Select a Table</h2>
+      <AvailableTables onSelectTable={handleTableSelect} className="bg-gray-100 rounded-lg shadow-md hover:bg-gray-200"/>
 
       <button
         className="mt-6 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"

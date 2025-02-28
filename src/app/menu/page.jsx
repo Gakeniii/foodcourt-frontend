@@ -20,7 +20,7 @@ const Menu = () => {
   const [quantity, setQuantity] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0);
   const router = useRouter();
-  const { addItemToCart } = useCart();
+  const { addToCart } = useCart();
   const { selectedOutlet, setSelectedOutlet } = useOutlet();
 
   useEffect(() => {
@@ -70,13 +70,13 @@ const Menu = () => {
     setTotalPrice(totalPrice);
   };
 
-  const addToCart = (item) => {
+  const handleAddToCart = (item) => {
     if (!selectedOutlet) {
       alert("Please select an outlet first.");
       return;
     }
 
-    addItemToCart({
+    addToCart({
       ...item,
       outlet_id: selectedOutlet.id,
       quantity,
@@ -179,7 +179,7 @@ const Menu = () => {
                 <strong>Price:</strong> KSh {selectedItem.price}
               </p>
               <QuantitySelector price={selectedItem.price} onQuantityChange={handleQuantityChange} />
-              <button className="addToCartButton" onClick={() => addToCart(selectedItem)}>
+              <button className="addToCartButton" onClick={() => handleAddToCart(selectedItem)}>
                 Add to Cart
               </button>
             </div>
