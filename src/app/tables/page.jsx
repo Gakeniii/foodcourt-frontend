@@ -1,91 +1,213 @@
-// "use client";
-
-// import { useState, useEffect } from "react";
-// import { motion } from "framer-motion";
+"use client";
+import { useEffect, useState } from "react";
+import AvailableTables from "../AvailableTable/page";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Tables() {
-//   const [tables, setTables] = useState([null]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
+  const { data: session, status } = useSession();
+  const [availableTables, setAvailableTables] = useState([]);
+  const [reservations, setReservations] = useState([]);
+  const [reservedTable, setReservedTable] = useState(null);
+  const [reservationDateTime, setReservationDateTime] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); 
+  const [showPopup, setShowPopup] = useState(false);
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+  const router = useRouter();
 
-//   // Fetch tables from the database
-//   useEffect(() => {
-//     const fetchTables = async () => {
-//       try {
-//         const response = await fetch("http://localhost:5000/bookings"); // Ensure this endpoint is correct
-//         if (!response.ok) throw new Error("Failed to fetch tables");
+  // Load persisted reservations from localStorage on component mount
+  useEffect(() => {
+    const storedReservations = JSON.parse(localStorage.getItem("reservationsForUser")) || [];
+    setReservations(storedReservations);
+  }, []);
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/login");
+    } else if (status === "authenticated" && session?.user) {
+      fetchAvailableTables();
+      // fetchReservations is now handled via localStorage, so no API call here
+    }
+  }, [status, router, session]);
+
+  const fetchAvailableTables = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/available`);
+      if (!response.ok) throw new Error("Failed to fetch available tables");
+      const data = await response.json();
   
-//         const data = await response.json();
+      if (Array.isArray(data.unbooked_tables)) {
+        setAvailableTables(data.unbooked_tables);
+      } else {
+        console.error("Error: Expected an array but got:", data);
+      }
+    } catch (error) {
+      console.error("Error fetching tables:", error);
+    }
+  };
+
+  // New helper function to persist reservations into localStorage
+  const persistReservations = (updatedReservations) => {
+    localStorage.setItem("reservationsForUser", JSON.stringify(updatedReservations));
+  };
+
+  const bookTable = async () => {
+    if (!session || !session.user) {
+      setErrorMessage("You must be logged in to book a table!");
+      return;
+    }
+
+    setErrorMessage("");
+
+    if (!reservedTable || !reservationDateTime) {
+      setErrorMessage("⚠️ Please select a table and reservation date & time!");
+      return;
+    }
+
+    const selectedTime = new Date(reservationDateTime);
+    if (isNaN(selectedTime.getTime())) {
+      setErrorMessage("Invalid date format. Please select a valid date & time.");
+      return;
+    }
+
+    const now = new Date();
+    const timeDiffMinutes = (selectedTime - now) / (1000 * 60);
+    if (timeDiffMinutes < 20) {
+      setErrorMessage("You must book at least 20-30 minutes before arriving.");
+      return;
+    }
+
+    const formattedBookingTime = selectedTime.toISOString().split(".")[0];
+
+    try {
+      const bookingResponse = await fetch(`${BASE_URL}/bookings`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.accessToken}`,
+        },
+        body: JSON.stringify({
+          customer_id: session?.user?.id,
+          table_number: reservedTable,
+          booking_time: formattedBookingTime,
+        }),
+      });
+
+      const responseData = await bookingResponse.json();
+      if (!bookingResponse.ok) {
+        throw new Error(responseData.error || "Failed to book table");
+      }
+
+      setAvailableTables((prevTables) =>
+        prevTables.filter((table) => table.number !== reservedTable)
+      );
   
-//         if (data.unbooked_tables && Array.isArray(data.unbooked_tables)) {
-//           setTables(data.unbooked_tables); // Extract the array properly
-//         } else {
-//           throw new Error("Invalid data format: Expected an array");
-//         }
-//       } catch (err) {
-//         setError(err.message);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-  
-//     fetchTables();
-//   }, []);
 
+      const newReservation = {
+        table_number: reservedTable,
+        booking_time: reservationDateTime,
+        booking_id: responseData.booking_id || Date.now(), // Fallback to timestamp if no booking_id provided
+      };
 
-//   // Handle booking toggle
-//   const toggleBooking = async (tableId, available) => {
-//     try {
-//       const response = await fetch(`http://localhost:5000/bookings`, {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ available: !available }),
-//       });
+      setReservations((prevReservations) => {
+        const safePrevReservations = Array.isArray(prevReservations) ? prevReservations : [];
+        const updatedReservations = [newReservation, ...safePrevReservations];
+        persistReservations(updatedReservations);
+        return updatedReservations;
+      });
 
-//       if (!response.ok) throw new Error("Failed to update table");
+      setShowPopup(true);
+      setTimeout(() => {
+        setShowPopup(false);
+        setReservedTable(null);
+        setReservationDateTime("");
+        fetchAvailableTables();
+        router.refresh();
+      }, 3000);
 
-//       const updatedTable = await response.json();
-//       setTables((prevTables) =>
-//         prevTables.map((table) => (table.id === tableId ? updatedTable : table))
-//       );
-//     } catch (err) {
-//       setError(err.message);
-//     }
-//   };
+    } catch (error) {
+      console.error("Error reserving table:", error);
+      setErrorMessage(error.message || "Error reserving the table. Please try again.");
+    }
+  };
 
-//   if (loading) return <p className="text-center text-gray-700">Loading tables...</p>;
-//   if (error) return <p className="text-center text-red-500">{error}</p>;
+  return (
+    <div className="pt-20 p-6">
+      {showPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center w-80">
+            <h2 className="text-lg font-semibold text-green-600">✅ Reservation Successful!</h2>
+            <p className="text-gray-700 mt-2">
+              You have booked Table No.{reservedTable} for {new Date(reservationDateTime).toLocaleString()}
+            </p>
+            <button
+              onClick={() => setShowPopup(false)}
+              className="mt-4 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-200"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
 
-//   return (
-//     <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-gray-100 to-gray-300 p-8">
-//       <div className="w-full max-w-3xl bg-white p-8 rounded-xl shadow-lg">
-//         <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">Welcome!</h1>
-//         <h1 className="text-2xl text-gray-700 text-center mb-6">Book a Table</h1>
+      {/* ✅ Error Message Popup */}
+      {errorMessage && (
+        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+          <div className="bg-red-500 text-white font-semibold text-center p-6 rounded-lg shadow-lg w-3/4 md:w-1/2 lg:w-1/3">
+            {errorMessage}
+            <button
+              onClick={() => setErrorMessage("")}
+              className="block mt-4 bg-white text-red-600 px-4 py-2 rounded-md mx-auto"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
 
-//         {error && <p className="text-red-500 text-center text-sm mb-4">{error}</p>}
+      {/* ✅ Display Recent Reservations */}
+      <div className="mb-6 p-4 bg-white shadow-md rounded-lg">
+        <h1 className="text-2xl text-gray-700 font-semibold text-center mb-4">Reservations</h1>
+        <h2 className="text-xl font-semibold text-center mb-4">Recent Reservations</h2>
+        {reservations.length > 0 ? (
+          <ul className="list-disc pl-5">
+            {reservations.map((res, index) => (
+              <li key={index} className="text-gray-800">
+                Table No.{res.table_number} for {new Date(res.booking_time).toLocaleString()}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-gray-500 text-center">No reservations yet.</p>
+        )}
+      </div>
 
-//         <div className="grid grid-cols-3 gap-6 mt-6">
-//           {tables.map((table) => (
-//             <div
-//               key={table.id}
-//               className="flex flex-col items-center border-2 border-gray-300 rounded-lg p-4 shadow-md"
-//             >
-//               <motion.button
-//                 onClick={() => toggleBooking(table.id, table.available)}
-//                 whileTap={{ scale: 0.95 }}
-//                 className={`p-6 rounded-lg font-semibold text-center text-lg transition duration-300 ease-in-out shadow-lg ${
-//                   table.available
-//                     ? "bg-green-500 hover:bg-green-600 text-white"
-//                     : "bg-gray-500 hover:bg-gray-600 text-gray-100"
-//                 }`}
-//               >
-//                 {table.available ? `Table ${table.id}` : `Table ${table.id} Booked`}
-//               </motion.button>
-//               <p className="text-gray-700 mt-2">Available for {table.availabilityTime} min</p>
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-//     </div>
-//   );
+      {/* ✅ Booking Section */}
+      <div className="p-4 bg-white shadow-md rounded-lg">
+        <h2 className="text-xl text-center font-semibold mb-2">Reserve a Table</h2>
+
+        <p className="text-sm text-red-600 bg-yellow-100 p-3 rounded-md text-center mb-4">
+          Please note: Reservations must be made at least 20-30 minutes before your arrival.
+        </p>
+
+        <label className="block text-gray-700 font-medium mb-1">Select Date & Time:</label>
+        <input
+          type="datetime-local"
+          value={reservationDateTime}
+          onChange={(e) => setReservationDateTime(e.target.value)}
+          className="border border-gray-300 p-2 rounded-md w-full mb-2"
+        />
+
+        <label className="block text-gray-700 font-medium mb-1">Select Table:</label>
+        <AvailableTables tables={availableTables} onSelectTable={setReservedTable} />
+
+        <button
+          onClick={bookTable}
+          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-200 w-full mt-4"
+        >
+          Book a Table
+        </button>
+      </div>
+    </div>
+  );
 }

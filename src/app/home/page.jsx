@@ -55,6 +55,7 @@ export default function Home() {
     }
     fetchTables();
   }, []);
+
   const fetchMenuItems = async (restaurantId) => {
     try {
       const response = await fetch(`http://127.0.0.1:5000/outlets/${restaurantId}`);
@@ -86,8 +87,8 @@ export default function Home() {
       selectedCuisine === 'All' || restaurant.cuisines.includes(selectedCuisine)
     );
     return (
-      <div className="homeContainer">
-        <h1 className="welcomeMessage">Welcome to Foodcourt!</h1>
+      <div className="pt-20 homeContainer">
+        <h1 className="welcomeMessage">{session?.user ?`Welcome, ${session.user.name}!` : "Welcome to Foodcourt!"}</h1>
         <div className="searchBarContainer">
           <input
             type="text"

@@ -115,7 +115,7 @@ export default function Orders() {
 
 
   return (
-    <div className="max-w-6xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <div className="max-w-6xl pt-20 mx-auto p-6 bg-white shadow-lg rounded-lg">
       <h1 className="text-2xl font-semibold text-gray-800 mb-4">Your Orders</h1>
 
       {orders.length === 0 ? (

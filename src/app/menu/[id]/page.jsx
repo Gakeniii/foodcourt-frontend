@@ -95,7 +95,7 @@ export default function Page({ params }) {
     .filter((item) => selectedCategory === "All" || item.category === selectedCategory);
 
   return (
-    <div className="menuContainer">
+    <div className="menuContainer pt-20">
       {restaurant?.image_url && (
         <img src={restaurant.image_url} alt={`${restaurant.name} Banner`} className="restaurantBanner" />
       )}

@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import QuantitySelector from "../QuantitySelector/QuantitySelector";
@@ -17,6 +16,8 @@ const Menu = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [cartNotification, setCartNotification] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
   const router = useRouter();
   const { addToCart } = useCart();
   const { selectedOutlet, setSelectedOutlet } = useOutlet();
@@ -51,7 +52,7 @@ const Menu = () => {
     setQuantity(1);
     setTotalPrice(item.price);
     setIsModalOpen(true);
-    if (setSelectedOutlet){
+    if (setSelectedOutlet) {
       setSelectedOutlet(outlet);
     } else {
       console.error("setSelectedOutlet is undefined");
@@ -73,14 +74,23 @@ const Menu = () => {
       alert("Please select an outlet first.");
       return;
     }
-
+    // Add the item to cart along with outlet and pricing info
     addToCart({
       ...item,
       outlet_id: selectedOutlet.id,
       quantity,
       totalPrice,
     });
-    router.push("/checkout");
+    // Increment the floating cart count by the current quantity
+    setCartCount((prevCount) => prevCount + quantity);
+    // Show a toast notification
+    setCartNotification(true);
+    // Close the modal
+    closeModal();
+    // Hide notification after 3 seconds
+    setTimeout(() => {
+      setCartNotification(false);
+    }, 3000);
   };
 
   const filteredMenuItems = outlets.flatMap((outlet) =>
@@ -95,7 +105,7 @@ const Menu = () => {
   );
 
   return (
-    <div className="max-w-6xl mx-auto p-4">
+    <div className="max-w-6xl mx-auto pt-20 p-4">
       <h1 className="text-center text-3xl font-bold my-6">Menu</h1>
 
       {/* Filters */}
@@ -107,18 +117,30 @@ const Menu = () => {
           onChange={handleSearchChange}
           className="p-2 border rounded-md w-64"
         />
-        <select value={selectedCuisine} onChange={handleCuisineChange} className="p-2 border rounded-md">
+        <select
+          value={selectedCuisine}
+          onChange={handleCuisineChange}
+          className="p-2 border rounded-md"
+        >
           <option value="All">All Cuisines</option>
           {Array.from(new Set(outlets.flatMap((outlet) => outlet.cuisines))).map((cuisine) => (
-            <option key={cuisine} value={cuisine}>{cuisine}</option>
+            <option key={cuisine} value={cuisine}>
+              {cuisine}
+            </option>
           ))}
         </select>
-        <select value={selectedCategory} onChange={handleCategoryChange} className="p-2 border rounded-md">
+        <select
+          value={selectedCategory}
+          onChange={handleCategoryChange}
+          className="p-2 border rounded-md"
+        >
           <option value="All">All Categories</option>
           {Array.from(
             new Set(outlets.flatMap((outlet) => outlet.menu_items.map((item) => item.category)))
           ).map((category) => (
-            <option key={category} value={category}>{category}</option>
+            <option key={category} value={category}>
+              {category}
+            </option>
           ))}
         </select>
       </div>
@@ -136,13 +158,17 @@ const Menu = () => {
               className="bg-white p-4 rounded-lg shadow-md cursor-pointer transition-transform transform hover:scale-105"
               onClick={() => openModal(item, item.outlet)}
             >
-              <img src={item.image_url} alt={item.name} className="w-full h-40 object-cover rounded-lg" />
+              <img
+                src={item.image_url}
+                alt={item.name}
+                className="w-full h-40 object-cover rounded-lg"
+              />
               <div className="mt-2 text-center">
                 <h2 className="text-lg font-semibold">{item.name}</h2>
                 <p className="text-gray-600">Waiting Time: {item.waiting} min</p>
                 <p className="text-green-600 font-bold">KSh {item.price}</p>
                 <button
-                  className="mt-2 px-4 py-2 bg-orange-500 text-white rounded-lg"
+                  className="mt-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition"
                   onClick={(e) => {
                     e.stopPropagation();
                     openModal(item, item.outlet);
@@ -156,23 +182,61 @@ const Menu = () => {
         </div>
       )}
 
-      {/* Modal */}
+      {/* Modal for adding item */}
       {isModalOpen && selectedItem && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
           <div className="bg-white p-6 rounded-lg max-w-lg w-full relative">
-            <button className="absolute top-2 right-4 text-2xl" onClick={closeModal}>&times;</button>
-            <img src={selectedItem.image_url} alt={selectedItem.name} className="w-full h-56 object-cover rounded-lg" />
+            <button
+              className="absolute top-2 right-4 text-2xl"
+              onClick={closeModal}
+            >
+              &times;
+            </button>
+            <img
+              src={selectedItem.image_url}
+              alt={selectedItem.name}
+              className="w-full h-56 object-cover rounded-lg"
+            />
             <h2 className="text-xl font-bold mt-4">{selectedItem.name}</h2>
-            <p className="text-gray-600"><strong>Restaurant:</strong> {selectedItem.outlet.name}</p>
-            <p className="text-gray-600"><strong>Category:</strong> {selectedItem.category}</p>
-            <p className="text-gray-600"><strong>Cuisine:</strong> {selectedItem.cuisine}</p>
+            <p className="text-gray-600">
+              <strong>Restaurant:</strong> {selectedItem.outlet.name}
+            </p>
+            <p className="text-gray-600">
+              <strong>Category:</strong> {selectedItem.category}
+            </p>
+            <p className="text-gray-600">
+              <strong>Cuisine:</strong> {selectedItem.cuisine}
+            </p>
             <p className="text-green-600 font-bold">KSh {selectedItem.price}</p>
-            <QuantitySelector price={selectedItem.price} onQuantityChange={handleQuantityChange} />
-            <button className="w-full mt-4 bg-green-500 text-white p-2 rounded-lg" onClick={() => handleAddToCart(selectedItem)}>
+            <QuantitySelector
+              price={selectedItem.price}
+              onQuantityChange={handleQuantityChange}
+            />
+            <button
+              className="w-full mt-4 bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 transition"
+              onClick={() => handleAddToCart(selectedItem)}
+            >
               Add to Cart
             </button>
           </div>
         </div>
+      )}
+
+      {/* Toast Notification */}
+      {cartNotification && (
+        <div className="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg transition duration-300">
+          Order added to cart!
+        </div>
+      )}
+
+      {/* Floating Checkout Button */}
+      {cartCount > 0 && (
+        <button
+          className="fixed bottom-4 right-2 bg-orange-500 text-white px-4 py-4 rounded-full hover:bg-green-600 transition shadow-lg flex items-center gap-2"
+          onClick={() => router.push("/checkout")}
+        >
+          View Cart <span className="font-bold">({cartCount})</span>
+        </button>
       )}
     </div>
   );

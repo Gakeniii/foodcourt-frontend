@@ -13,10 +13,11 @@ import {
   CalendarCheck,
   ShoppingCart,
 } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
 
 const categories = [
   { name: "Home", icon: Home, href: "/home" },
-  { name: "Food", icon: Utensils, href: "/menu" },
+  { name: "Menu", icon: Utensils, href: "/menu" },
   { name: "Orders", icon: ClipboardList, href: "/orders" },
   { name: "Bookings", icon: CalendarCheck, href: "/tables" },
   { name: "Cart", icon: ShoppingCart, href: "/checkout" },
@@ -28,6 +29,7 @@ export function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
   const menuRef = useRef(null);
+  const { data: session } = useSession();
 
   // Close dropdown if clicking outside
   useEffect(() => {
@@ -42,10 +44,7 @@ export function Navbar() {
   }, []);
 
   const handleLogout = async () => {
-    setLoading(true);
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
-    router.push("/auth/login");
+    signOut({callbackUrl: "/auth/login"})
   };
 
   const handleMenuClick = () => {
@@ -64,7 +63,7 @@ export function Navbar() {
   if (hiddenRoutes.includes(pathname)) return null;
 
   return (
-    <nav className="bg-yellow-400 shadow-md z-[9999]">
+    <nav className="bg-yellow-400 w-full fixed shadow-md z-[9999]">
       {/* Navbar Container */}
       <div className="container mx-auto flex items-center justify-between h-14 px-4">
         {/* Brand Name */}
@@ -98,7 +97,7 @@ export function Navbar() {
             className="flex items-center gap-2 bg-yellow-300 rounded-full px-3 py-1 hover:shadow-md transition-shadow"
           >
             <User className="h-5 w-5 text-green-600 transition-transform duration-300 hover:scale-110" />
-            <span className="font-medium text-gray-900 hidden sm:inline">User</span>
+            <span className="font-medium text-gray-900 hidden sm:inline">{session?.user?.name}</span>
             <ChevronDown className="h-4 w-4 text-gray-700" />
           </button>
 
