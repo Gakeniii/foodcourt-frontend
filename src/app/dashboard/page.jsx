@@ -105,10 +105,9 @@ export default function OwnerDashboard() {
       {/* Navbar */}
       <nav className="bg-gray-900 text-white p-4 flex justify-between items-center">
         <h1 className="text-xl font-bold">FoodCourt Owner</h1>
-        <Link href="/dashboard" className="mr-4 hover:text-gray-300">Dashboard</Link>
+        <Link href="/auth/login" className="mr-4 hover:text-gray-300">Dashboard</Link>
       </nav>
 
-      {/* Pop-up Notification */}
       {showPopup && (
         <div className="fixed top-10 right-10 bg-green-500 text-white p-4 rounded-lg shadow-lg">
           {popupMessage}
@@ -127,7 +126,7 @@ export default function OwnerDashboard() {
             Table Bookings ({tablesCount})
           </Link>
         </div>
-                  {/* Add Outlet Form */}
+
         <div className="mt-6">
             <input
               type="text"
@@ -153,7 +152,7 @@ export default function OwnerDashboard() {
 
         {/* Outlets Section */}
         <div className="mb-6 w-full">
-          <h3 className="text-xl font-semibold">Your Outlets</h3>
+          <h3 className="text-xl mb-6 font-semibold">Your Outlets</h3>
           <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-3 xl:grid-cols-2 gap-2">
             {outlets.map((outlet) => (
               <div 
@@ -165,7 +164,6 @@ export default function OwnerDashboard() {
               </div>
             ))}
           </div>
-
         </div>
       </div>
     </div>

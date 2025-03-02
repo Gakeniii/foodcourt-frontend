@@ -11,7 +11,7 @@ export default function SignUp() {
   const [error, setError] = useState("");
   const router = useRouter();
   
-  const BASE_URL = "http://127.0.0.1:5000";
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
   const onSubmit = async (data) => {
     try {
@@ -71,31 +71,14 @@ export default function SignUp() {
           />
           {errors.password && <p className="text-red-500">{errors.password.message}</p>}
 
-          {/* Confirm Password */}
-          {/* <input
-            type="password"
-            {...register("confirmPassword", { required: "Please confirm your password" })}
-            placeholder="Re-enter Password"
-            className="auth-input"
-          />
-          {errors.confirmPassword && <p className="text-red-500">{errors.confirmPassword.message}</p>} */}
-
-          {/* Role Selection */}
-          {/* { <select
+          <select
             {...register("role", { required: "Role is required" })}
-            className="auth-input"
+            className="auth-input w-full p-4 bg-gray-900 rounded-xl text-white outline-none"
           >
             <option value="">Select Role</option>
-            <option value="customer">Customer</option>
-            <option value="owner">Owner</option>
-          </select> } */}
-          <input
-            type="text"
-            {...register("role", { required: "Role is required" })}
-            placeholder="Role"
-            className="auth-input"
-          />
-          {errors.role && <p className="text-red-500">{errors.role.message}</p>}
+            <option value="Customer">Customer</option>
+            <option value="Owner">Owner</option>
+          </select>
 
           {/* Submit Button */}
           <button type="submit" className="w-full bg-red-600 text-white p-2 rounded-md hover:bg-red-700 transition">

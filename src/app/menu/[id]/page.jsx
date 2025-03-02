@@ -2,15 +2,15 @@
 "use client";
 
 import { useEffect, useState, use } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import "./page.css";
-import { useOrder } from "@/app/context/OrderContext";
+import { useCart } from "@/app/context/CartContext";
+import { useOutlet } from "@/app/context/Outlet";
+
 
 export default function Page({ params }) {
-  // const params = useParams();
-  const { id } = params;
-  console.log("Menu ID:", params.id);
-  // console.log("Params recieve:", params);
+  const resolvedParams = use(params);
+  const { id } = resolvedParams;
 
   const [restaurant, setRestaurant] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -21,22 +21,26 @@ export default function Page({ params }) {
   const [selectedItem, setSelectedItem] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-  const { addToOrder } = useOrder();
-  
+
+  const { setSelectedOutlet} = useOutlet();
+  const { addToCart } = useCart();
   const router = useRouter();
+
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
   useEffect(() => {
     async function fetchRestaurant() {
       console.log("Fetching restaurant with ID:", id); 
 
       try {
-        const response = await fetch(`http://localhost:5000/outlets/${id}`);
+        const response = await fetch(`${BASE_URL}/outlets/${id}`);
         if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
 
         console.log("Restaurant data:", data);
 
         setRestaurant(data);
+        setSelectedOutlet(data);
         setCategories(["All", ...new Set(data.menu_items.map(item => item.category))]);
       } catch (error) {
         setError("Failed to load restaurant details");
@@ -46,12 +50,11 @@ export default function Page({ params }) {
       }
     }
     fetchRestaurant();
-  }, [id]);
+  }, [id, setSelectedOutlet]);
 
   const handleSearchChange = (event) => setSearchQuery(event.target.value);
   const handleCategoryChange = (event) => setSelectedCategory(event.target.value);
 
-  // When opening modal, attach the restaurant details as outlet info
   const openModal = (item) => {
     setSelectedItem({ ...item, outlet: restaurant });
     setIsModalOpen(true);
@@ -62,17 +65,15 @@ export default function Page({ params }) {
     setIsModalOpen(false);
   };
 
-  const addToCart = (item) => {
-
+  const handleAddToCart = (item) => {
   console.log("Adding to cart:", item);
   console.log("Current restaurant state:", restaurant);
-
     if (!restaurant || !restaurant.id) {
       setError("Please select an outlet before placing your order.");
       return;
     }
 
-    addToOrder({
+    addToCart({
       id: item.id,
       name: item.name,
       image_url: item.image_url,
@@ -94,7 +95,7 @@ export default function Page({ params }) {
     .filter((item) => selectedCategory === "All" || item.category === selectedCategory);
 
   return (
-    <div className="menuContainer">
+    <div className="menuContainer pt-20">
       {restaurant?.image_url && (
         <img src={restaurant.image_url} alt={`${restaurant.name} Banner`} className="restaurantBanner" />
       )}
@@ -161,7 +162,7 @@ export default function Page({ params }) {
               <p><strong>Cuisine:</strong> {selectedItem.cuisine}</p>
               <p><strong>Description:</strong> {selectedItem.description}</p>
               <p><strong>Price:</strong> KSh {selectedItem.price}</p>
-              <button className="addToCartButton" onClick={() => restaurant && addToCart(selectedItem)}
+              <button className="addToCartButton" onClick={() => restaurant && handleAddToCart(selectedItem)}
                 disabled={!restaurant}>
                 Add to Cart
               </button>

@@ -2,22 +2,27 @@
 
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { useSocket } from "../lib/hooks/useSocket";
 
 export default function Orders() {
   const { data: session } = useSession();
+  const { socket } = useSocket();
+  const { orderUpdate } = useSocket();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [highlightedOrderId, setHighlightedOrderId] = useState(null);
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
   useEffect(() => {
-    if (!session?.user?.id) return;
+    if (!session?.user?.id || !socket) return;
+    console.log("Socket instance:", socket);
 
     const fetchOrders = async () => {
       try {
         console.log("Fetching orders for user ID:", session.user.id);
     
-        const response = await fetch(`http://localhost:5000/orders`, {
+        const response = await fetch(`${BASE_URL}/orders`, {
           headers: {
             Authorization: `Bearer ${session?.accessToken || ""}`,
           },
@@ -28,16 +33,12 @@ export default function Orders() {
         }
     
         const data = await response.json();
-        console.log("Fetched orders:", data); // Debugging output
-    
-        // Ensure orders have `id`
         if (!Array.isArray(data) || data.some(order => !order.id)) {
           throw new Error("Invalid order data received. Check backend response.");
         }
     
-        // Filter orders for the current customer
         const userOrders = data.filter(order => order.customer_id === session.user.id);
-        console.log("Filtered orders:", userOrders); // Debugging output
+        console.log("Filtered orders:", userOrders);
     
         setOrders(userOrders);
       } catch (error) {
@@ -50,16 +51,59 @@ export default function Orders() {
     
 
     fetchOrders();
-    // Retrieve the last placed order ID from localStorage
     const storedOrderId = localStorage.getItem("order_id");
     if (storedOrderId) {
       setHighlightedOrderId(parseInt(storedOrderId));
     }
-  }, [session]);
+
+    if (socket){
+      socket.on("order_status_update", (updatedOrder) => {
+        console.log("Order Update Received:", updatedOrder);
+        setOrders(prevOrders => prevOrders.map(order =>
+          order.id === updatedOrder.order_id ? { ...order, status: updatedOrder.status } : order
+        ));
+      });
+    }
+
+
+    return () => socket.off("order_status_update");
+  }, [session, socket]);
+
+  const cancelOrder = async (orderId) => {
+    try {
+        const response = await fetch(`${BASE_URL}/orders/${orderId}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${session?.accessToken || ""}`,
+            },
+            body: JSON.stringify({ status: "Cancelled" }),
+        });
+
+        if (!response.ok) throw new Error("Failed to cancel order");
+
+        // Emit the cancellation event to the owner
+        socket.emit("cancel_order", { order_id: orderId });
+
+        // Update order locally
+        setOrders(prevOrders => prevOrders.map(order =>
+            order.id === orderId ? { ...order, status: "Cancelled" } : order
+        ));
+
+    } catch (error) {
+        console.error("Error cancelling order:", error);
+    }
+  };
 
   if (!session) {
     return <p className="text-gray-600">Please log in to view your orders.</p>;
   }
+
+  const getEstimatedTime = () => {
+    const minTime = 15;
+    const maxTime = 30;
+    return Math.floor(Math.random() * (maxTime - minTime + 1) + minTime);
+  };
 
   if (loading) {
     return <p className="text-gray-600">Loading orders...</p>;
@@ -69,8 +113,9 @@ export default function Orders() {
     return <p className="text-red-500">{error}</p>;
   }
 
+
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <div className="max-w-6xl pt-20 mx-auto p-6 bg-white shadow-lg rounded-lg">
       <h1 className="text-2xl font-semibold text-gray-800 mb-4">Your Orders</h1>
 
       {orders.length === 0 ? (
@@ -84,12 +129,20 @@ export default function Orders() {
                 order.id === highlightedOrderId ? "bg-yellow-200 border-2 border-yellow-500" : "bg-gray-100"
               }`}
             >
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">
                 Order #{order.id} - {order.outlet_name}
+              </h3>
+              <h2 className="text-gray-700">
+                <strong className="text-lg">Status:</strong> <span className="font-bold">{order.status}</span>
               </h2>
-              <p className="text-gray-700">
-                <strong>Status:</strong> <span className="font-bold">{order.status}</span>
-              </p>
+              
+              {/* Estimated Serving Time */}
+              {order.status === "Confirmed" && (
+                <p className="text-green-600 font-medium mt-2">
+                  🕒 Your order will be served in approximately {getEstimatedTime()} minutes.
+                </p>
+              )}
+
               <p className="text-gray-700">
                 <strong>Table:</strong> {order.table_number || "N/A"}
               </p>
@@ -113,6 +166,19 @@ export default function Orders() {
                   </li>
                 ))}
               </ul>
+              {orderUpdate && orderUpdate.order_id === order.id && (
+                <div className="bg-green-300 border border-green-500 p-2 rounded-md mt-4">
+                  Order #{orderUpdate.order_id} as been <strong>{orderUpdate.status}</strong> ✔
+                </div>
+              )}
+              
+            <button
+              className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50"
+              onClick={() => cancelOrder(order.id)}
+              disabled={order.status === "Cancelled" || order.status === "Completed"}
+            >
+              {order.status === "Cancelled" ? "Cancelled" : "Cancel Order"}
+            </button>
             </div>
           ))}
         </div>

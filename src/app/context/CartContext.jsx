@@ -1,56 +1,45 @@
-// src/app/context/CartContext.js
-"use client";
 
-import { createContext, useContext, useState } from 'react';
+"use client";
+import { createContext, useContext, useState } from "react";
 
 const CartContext = createContext();
 
-export const CartProvider = ({ children }) => {
+export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
 
-  const addItemToCart = (item) => {
-    setCartItems((prevItems) => [...prevItems, item]);
+  const addToCart = (item) => {
+    setCartItems((prevItems) => {
+      // Check if the item already exists to update quantity & total price.
+      const existing = prevItems.find((i) => i.id === item.id);
+      if (existing) {
+        return prevItems.map((i) =>
+          i.id === item.id
+            ? { 
+                ...i, 
+                quantity: (i.quantity || 1) + (item.quantity || 1), 
+                totalPrice: (i.totalPrice || i.price) + item.totalPrice 
+              }
+            : i
+        );
+      }
+      // Otherwise, add as a new item.
+      return [...prevItems, { ...item, quantity: item.quantity || 1, totalPrice: item.totalPrice || item.price }];
+    });
   };
 
+  const clearCart = () => {
+    setCartItems([]);
+  };
+
+
   return (
-    <CartContext.Provider value={{ cartItems, addItemToCart }}>
+    <CartContext.Provider value={{ cartItems, addToCart, clearCart }}>
       {children}
     </CartContext.Provider>
   );
-};
+}
 
-export const useCart = () => useContext(CartContext);
-
-// CartContext.js
-// import { createContext, useContext, useState } from 'react';
-
-// const CartContext = createContext();
-
-// export const useCart = () => useContext(CartContext);
-
-// export const CartProvider = ({ children }) => {
-//   const [cart, setCart] = useState([]);
-//   const [orders, setOrders] = useState([]);
-
-//   const addItemToCart = (item) => {
-//     setCart((prevCart) => [...prevCart, item]);
-//   };
-
-//   const placeOrder = async () => {
-//     // Logic to place the order (e.g., sending the data to the server)
-//     // After placing the order, update the orders list
-//     setOrders([...orders, ...cart]);  // Example: adding current cart items to orders
-//     setCart([]); // Clear the cart after placing the order
-//   };
-
-//   const getTotalPrice = () => {
-//     return cart.reduce((total, item) => total + item.totalPrice, 0);
-//   };
-
-//   return (
-//     <CartContext.Provider value={{ cart, orders, addItemToCart, placeOrder, getTotalPrice }}>
-//       {children}
-//     </CartContext.Provider>
-//   );
-// };
+export function useCart() {
+  return useContext(CartContext);
+}
 

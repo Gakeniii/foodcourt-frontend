@@ -1,10 +1,7 @@
-
 "use client";
-
 import { useEffect, useState } from "react";
-import "../menu/menu.css";
-import QuantitySelector from "../QuantitySelector/QuantitySelector";
 import { useRouter } from "next/navigation";
+import QuantitySelector from "../QuantitySelector/QuantitySelector";
 import { useCart } from "../context/CartContext";
 import { useOutlet } from "../context/Outlet";
 
@@ -19,8 +16,10 @@ const Menu = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [cartNotification, setCartNotification] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
   const router = useRouter();
-  const { addItemToCart } = useCart();
+  const { addToCart } = useCart();
   const { selectedOutlet, setSelectedOutlet } = useOutlet();
 
   useEffect(() => {
@@ -53,7 +52,7 @@ const Menu = () => {
     setQuantity(1);
     setTotalPrice(item.price);
     setIsModalOpen(true);
-    if (setSelectedOutlet){
+    if (setSelectedOutlet) {
       setSelectedOutlet(outlet);
     } else {
       console.error("setSelectedOutlet is undefined");
@@ -70,19 +69,28 @@ const Menu = () => {
     setTotalPrice(totalPrice);
   };
 
-  const addToCart = (item) => {
+  const handleAddToCart = (item) => {
     if (!selectedOutlet) {
       alert("Please select an outlet first.");
       return;
     }
-
-    addItemToCart({
+    // Add the item to cart along with outlet and pricing info
+    addToCart({
       ...item,
       outlet_id: selectedOutlet.id,
       quantity,
       totalPrice,
     });
-    router.push("/checkout");
+    // Increment the floating cart count by the current quantity
+    setCartCount((prevCount) => prevCount + quantity);
+    // Show a toast notification
+    setCartNotification(true);
+    // Close the modal
+    closeModal();
+    // Hide notification after 3 seconds
+    setTimeout(() => {
+      setCartNotification(false);
+    }, 3000);
   };
 
   const filteredMenuItems = outlets.flatMap((outlet) =>
@@ -97,17 +105,23 @@ const Menu = () => {
   );
 
   return (
-    <div className="menuContainer">
-      <h1 className="menuTitle">Menu</h1>
-      <div className="filtersContainer">
+    <div className="max-w-6xl mx-auto pt-20 p-4">
+      <h1 className="text-center text-3xl font-bold my-6">Menu</h1>
+
+      {/* Filters */}
+      <div className="flex flex-wrap gap-4 justify-center mb-6">
         <input
           type="text"
           placeholder="Search..."
           value={searchQuery}
           onChange={handleSearchChange}
-          className="searchBar"
+          className="p-2 border rounded-md w-64"
         />
-        <select value={selectedCuisine} onChange={handleCuisineChange} className="cuisineDropdown">
+        <select
+          value={selectedCuisine}
+          onChange={handleCuisineChange}
+          className="p-2 border rounded-md"
+        >
           <option value="All">All Cuisines</option>
           {Array.from(new Set(outlets.flatMap((outlet) => outlet.cuisines))).map((cuisine) => (
             <option key={cuisine} value={cuisine}>
@@ -115,7 +129,11 @@ const Menu = () => {
             </option>
           ))}
         </select>
-        <select value={selectedCategory} onChange={handleCategoryChange} className="categoryDropdown">
+        <select
+          value={selectedCategory}
+          onChange={handleCategoryChange}
+          className="p-2 border rounded-md"
+        >
           <option value="All">All Categories</option>
           {Array.from(
             new Set(outlets.flatMap((outlet) => outlet.menu_items.map((item) => item.category)))
@@ -126,26 +144,31 @@ const Menu = () => {
           ))}
         </select>
       </div>
+
+      {/* Menu Items */}
       {loading ? (
-        <p>Loading outlets...</p>
+        <p className="text-center">Loading outlets...</p>
       ) : error ? (
-        <p>{error}</p>
+        <p className="text-red-500 text-center">{error}</p>
       ) : (
-        <div className="menuItemsContainer">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filteredMenuItems.map((item) => (
             <div
               key={item.id}
-              className="menuItemCard"
+              className="bg-white p-4 rounded-lg shadow-md cursor-pointer transition-transform transform hover:scale-105"
               onClick={() => openModal(item, item.outlet)}
-              style={{ cursor: "pointer" }}
             >
-              <img src={item.image_url} alt={item.name} className="menuItemImage" />
-              <div className="menuItemDetails">
-                <h2 className="menuItemName">{item.name}</h2>
-                <p className="menuItemWaitingTime">Waiting Time: {item.waiting} minutes</p>
-                <p className="menuItemPrice">KSh {item.price}</p>
+              <img
+                src={item.image_url}
+                alt={item.name}
+                className="w-full h-40 object-cover rounded-lg"
+              />
+              <div className="mt-2 text-center">
+                <h2 className="text-lg font-semibold">{item.name}</h2>
+                <p className="text-gray-600">Waiting Time: {item.waiting} min</p>
+                <p className="text-green-600 font-bold">KSh {item.price}</p>
                 <button
-                  className="addToCart"
+                  className="mt-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition"
                   onClick={(e) => {
                     e.stopPropagation();
                     openModal(item, item.outlet);
@@ -158,36 +181,62 @@ const Menu = () => {
           ))}
         </div>
       )}
+
+      {/* Modal for adding item */}
       {isModalOpen && selectedItem && (
-        <div className="modal" onClick={closeModal}>
-          <div className="modalContent" onClick={(e) => e.stopPropagation()}>
-            <div className="modalImageContainer">
-              <img src={selectedItem.image_url} alt={selectedItem.name} className="modalImage" />
-            </div>
-            <div className="modalDetails">
-              <h2>{selectedItem.name}</h2>
-              <p>
-                <strong>Restaurant:</strong> {selectedItem.outlet.name}
-              </p>
-              <p>
-                <strong>Category:</strong> {selectedItem.category}
-              </p>
-              <p>
-                <strong>Cuisine:</strong> {selectedItem.cuisine}
-              </p>
-              <p>
-                <strong>Price:</strong> KSh {selectedItem.price}
-              </p>
-              <QuantitySelector price={selectedItem.price} onQuantityChange={handleQuantityChange} />
-              <button className="addToCartButton" onClick={() => addToCart(selectedItem)}>
-                Add to Cart
-              </button>
-            </div>
-            <span className="close" onClick={closeModal}>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+          <div className="bg-white p-6 rounded-lg max-w-lg w-full relative">
+            <button
+              className="absolute top-2 right-4 text-2xl"
+              onClick={closeModal}
+            >
               &times;
-            </span>
+            </button>
+            <img
+              src={selectedItem.image_url}
+              alt={selectedItem.name}
+              className="w-full h-56 object-cover rounded-lg"
+            />
+            <h2 className="text-xl font-bold mt-4">{selectedItem.name}</h2>
+            <p className="text-gray-600">
+              <strong>Restaurant:</strong> {selectedItem.outlet.name}
+            </p>
+            <p className="text-gray-600">
+              <strong>Category:</strong> {selectedItem.category}
+            </p>
+            <p className="text-gray-600">
+              <strong>Cuisine:</strong> {selectedItem.cuisine}
+            </p>
+            <p className="text-green-600 font-bold">KSh {selectedItem.price}</p>
+            <QuantitySelector
+              price={selectedItem.price}
+              onQuantityChange={handleQuantityChange}
+            />
+            <button
+              className="w-full mt-4 bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 transition"
+              onClick={() => handleAddToCart(selectedItem)}
+            >
+              Add to Cart
+            </button>
           </div>
         </div>
+      )}
+
+      {/* Toast Notification */}
+      {cartNotification && (
+        <div className="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow-lg transition duration-300">
+          Order added to cart!
+        </div>
+      )}
+
+      {/* Floating Checkout Button */}
+      {cartCount > 0 && (
+        <button
+          className="fixed bottom-4 right-2 bg-orange-500 text-white px-4 py-4 rounded-full hover:bg-green-600 transition shadow-lg flex items-center gap-2"
+          onClick={() => router.push("/checkout")}
+        >
+          View Cart <span className="font-bold">({cartCount})</span>
+        </button>
       )}
     </div>
   );
