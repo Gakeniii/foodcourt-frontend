@@ -164,11 +164,10 @@ export default function Home() {
         <motion.div className="absolute inset-0 -z-10" style={{ y: 0 }}>
           {" "}
           {/*Removed parallax*/}
-          <Image
-            src="/placeholder.svg?height=1000&width=1920&text=Food+Background"
+          <img
+            src="https://wallpapers.com/images/featured/delicious-food-pictures-i5wjpvjqrk3qroy0.jpg"
             alt="Parallax background"
-            fill
-            className="object-cover opacity-10"
+            className="object-cover opacity-8"
           />
         </motion.div>
 
@@ -371,7 +370,7 @@ export default function Home() {
             preserveAspectRatio="none"
             xmlns="http://www.w3.org/2000/svg">
               <path
-                fill="#065F46"
+                className="fill-current text-green-900"
                 d="M0,288L48,266.7C96,245,192,203,288,202.7C384,203,480,245,576,256C672,267,768,245,864,213.3C960,181,1056,139,1152,133.3C1248,128,1344,160,1392,176L1440,192L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"
               />
             </svg>
