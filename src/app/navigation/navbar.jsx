@@ -63,7 +63,7 @@ export function Navbar() {
   if (hiddenRoutes.includes(pathname)) return null;
 
   return (
-    <nav className="bg-yellow-400 w-full fixed shadow-md z-[9999]">
+    <nav className="bg-amber-400 w-full fixed shadow-md z-[9999]">
       {/* Navbar Container */}
       <div className="container mx-auto flex items-center justify-between h-14 px-4">
         {/* Brand Name */}
