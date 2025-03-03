@@ -29,7 +29,7 @@ function AvailableTables({ onSelectTable }) {
               className={`p-6 rounded-lg text-center font-semibold transition-all flex items-center justify-center 
                 ${
                   selectedTable === table_number
-                    ? "bg-green-500 text-white shadow-md scale-105"
+                    ? "bg-green-800 text-white shadow-md scale-105"
                     : "bg-gray-100 hover:bg-gray-200 text-gray-700"
                 }`}
             >

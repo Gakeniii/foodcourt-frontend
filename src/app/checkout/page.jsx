@@ -130,11 +130,14 @@ export default function Checkout() {
       <AvailableTables onSelectTable={handleTableSelect} className="bg-gray-100 rounded-lg shadow-md hover:bg-gray-200"/>
 
       <button
-        className="mt-6 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+        className="mt-6 w-full bg-amber-500 text-white py-2 rounded-full hover: transition"
         onClick={handleOrderConfirmation}
       >
         Confirm Order
       </button>
+      <br></br>
+      <br></br>
+      <br></br>
     </div>
   );
 }

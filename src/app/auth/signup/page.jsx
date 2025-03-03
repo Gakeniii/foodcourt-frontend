@@ -249,6 +249,8 @@ export default function SignUp() {
             >
               Sign Up
             </button>
+            <br></br>
+            <br></br>
           </form>
         </div>
       </div>

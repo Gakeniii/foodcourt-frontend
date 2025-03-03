@@ -106,7 +106,7 @@ const Menu = () => {
 
   return (
     <div className="max-w-6xl mx-auto pt-20 p-4">
-      <h1 className="text-center text-3xl font-bold my-6">Menu</h1>
+      <h1 className="text-center text-gray-700 text-4xl font-bold my-6">Menu</h1>
 
       {/* Filters */}
       <div className="flex flex-wrap gap-4 justify-center mb-6">
@@ -115,12 +115,12 @@ const Menu = () => {
           placeholder="Search..."
           value={searchQuery}
           onChange={handleSearchChange}
-          className="p-2 border rounded-md w-64"
+          className="p-2 border rounded-full w-64"
         />
         <select
           value={selectedCuisine}
           onChange={handleCuisineChange}
-          className="p-2 border rounded-md"
+          className="p-2 border rounded-full"
         >
           <option value="All">All Cuisines</option>
           {Array.from(new Set(outlets.flatMap((outlet) => outlet.cuisines))).map((cuisine) => (
@@ -132,7 +132,7 @@ const Menu = () => {
         <select
           value={selectedCategory}
           onChange={handleCategoryChange}
-          className="p-2 border rounded-md"
+          className="p-2 border rounded-full"
         >
           <option value="All">All Categories</option>
           {Array.from(
@@ -163,12 +163,17 @@ const Menu = () => {
                 alt={item.name}
                 className="w-full h-40 object-cover rounded-lg"
               />
-              <div className="mt-2 text-center">
-                <h2 className="text-lg font-semibold">{item.name}</h2>
-                <p className="text-gray-600">Waiting Time: {item.waiting} min</p>
-                <p className="text-green-600 font-bold">KSh {item.price}</p>
+              <div className="mt-2 flex justify-between items-center">
+                {/* Left side: Item details */}
+                <div className="text-left">
+                  <h2 className="text-lg font-semibold">{item.name}</h2>
+                  <p className="text-gray-600">Waiting Time: {item.waiting} min</p>
+                  <p className="text-green-700 font-bold">KSh {item.price}</p>
+                </div>
+
+                {/* Right side: Plus button */}
                 <button
-                  className="mt-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition"
+                  className="px-2 py-1 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition"
                   onClick={(e) => {
                     e.stopPropagation();
                     openModal(item, item.outlet);
@@ -177,6 +182,8 @@ const Menu = () => {
                   +
                 </button>
               </div>
+
+
             </div>
           ))}
         </div>
@@ -207,13 +214,13 @@ const Menu = () => {
             <p className="text-gray-600">
               <strong>Cuisine:</strong> {selectedItem.cuisine}
             </p>
-            <p className="text-green-600 font-bold">KSh {selectedItem.price}</p>
+            <p className="text-green-900 font-bold">KSh {selectedItem.price}</p>
             <QuantitySelector
               price={selectedItem.price}
               onQuantityChange={handleQuantityChange}
             />
             <button
-              className="w-full mt-4 bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 transition"
+              className="w-full mt-4 bg-amber-500 text-white p-2 rounded-full hover: transition"
               onClick={() => handleAddToCart(selectedItem)}
             >
               Add to Cart
@@ -232,12 +239,15 @@ const Menu = () => {
       {/* Floating Checkout Button */}
       {cartCount > 0 && (
         <button
-          className="fixed bottom-4 right-2 bg-orange-500 text-white px-4 py-4 rounded-full hover:bg-green-600 transition shadow-lg flex items-center gap-2"
+          className="fixed bottom-4 right-2 bg-yellow-500 border-black text-white px-4 py-4 rounded-full hover: transition shadow-lg flex items-center gap-2"
           onClick={() => router.push("/checkout")}
         >
           View Cart <span className="font-bold">({cartCount})</span>
         </button>
       )}
+      <br></br>
+      <br></br>
+      <br></br>
     </div>
   );
 };

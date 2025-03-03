@@ -10,7 +10,7 @@
 .quantitySelector button {
   padding: 3px 6px;
   font-size: 0.8rem;
-  background-color: #4caf50;
+  background-color: #044e06;
   color: #fff;
   border: none;
   border-radius: 3px;
@@ -19,7 +19,7 @@
 }
 
 .quantitySelector button:hover {
-  background-color: #45a049;
+  background-color: #085f0c;
 }
 
 .quantitySelector span {

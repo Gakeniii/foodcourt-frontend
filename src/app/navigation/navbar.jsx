@@ -63,15 +63,15 @@ export function Navbar() {
   if (hiddenRoutes.includes(pathname)) return null;
 
   return (
-    <nav className="bg-amber-400 w-full fixed shadow-md z-[9999]">
+    <nav className="bg-amber-300 w-full fixed shadow-md z-[9999]">
       {/* Navbar Container */}
       <div className="container mx-auto flex items-center justify-between h-14 px-4">
         {/* Brand Name */}
         <Link
           href="/"
-          className="text-xl sm:text-2xl font-bold text-gray-800 transition-transform duration-300"
+          className="text-3xl sm:text-2xl font-bold text-gray-800 transition-transform duration-300"
         >
-          Foodie Eats
+          Foodie<span className="text-amber-500">.Eats</span>
         </Link>
 
         {/* Navigation Icons - Hidden on small screens */}
@@ -96,7 +96,7 @@ export function Navbar() {
             onClick={() => setUserMenuOpen(!userMenuOpen)}
             className="flex items-center gap-2 bg-yellow-300 rounded-full px-3 py-1 hover:shadow-md transition-shadow"
           >
-            <User className="h-5 w-5 text-green-600 transition-transform duration-300 hover:scale-110" />
+            <User className="h-5 w-5 text-green-800 transition-transform duration-300 hover:scale-110" />
             <span className="font-medium text-gray-900 hidden sm:inline">{session?.user?.name}</span>
             <ChevronDown className="h-4 w-4 text-gray-700" />
           </button>

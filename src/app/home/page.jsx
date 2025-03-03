@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import './home.css';
 import { useSession } from 'next-auth/react';
+import { Search } from 'lucide-react';
 
 export default function Home() {
   const [restaurants, setRestaurants] = useState([]);
@@ -97,6 +98,7 @@ export default function Home() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
+          <Search className='absolute left-3 top-3 text-amber-500 h-5 w-5'/>
           <select value={selectedCuisine} onChange={handleCuisineChange} className="cuisineDropdown">
             <option value="All">All Cuisines</option>
             {cuisines.map((cuisine, index) => (
@@ -129,26 +131,7 @@ export default function Home() {
           </div>
         </div>
       )}
-      <div className="tablesContainer">
-        <h2>Available Tables</h2>
-        {loadingTables ? (
-          <p>Loading available tables...</p>
-        ) : error ? (
-          <p>{error}</p>
-        ) : (
-          tables.map((table) => (
-            <div key={table.id} className="tableCard">
-              <h3>Table {table.table_number}</h3>
-              <p>Booking Time: {new Date(table.booking_time).toLocaleString()}</p>
-              <p>Customer: {table.customer_name}</p>
-            </div>
-          ))
-        )}
-      </div>
-      {error && <p className="error">{error}</p>}
     </div>
   );
 }
-
-  
 
