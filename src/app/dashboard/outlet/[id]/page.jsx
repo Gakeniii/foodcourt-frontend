@@ -25,12 +25,13 @@ export default function OutletPage() {
   const [showModal, setShowModal] = useState(false);
   const token = session?.accessToken;
 
-  useEffect(() => {
+  const fetchMenus = async () => {
     if (!outletId || !token) return;
-    const fetchMenus = async () => {
-      const menuItems = await fetchOutletMenus(outletId, token);
-      setMenus(menuItems);
-    };
+    const menuItems = await fetchOutletMenus(outletId, token);
+    setMenus(menuItems);
+  };
+
+  useEffect(() => {
     fetchMenus();
   }, [outletId, token]);
 
@@ -40,14 +41,13 @@ export default function OutletPage() {
   };
 
   const handleAddMenu = async () => {
-    console.log("Button Clicked!");
-
     if (
       !newMenu.name ||
       !newMenu.price ||
       !newMenu.image_url ||
       !newMenu.cuisine ||
       !newMenu.category ||
+      !newMenu.description ||
       !newMenu.waiting
     ) {
       console.log("Missing fields:", newMenu);
@@ -59,8 +59,8 @@ export default function OutletPage() {
     const addedMenu = await addMenuItem({ ...newMenu, outlet_id: outletId }, token);
 
     if (addedMenu) {
-      console.log("Menu added successfully:", addedMenu);
-      setMenus([...menus, addedMenu]);
+      showPopup("Menu added successfully!", "green");
+      // setMenus([...menus, addedMenu]);
       setNewMenu({
         name: "",
         price: "",
@@ -70,9 +70,7 @@ export default function OutletPage() {
         description: "",
         waiting: "",
       });
-      showPopup("Menu added successfully!", "green");
-    } else {
-      console.log("No menu returned from API.");
+      fetchMenus();
     }
   };
 
@@ -86,12 +84,10 @@ export default function OutletPage() {
   
     const updated = await updateMenuItem(editingMenu.id, updatedData, token);
     if (updated) {
-      setMenus((prevMenus) => 
-        prevMenus.map((m) => (m.id === editingMenu.id ? { ...m, ...updated } : m))
-      );
+      showPopup("Menu updated successfully!", "yellow");
       setEditingMenu(null);
       setShowModal(true);
-      showPopup("Menu updated successfully!", "yellow");
+      fetchMenus();
     }
     
   };
