@@ -14,6 +14,7 @@ export default function Checkout() {
   const { selectedOutlet } = useOutlet();
   const [selectedTableNumber, setSelectedTableNumber] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("M-Pesa");
+  const [isLoading, setIsLoading] = useState(false);
   const paymentMethods = ["Apple Pay", "M-Pesa", "Card", "Cash"];
   const router = useRouter();
 
@@ -33,6 +34,7 @@ export default function Checkout() {
       alert("Please select an outlet before placing your order.");
       return;
     }
+    setIsLoading(true);
   
     const orderData = {
       customer_id: session?.user?.id,
@@ -127,7 +129,7 @@ export default function Checkout() {
         className="mt-6 w-full bg-amber-500 text-white py-2 rounded-full hover: transition"
         onClick={handleOrderConfirmation}
       >
-        Confirm Order
+        {isLoading ? "Loading..." : "Confirm Order"}
       </button>
       <br></br>
       <br></br>

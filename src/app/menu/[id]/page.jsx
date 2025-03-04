@@ -23,7 +23,7 @@ export default function Page({ params }) {
   const [showPopup, setShowPopup] = useState(false);
 
   const { setSelectedOutlet} = useOutlet();
-  const { addToCart } = useCart();
+  const { cartItems, addToCart } = useCart();
   const router = useRouter();
 
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -66,8 +66,6 @@ export default function Page({ params }) {
   };
 
   const handleAddToCart = (item) => {
-  console.log("Adding to cart:", item);
-  console.log("Current restaurant state:", restaurant);
     if (!restaurant || !restaurant.id) {
       setError("Please select an outlet before placing your order.");
       return;
@@ -87,7 +85,6 @@ export default function Page({ params }) {
     setShowPopup(true);
     setTimeout(() => setShowPopup(false), 3000);
     closeModal();
-    router.push("/checkout");
   };
 
   const filteredMenuItems = restaurant?.menu_items
@@ -99,7 +96,7 @@ export default function Page({ params }) {
       {restaurant?.image_url && (
         <img src={restaurant.image_url} alt={`${restaurant.name} Banner`} className="restaurantBanner" />
       )}
-      <h1 className="menuTitle">{restaurant?.name} Menu</h1>
+      <h1 className="menuTitle text-green-950">{restaurant?.name} Menu</h1>
 
       <div className="filtersContainer">
         <input
@@ -132,11 +129,11 @@ export default function Page({ params }) {
             >
               <img src={item.image_url} alt={item.name} className="menuItemImage" />
               <div className="menuItemDetails">
-                <h2 className="menuItemName">{item.name}</h2>
+                <h2 className="menuItemName text-amber-500">{item.name}</h2>
                 <p className="menuItemWaitingTime">Waiting Time: {item.waiting} minutes</p>
                 <p className="menuItemPrice">KSh {item.price}</p>
                 <button
-                  className="addToCart"
+                  className="addToCart bg-amber-500"
                   onClick={(e) => { e.stopPropagation(); openModal(item); }}
                 >
                   +
@@ -154,7 +151,7 @@ export default function Page({ params }) {
               <img src={selectedItem.image_url} alt={selectedItem.name} className="modalImage" />
             </div>
             <div className="modalDetails">
-              <h2>{selectedItem.name}</h2>
+              <h2 className="text-amber-500">{selectedItem.name}</h2>
               {selectedItem.outlet && (
                 <p><strong>Restaurant:</strong> {selectedItem.outlet.name}</p>
               )}
@@ -162,7 +159,7 @@ export default function Page({ params }) {
               <p><strong>Cuisine:</strong> {selectedItem.cuisine}</p>
               <p><strong>Description:</strong> {selectedItem.description}</p>
               <p><strong>Price:</strong> KSh {selectedItem.price}</p>
-              <button className="addToCartButton" onClick={() => restaurant && handleAddToCart(selectedItem)}
+              <button className="text-green-900 addToCartButton" onClick={() => restaurant && handleAddToCart(selectedItem)}
                 disabled={!restaurant}>
                 Add to Cart
               </button>
@@ -172,11 +169,16 @@ export default function Page({ params }) {
         </div>
       )}
 
-      {showPopup && (
-        <div className="popupMessage">
-          <p>Item added to cart!</p>
-        </div>
+      {showPopup && (<div className="popupMessage"><p>Item added to cart!</p></div>)}
+
+      {cartItems.length > 0 && (
+        <button className="viewCartButton" onClick={() => router.push("/checkout")}>
+          View Cart ({cartItems.length})
+        </button>
       )}
+      <br></br>
+      <br></br>
+      <br></br>
     </div>
   );
 }

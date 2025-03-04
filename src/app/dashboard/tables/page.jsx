@@ -85,7 +85,7 @@ export default function BookingsPage() {
       <h1 className="text-3xl text-gray-800 font-bold mb-6 text-center">Reserved Tables</h1>
 
       {bookings.length === 0 ? (
-        <p className="text-center text-gray-600">No bookings available.</p>
+        <p className="text-center text-gray-600">Loading reservations...</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {bookings.map((booking) => (

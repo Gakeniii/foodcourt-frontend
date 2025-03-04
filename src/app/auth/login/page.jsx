@@ -11,6 +11,7 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const validateForm = () => {
@@ -33,6 +34,7 @@ export default function LoginPage() {
       return;
     }
     setErrors({});
+    setIsLoading(true);
   
     try {
       const signInResult = await signIn("credentials", {
@@ -173,7 +175,7 @@ export default function LoginPage() {
                   type="submit"
                   className="w-full bg-amber-500 text-white py-3 rounded-full hover:bg-amber-600 transition-colors font-semibold text-sm"
                 >
-                  Sign In
+                  {isLoading ? "Loading..." : "Sign In"}
                 </button>
               </form><br></br>
     

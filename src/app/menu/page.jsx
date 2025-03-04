@@ -102,7 +102,7 @@ const Menu = () => {
 
   return (
     <div className="max-w-6xl mx-auto pt-20 p-4">
-      <h1 className="text-center text-gray-700 text-4xl font-bold my-6">Menu</h1>
+      <h1 className="text-center text-green-900 text-4xl font-bold my-6">Menus</h1>
 
       {/* Filters */}
       <div className="flex flex-wrap gap-4 justify-center mb-6">
@@ -111,7 +111,7 @@ const Menu = () => {
           placeholder="Search..."
           value={searchQuery}
           onChange={handleSearchChange}
-          className="p-2 border rounded-full w-64"
+          className="p-2 border border-amber-400 rounded-full w-64"
         />
         <select
           value={selectedCuisine}
@@ -128,13 +128,13 @@ const Menu = () => {
         <select
           value={selectedCategory}
           onChange={handleCategoryChange}
-          className="p-2 border rounded-full"
+          className="p-2 border rounded-full text-gray-800"
         >
           <option value="All">All Categories</option>
           {Array.from(
             new Set(outlets.flatMap((outlet) => outlet.menu_items.map((item) => item.category)))
           ).map((category) => (
-            <option key={category} value={category}>
+            <option key={category} value={category} className="text-gray-800">
               {category}
             </option>
           ))}
@@ -143,7 +143,7 @@ const Menu = () => {
 
       {/* Menu Items */}
       {loading ? (
-        <p className="text-center">Loading outlets...</p>
+        <p className="text-center">Loading Menus...</p>
       ) : error ? (
         <p className="text-red-500 text-center">{error}</p>
       ) : (

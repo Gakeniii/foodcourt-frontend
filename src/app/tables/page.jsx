@@ -14,6 +14,7 @@ export default function Tables() {
   const [errorMessage, setErrorMessage] = useState(""); 
   const [lastReservationDisplayTime, setLastReservationDisplayTime] = useState("");
   const [showPopup, setShowPopup] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
   const router = useRouter();
 
@@ -78,6 +79,7 @@ export default function Tables() {
     }
 
     setErrorMessage("");
+    setIsLoading(true);
 
     if (!reservedTable || !reservationDateTime) {
       setErrorMessage("⚠️ Please select a table and reservation date & time!");
@@ -220,7 +222,7 @@ export default function Tables() {
           onClick={bookTable}
           className="bg-amber-500 text-white px-4 py-2 rounded-full hover: transition duration-200 w-full mt-4"
         >
-          Book a Table
+          {isLoading ? "Loading..." : "Reserve Table"}
         </button>
       </div>
       <br></br>

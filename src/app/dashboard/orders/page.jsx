@@ -1,4 +1,3 @@
-
 "use client";
 import { useEffect, useState } from "react";
 import Navbar from "../navbar";
@@ -10,12 +9,15 @@ export default function OrdersPage() {
   const [alert, setAlert] = useState(null);
   const [filterStatus, setFilterStatus] = useState("");
   const [filteredOrders, setFilteredOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingOrderId, setLoadingOrderId] = useState(null); // Track loading state per order
 
   const socket = io(process.env.NEXT_PUBLIC_BASE_URL);
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
   useEffect(() => {
     const fetchOrders = async () => {
+      setLoading(true);
       try {
         const response = await fetch(`${BASE_URL}/orders`);
         if (!response.ok) throw new Error("Failed to fetch orders");
@@ -23,6 +25,8 @@ export default function OrdersPage() {
         setOrders(data);
       } catch (error) {
         console.error("Error fetching orders:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchOrders();
@@ -30,7 +34,6 @@ export default function OrdersPage() {
 
   useEffect(() => {
     const handleOrderUpdate = (updatedOrder) => {
-      console.log("Order Updated:", updatedOrder);
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
           order.id === updatedOrder.order_id
@@ -39,10 +42,10 @@ export default function OrdersPage() {
         )
       );
       setAlert(`✔ Order #${updatedOrder.order_id} has been ${updatedOrder.status}`);
+      setLoadingOrderId(null); // Stop loading effect
     };
 
     const handleOrderCancel = (canceledOrder) => {
-      console.log("Order Canceled:", canceledOrder);
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
           order.id === canceledOrder.order_id
@@ -51,6 +54,7 @@ export default function OrdersPage() {
         )
       );
       setAlert(`❌ Order #${canceledOrder.order_id} was canceled.`);
+      setLoadingOrderId(null); // Stop loading effect
     };
 
     socket.on("order_status_update", handleOrderUpdate);
@@ -62,7 +66,6 @@ export default function OrdersPage() {
     };
   }, [orders]);
 
-  // Auto-hide alert after 3 seconds
   useEffect(() => {
     if (alert) {
       const timeout = setTimeout(() => {
@@ -81,6 +84,7 @@ export default function OrdersPage() {
   };
 
   const updateOrderStatus = async (orderId, newStatus) => {
+    setLoadingOrderId(orderId); // Set loading for the specific order
     try {
       const response = await fetch(`${BASE_URL}/orders/${orderId}`, {
         method: "PATCH",
@@ -91,17 +95,16 @@ export default function OrdersPage() {
       if (!response.ok) throw new Error("Failed to update order status");
 
       const data = await response.json();
-      console.log("Order status updated:", data);
-
-      setAlert(`✔ Order #${orderId} updated to ${newStatus}`);
-
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
           order.id === orderId ? { ...order, status: newStatus } : order
         )
       );
+      setAlert(`✔ Order #${orderId} updated to ${newStatus}`);
     } catch (error) {
       console.error(`Error updating order status to ${newStatus}:`, error);
+    } finally {
+      setLoadingOrderId(null); // Stop loading effect
     }
   };
 
@@ -109,20 +112,20 @@ export default function OrdersPage() {
     <div className="pt-20 p-6 py-4">
       <Navbar />
 
-      {/* Alert Pop-up */}
       {alert && (
-        <div className="fixed text-center pt-40 left-1/2 transform -translate-x-1/2 bg-gray-100 text-black px-6 py-3 rounded-lg shadow-lg z-50 flex gap-3 transition-opacity duration-500 opacity-100">
-          <span className="text-2xl">✔</span>
+        <div className="fixed justify-center text-center pt-20 left-1/2 transform -translate-x-1/2 bg-gray-100 text-gray-800 px-6 py-3 rounded-md shadow-lg z-50 flex gap-2 transition-opacity duration-500 opacity-100">
           <span className="text-lg font-semibold">{alert}</span>
-          {/* <button className="ml-auto text-white text-lg font-bold" onClick={() => setAlert(null)}>
-            ✖
-          </button> */}
         </div>
       )}
 
       <h1 className="text-3xl text-center text-gray-800 font-bold mb-6">Orders</h1>
 
-      {/* Filter Orders */}
+      {loading && (
+        <div className="text-center text-lg font-semibold text-gray-600">
+          <p>Loading Orders...</p>
+        </div>
+      )}
+
       <div className="mb-4">
         <label className="mr-2 font-semibold">Filter by Status:</label>
         <select className="border rounded-lg w-xl px-3 py-2" value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
@@ -134,7 +137,6 @@ export default function OrdersPage() {
         </select>
       </div>
 
-      {/* Orders List */}
       <ul className="divide-y divide-gray-300 bg-white shadow-md rounded-lg">
         {filteredOrders.length > 0 ? (
           filteredOrders.map((order) => (
@@ -160,20 +162,40 @@ export default function OrdersPage() {
                   )}
                 </ul>
 
-                {/* Action Buttons */}
                 {order.status === "Pending" && (
-                  <button className="mt-4 px-4 py-2 bg-amber-500 text-white rounded-full hover:bg-yellow-600 transition" onClick={(e) => { e.stopPropagation(); updateOrderStatus(order.id, "Confirmed"); }}>
-                    Confirm Order
+                  <button
+                    className="mt-4 px-4 py-2 bg-amber-500 text-white rounded-full hover:bg-yellow-600 transition"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      updateOrderStatus(order.id, "Confirmed");
+                    }}
+                    disabled={loadingOrderId === order.id}
+                  >
+                    {loadingOrderId === order.id ? "Processing..." : "Confirm Order"}
                   </button>
                 )}
                 {order.status === "Confirmed" && (
-                  <button className="mt-4 px-4 py-2 bg-green-900 text-white rounded-full hover:bg-green-700 transition" onClick={(e) => { e.stopPropagation(); updateOrderStatus(order.id, "Completed"); }}>
-                    Complete
+                  <button
+                    className="mt-4 px-4 py-2 bg-green-900 text-white rounded-full hover:bg-green-700 transition"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      updateOrderStatus(order.id, "Completed");
+                    }}
+                    disabled={loadingOrderId === order.id}
+                  >
+                    {loadingOrderId === order.id ? "Processing..." : "Complete"}
                   </button>
                 )}
                 {order.status !== "Cancelled" && order.status !== "Completed" && (
-                  <button className="mt-4 ml-2 px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition" onClick={(e) => { e.stopPropagation(); updateOrderStatus(order.id, "Cancelled"); }}>
-                    Cancel Order
+                  <button
+                    className="mt-4 ml-2 px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      updateOrderStatus(order.id, "Cancelled");
+                    }}
+                    disabled={loadingOrderId === order.id}
+                  >
+                    {loadingOrderId === order.id ? "Processing..." : "Cancel Order"}
                   </button>
                 )}
               </div>
@@ -183,9 +205,6 @@ export default function OrdersPage() {
           <p className="text-center text-gray-500 p-4">No orders found for this status.</p>
         )}
       </ul>
-      <br></br>
-      <br></br>
-      <br></br>
     </div>
   );
 }
