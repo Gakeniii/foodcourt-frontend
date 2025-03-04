@@ -63,7 +63,7 @@ export function Navbar() {
   if (hiddenRoutes.includes(pathname)) return null;
 
   return (
-    <nav className="bg-amber-300 w-full fixed shadow-md z-[9999]">
+    <nav className="bg-amber-400 w-full fixed shadow-md z-[9999]">
       {/* Navbar Container */}
       <div className="container mx-auto flex items-center justify-between h-14 px-4">
         {/* Brand Name */}
@@ -71,7 +71,7 @@ export function Navbar() {
           href="/"
           className="text-3xl sm:text-2xl font-bold text-gray-800 transition-transform duration-300"
         >
-          Foodie<span className="text-amber-500">.Eats</span>
+          Foodie<span className="text-green-900">.Eats</span>
         </Link>
 
         {/* Navigation Icons - Hidden on small screens */}

@@ -336,7 +336,7 @@ export default function OrdersPage() {
         </div>
       )}
 
-      <h1 className="text-3xl font-bold mb-6">Orders</h1>
+      <h1 className="text-3xl text-center text-gray-800 font-bold mb-6">Orders</h1>
 
       {/* Filter Orders */}
       <div className="mb-4">
@@ -378,17 +378,17 @@ export default function OrdersPage() {
 
                 {/* Action Buttons */}
                 {order.status === "Pending" && (
-                  <button className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition" onClick={(e) => { e.stopPropagation(); updateOrderStatus(order.id, "Confirmed"); }}>
+                  <button className="mt-4 px-4 py-2 bg-amber-500 text-white rounded-full hover:bg-blue-700 transition" onClick={(e) => { e.stopPropagation(); updateOrderStatus(order.id, "Confirmed"); }}>
                     Confirm Order
                   </button>
                 )}
                 {order.status === "Confirmed" && (
-                  <button className="mt-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition" onClick={(e) => { e.stopPropagation(); updateOrderStatus(order.id, "Completed"); }}>
+                  <button className="mt-4 px-4 py-2 bg-green-900 text-white rounded-full hover:bg-green-700 transition" onClick={(e) => { e.stopPropagation(); updateOrderStatus(order.id, "Completed"); }}>
                     Complete
                   </button>
                 )}
                 {order.status !== "Cancelled" && order.status !== "Completed" && (
-                  <button className="mt-4 ml-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition" onClick={(e) => { e.stopPropagation(); updateOrderStatus(order.id, "Cancelled"); }}>
+                  <button className="mt-4 ml-2 px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition" onClick={(e) => { e.stopPropagation(); updateOrderStatus(order.id, "Cancelled"); }}>
                     Cancel Order
                   </button>
                 )}

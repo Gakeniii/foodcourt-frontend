@@ -80,9 +80,9 @@ export default function BookingsPage() {
   };
 
   return (
-    <div className="pt-20 p-6">
+    <div className="pt-20 p-6 bg-amber-20">
       <Navbar />
-      <h1 className="text-3xl font-bold mb-6 text-center">Reserved Tables</h1>
+      <h1 className="text-3xl text-gray-800 font-bold mb-6 text-center">Reserved Tables</h1>
 
       {bookings.length === 0 ? (
         <p className="text-center text-gray-600">No bookings available.</p>
@@ -91,7 +91,7 @@ export default function BookingsPage() {
           {bookings.map((booking) => (
             <div
               key={booking.id}
-              className="p-4 border rounded-lg shadow-lg bg-white hover:shadow-xl transition-all"
+              className="p-4 border rounded-2xl shadow-lg bg-white hover:shadow-xl transition-all"
             >
               <h2 className="text-lg font-semibold text-gray-600">Booking No.{booking.id}</h2>
               <p className="text-gray-700"><strong>Table Number:</strong> {booking.table_number}</p>
@@ -100,7 +100,7 @@ export default function BookingsPage() {
               <p className="text-gray-700"><strong>Email:</strong> {booking.customer_email}</p>
               <button
                 onClick={() => cancelReservation(booking.id)}
-                className="mt-3 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700 transition"
+                className="mt-3 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
               >
                 Cancel Reservation
               </button>
@@ -108,6 +108,9 @@ export default function BookingsPage() {
           ))}
         </div>
       )}
+      <br></br>
+      <br></br>
+      <br></br>
     </div>
   );
 }

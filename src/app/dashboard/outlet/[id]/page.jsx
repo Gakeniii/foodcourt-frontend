@@ -149,7 +149,7 @@ export default function OutletPage() {
               placeholder="Waiting Time (Minutes)" className="border rounded-md p-3 w-full focus:ring-2 focus:ring-blue-400"/>
   
             <button onClick={handleAddMenu}
-              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-md transition duration-200 w-full">
+              className="bg-amber-500 hover:bg-yellow-600 text-white font-semibold py-3 rounded-full transition duration-200 w-full">
               Add Menu
             </button>
           </div>

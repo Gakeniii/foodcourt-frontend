@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { fetchOutlets, addOutlet } from "../lib/utils";
 import axios from "axios";
+import Footer from "../footer/page";
 
 export default function OwnerDashboard() {
   const [ownerName, setOwnerName] = useState("");
@@ -103,8 +104,8 @@ export default function OwnerDashboard() {
   return (
     <div className="h-screen flex flex-col bg-gray-100">
       {/* Navbar */}
-      <nav className="bg-gray-900 text-white p-4 flex justify-between items-center">
-        <h1 className="text-xl font-bold">FoodCourt Owner</h1>
+      <nav className="bg-green-950 text-white p-4 flex justify-between items-center">
+        <h1 className="text-xl font-bold">FoodCourt<span className="text-amber-500">.Owner</span></h1>
         <Link href="/auth/login" className="mr-4 hover:text-gray-300">Dashboard</Link>
       </nav>
 
@@ -116,14 +117,14 @@ export default function OwnerDashboard() {
 
       {/* Dashboard Content */}
       <div className="flex-grow flex flex-col items-center justify-center p-6">
-        <h2 className="text-3xl font-bold mb-4">Welcome, {ownerName || session?.user?.name}!</h2>
+        <h2 className="text-3xl text-gray-800 font-bold mb-4">Welcome, {ownerName || session?.user?.name}!</h2>
 
         <div className="grid grid-cols-2 gap-6 mb-6">
-          <Link href="/dashboard/orders" className="bg-blue-500 text-white p-6 rounded shadow-md hover:bg-blue-600">
+          <Link href="/dashboard/orders" className="bg-amber-500 text-white p-6 rounded-full shadow-md hover:bg-yellow-600">
             Orders ({ordersCount})
           </Link>
-          <Link href="/dashboard/tables" className="bg-green-500 text-white p-6 rounded shadow-md hover:bg-green-600">
-            Table Bookings ({tablesCount})
+          <Link href="/dashboard/tables" className="bg-green-900 text-white p-6 rounded-full shadow-md hover:bg-green-800">
+            Reservations ({tablesCount})
           </Link>
         </div>
 
@@ -133,18 +134,18 @@ export default function OwnerDashboard() {
               value={newOutletName}
               onChange={(e) => setNewOutletName(e.target.value)}
               placeholder="New Outlet Name"
-              className="p-2 rounded border mb-4"
+              className="px-4 py-2 mx-2 gap-2 rounded-full border mb-4"
             />
             <input
               type="text"
               value={newOutletImageUrl}
               onChange={(e) => setNewOutletImageUrl(e.target.value)}
               placeholder="Image URL"
-              className="p-2 rounded border mb-4"
+              className="px-4 py-2 rounded-full border mb-4"
             />
             <button
               onClick={handleAddOutlet}
-              className="ml-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              className="ml-4 p-4 bg-amber-500 text-white rounded-full hover:bg-yellow-600"
             >
               Add Outlet
             </button>
@@ -152,7 +153,7 @@ export default function OwnerDashboard() {
 
         {/* Outlets Section */}
         <div className="mb-6 w-full">
-          <h3 className="text-xl mb-6 font-semibold">Your Outlets</h3>
+          <h3 className="text-2xl text-gray-800 mb-6 font-semibold">Your Outlets</h3>
           <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-3 xl:grid-cols-2 gap-2">
             {outlets.map((outlet) => (
               <div 
@@ -160,12 +161,13 @@ export default function OwnerDashboard() {
                 onClick={() => router.push(`/dashboard/outlet/${outlet.id}`)}
                 className="p-4 rounded-lg shadow-md hover:shadow-lg transition duration-300 flex flex-col items-center">
                 <img src={outlet.image_url} alt={outlet.name} className="w-full h-48 object-cover rounded-t-lg" />
-                <h4 className="text-lg font-semibold mt-4">{outlet.name}</h4>
+                <h4 className="text-lg text-gray-800 font-semibold mt-4">{outlet.name}</h4>
               </div>
             ))}
           </div>
         </div>
       </div>
+      <Footer/>
     </div>
   );
 }

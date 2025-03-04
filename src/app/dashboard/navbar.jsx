@@ -27,18 +27,18 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-slate-900 fixed top-0 left-0 w-full shadow-md z-[9999]">
-      <div className="container text-white mx-auto px-4 py-3 flex justify-between items-center">
+    <nav className="bg-green-950 fixed top-0 left-0 w-full shadow-md z-[9999]">
+      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         {/* Brand */}
-        <Link href="/dashboard" className="text-2xl font-bold text-white md:text-3xl">
-          Foodie Eats
+        <Link href="/dashboard" className="mx-0 text-lg font-bold text-white md:text-xl">
+          FoodieEats<span className="text-amber-500">.Owner</span>
         </Link>
 
         {/* Desktop Links */}
-        <div className="hidden md:flex space-x-6 text-white font-medium">
-          <Link href="/dashboard" className="hover:text-gray-600 transition">Dashboard</Link>
-          <Link href="/dashboard/tables" className="hover:text-gray-600 transition">Tables</Link>
-          <Link href="/dashboard/orders" className="hover:text-gray-600 transition">Orders</Link>
+        <div className="hidden md:flex space-x-6 text-amber-500 font-medium">
+          <Link href="/dashboard" className="hover:text-yellow-600 transition">Dashboard</Link>
+          <Link href="/dashboard/tables" className="hover:text-yellow-600 transition">Reservations</Link>
+          <Link href="/dashboard/orders" className="hover:text-yellow-600 transition">Orders</Link>
 
         </div>
 

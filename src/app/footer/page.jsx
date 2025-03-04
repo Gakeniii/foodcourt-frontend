@@ -8,7 +8,7 @@ import Link from 'next/link';
 export default function Footer() {
   const pathname = usePathname();
 
-  const hiddenRoutes = ["/", "/auth/signup", "/auth/login"];
+  const hiddenRoutes = ["/", "/auth/signup", "/auth/login", "/dashboard"];
   if (hiddenRoutes.includes(pathname)) return null;
   return (
     <footer className=" relative bg-green-950 text-white pt-16 pb-8">
