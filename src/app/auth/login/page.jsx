@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import "./login.css";
 import { getSession, signIn } from "next-auth/react";
-import { User, Mail, Lock, Eye, UserCircle } from "lucide-react";
+import { Mail, Lock, Eye } from "lucide-react";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });

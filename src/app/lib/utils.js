@@ -35,7 +35,6 @@ export const fetchOutlets = async () => {
   }
 };
 
-// Add an outlet
 
 export const addOutlet = async (outletData, token) => {
   try {

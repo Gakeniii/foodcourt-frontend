@@ -16,6 +16,7 @@ export default function Home() {
   const [menuItems, setMenuItems] = useState([]);
   const [tables, setTables] = useState([]);
   const [loadingTables, setLoadingTables] = useState(true);
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
   const { data: session, status } = useSession();
 
@@ -24,7 +25,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchRestaurants() {
       try {
-        const response = await fetch('http://127.0.0.1:5000/outlets');
+        const response = await fetch(`${BASE_URL}/outlets`);
         if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
         const data = await response.json();
         setRestaurants(data);
@@ -43,7 +44,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchTables() {
       try {
-        const response = await fetch('http://127.0.0.1:5000/bookings');
+        const response = await fetch(`${BASE_URL}/bookings`);
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         setTables(data.filter(table => table.availability === true));
@@ -59,7 +60,7 @@ export default function Home() {
 
   const fetchMenuItems = async (restaurantId) => {
     try {
-      const response = await fetch(`http://127.0.0.1:5000/outlets/${restaurantId}`);
+      const response = await fetch(`${BASE_URL}/outlets/${restaurantId}`);
       if (!response.ok) throw new Error(`Network response was not ok: ${response.statusText}`);
       const data = await response.json();
       setMenuItems(data.menu_items);

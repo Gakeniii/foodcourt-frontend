@@ -60,7 +60,6 @@ export default function OutletPage() {
 
     if (addedMenu) {
       showPopup("Menu added successfully!", "green");
-      // setMenus([...menus, addedMenu]);
       setNewMenu({
         name: "",
         price: "",

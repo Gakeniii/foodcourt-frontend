@@ -97,7 +97,6 @@ export default function Tables() {
       return;
     }
 
-    // Format the booking time as needed (removing milliseconds, if desired)
     const formattedBookingTime = selectedTime.toISOString();
     const displayBookingTime = new Date(formattedBookingTime).toLocaleString();
 
@@ -120,7 +119,6 @@ export default function Tables() {
         throw new Error(responseData.error || "Failed to book table");
       }
 
-      // Remove the booked table from the available tables list
       setAvailableTables((prevTables) =>
         prevTables.filter((table) => table.number !== reservedTable)
       );
@@ -133,10 +131,8 @@ export default function Tables() {
         booking_id: responseData.booking_id || Date.now(),
       };
 
-      // Optimistically update reservations (if desired)
       setReservations((prevReservations) => [newReservation, ...prevReservations]);
 
-      // Show success popup and refresh reservations from backend after a short delay
       setShowPopup(true);
       setTimeout(() => {
         setShowPopup(false);

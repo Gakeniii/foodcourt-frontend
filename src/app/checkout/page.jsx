@@ -19,12 +19,6 @@ export default function Checkout() {
 
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-  // useEffect(() => {
-  //   if (!session) {
-  //     window.location.href = "/auth/login";
-  //   }
-  // }, [session]);
-
 
   const handleTableSelect = (tableNumber) => {
     setSelectedTableNumber(tableNumber);

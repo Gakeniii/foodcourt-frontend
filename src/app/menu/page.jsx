@@ -21,11 +21,12 @@ const Menu = () => {
   const router = useRouter();
   const { addToCart } = useCart();
   const { selectedOutlet, setSelectedOutlet } = useOutlet();
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
   useEffect(() => {
     async function fetchOutlets() {
       try {
-        const response = await fetch("http://127.0.0.1:5000/outlets");
+        const response = await fetch(`${BASE_URL}/outlets`);
         if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
         setOutlets(data);
@@ -74,20 +75,15 @@ const Menu = () => {
       alert("Please select an outlet first.");
       return;
     }
-    // Add the item to cart along with outlet and pricing info
     addToCart({
       ...item,
       outlet_id: selectedOutlet.id,
       quantity,
       totalPrice,
     });
-    // Increment the floating cart count by the current quantity
     setCartCount((prevCount) => prevCount + quantity);
-    // Show a toast notification
     setCartNotification(true);
-    // Close the modal
     closeModal();
-    // Hide notification after 3 seconds
     setTimeout(() => {
       setCartNotification(false);
     }, 3000);

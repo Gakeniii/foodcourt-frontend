@@ -38,7 +38,7 @@ export default function BookingsPage() {
 
     // ✅ Connect to Socket.IO
     const socket = io(SOCKET_URL, {
-      transports: ["websocket"], // Ensure stable connection
+      transports: ["websocket"],
     });
 
     // ✅ Listen for deleted booking event

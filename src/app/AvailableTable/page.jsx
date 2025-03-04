@@ -8,7 +8,7 @@ function AvailableTables({ onSelectTable }) {
   useEffect(() => {
     fetch(`${BASE_URL}/available`)
       .then((response) => response.json())
-      .then((data) => setAvailableTables(data.unbooked_tables)) // Adjusted to match the new API response
+      .then((data) => setAvailableTables(data.unbooked_tables))
       .catch((error) => console.error("Error fetching available tables:", error));
   }, []);
 

@@ -19,7 +19,7 @@ const categories = [
   { name: "Home", icon: Home, href: "/home" },
   { name: "Menu", icon: Utensils, href: "/menu" },
   { name: "Orders", icon: ClipboardList, href: "/orders" },
-  { name: "Bookings", icon: CalendarCheck, href: "/tables" },
+  { name: "Reservations", icon: CalendarCheck, href: "/tables" },
   { name: "Cart", icon: ShoppingCart, href: "/checkout" },
 ];
 
