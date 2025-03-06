@@ -175,7 +175,7 @@ export default function LoginPage() {
                   type="submit"
                   className="w-full bg-amber-500 text-white py-3 rounded-full hover:bg-amber-600 transition-colors font-semibold text-sm"
                 >
-                  {isLoading ? "Loading..." : "Sign In"}
+                  {isLoading ? "Signing In ..." : "Sign In"}
                 </button>
               </form><br></br>
     
