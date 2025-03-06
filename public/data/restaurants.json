@@ -1,0 +1,62 @@
+[
+  {
+    "id": "1",
+    "name": "Bella's Italian Bistro",
+    "slug": "bellas-italian-bistro",
+    "image": "/images/italian.jpg"
+  },
+  {
+    "id": "2",
+    "name": "Sushi Haven",
+    "slug": "sushi-haven",
+    "image": "/images/sushi.jpg"
+  },
+  {
+    "id": "3",
+    "name": "Taco Fiesta",
+    "slug": "taco-fiesta",
+    "image": "/images/taco.jpg"
+  },
+  {
+    "id": "4",
+    "name": "Burger Palace",
+    "slug": "burger-palace",
+    "image": "/images/burger.jpg"
+  },
+  {
+    "id": "5",
+    "name": "Green Garden Salads",
+    "slug": "green-garden-salads",
+    "image": "/images/salad.jpg"
+  },
+  {
+    "id": "6",
+    "name": "Steakhouse Supreme",
+    "slug": "steakhouse-supreme",
+    "image": "/images/steak.jpg"
+  },
+  {
+    "id": "7",
+    "name": "Pasta Delight",
+    "slug": "pasta-delight",
+    "image": "/images/pasta.jpg"
+  },
+  {
+    "id": "8",
+    "name": "Seafood Sensations",
+    "slug": "seafood-sensations",
+    "image": "/images/seafood.jpg"
+  },
+  {
+    "id": "9",
+    "name": "Vegan Vibes",
+    "slug": "vegan-vibes",
+    "image": "/images/vegan.jpg"
+  },
+  {
+    "id": "10",
+    "name": "Dessert Dreams",
+    "slug": "dessert-dreams",
+    "image": "/images/dessert.jpg"
+  }
+]

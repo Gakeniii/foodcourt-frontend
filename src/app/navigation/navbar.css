@@ -1,0 +1,42 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #0a0a0a;
+  padding: 10px 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.logoImage {
+  display: none; /* Hide the logo image */
+}
+
+.logoName {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+}
+
+.navList {
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navItem a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-left: 20px;
+}
+
+.navItem a:hover {
+  text-decoration: underline;
+}
