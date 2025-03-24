@@ -17,9 +17,7 @@ export async function login(email, password) {
     return data;
 }
 
-
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
-
 
 export const fetchOutlets = async () => {
   try {
